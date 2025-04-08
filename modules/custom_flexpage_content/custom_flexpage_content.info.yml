@@ -1,0 +1,7 @@
+name: 'Custom Flexpage Content'
+type: module
+description: 'To deploy custom content'
+package: Research
+core_version_requirement: ^10 || ^11
+dependencies:
+  - default_content
