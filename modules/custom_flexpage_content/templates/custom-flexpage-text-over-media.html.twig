@@ -1,0 +1,14 @@
+<section class="visual-story visual-story--text-media visual-story--{{ layout }} visual-story--theme-{{ color_theme }}">
+  <div class="visual-story__text">
+    {% if headline %}
+      <h2 class="visual-story__headline">{{ headline }}</h2>
+    {% endif %}
+    {% if body %}
+      <div class="visual-story__body">{{ body|nl2br }}</div>
+    {% endif %}
+  </div>
+  <div class="visual-story__media">
+    <img src="{{ media_url }}" alt="{{ media_alt }}">
+  </div>
+</section>
+

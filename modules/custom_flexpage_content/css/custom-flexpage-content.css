@@ -1,0 +1,232 @@
+.visual-story {
+  --vs-bg: #05070d;
+  --vs-text: #f5f3ea;
+  --vs-accent: #f3a712;
+  --vs-panel: rgba(8, 12, 20, 0.9);
+  position: relative;
+  margin: 0 0 2rem;
+}
+
+.visual-story__headline {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: inherit;
+}
+
+.visual-story--hero {
+  color: var(--vs-text);
+  overflow: hidden;
+}
+
+.visual-story--height-short {
+  min-height: 38vh;
+}
+
+.visual-story--height-tall {
+  min-height: 65vh;
+}
+
+.visual-story--height-screen {
+  min-height: 100vh;
+}
+
+.visual-story__bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visual-story__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(3, 5, 9, 0.8), rgba(3, 5, 9, 0.35));
+}
+
+.visual-story--overlay-light .visual-story__overlay {
+  background: linear-gradient(135deg, rgba(3, 5, 9, 0.55), rgba(3, 5, 9, 0.2));
+}
+
+.visual-story--overlay-heavy .visual-story__overlay {
+  background: linear-gradient(135deg, rgba(3, 5, 9, 0.93), rgba(3, 5, 9, 0.55));
+}
+
+.visual-story__content {
+  position: relative;
+  z-index: 2;
+  max-width: 58rem;
+  padding: 4rem 1rem;
+}
+
+.visual-story--align-center .visual-story__content {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.visual-story--align-right .visual-story__content {
+  margin-left: auto;
+  text-align: right;
+}
+
+.visual-story__eyebrow {
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  color: var(--vs-accent);
+}
+
+.visual-story__dek {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+  line-height: 1.45;
+}
+
+.visual-story__cta-wrap {
+  margin-top: 1.5rem;
+}
+
+.visual-story__cta {
+  display: inline-block;
+  padding: 0.65rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.visual-story__cta:hover,
+.visual-story__cta:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.visual-story--text-media {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.visual-story--text-media.visual-story--media-left .visual-story__media {
+  order: -1;
+}
+
+.visual-story--theme-dark {
+  background: linear-gradient(130deg, #0a1021, #05070d);
+  color: #f6f5f1;
+}
+
+.visual-story--theme-light {
+  background: linear-gradient(130deg, #f4f0e6, #f7f7f3);
+  color: #181a1e;
+}
+
+.visual-story--text-media .visual-story__text {
+  padding: clamp(1.5rem, 3.5vw, 3.5rem);
+}
+
+.visual-story--text-media .visual-story__body {
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.visual-story--text-media .visual-story__media img {
+  width: 100%;
+  height: 100%;
+  min-height: 20rem;
+  object-fit: cover;
+  display: block;
+}
+
+.visual-story--scrollpoints {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.25rem;
+}
+
+.visual-story__scrollpoints-media {
+  position: relative;
+  overflow: hidden;
+  min-height: 28rem;
+}
+
+.visual-story__scrollpoints-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.visual-story__point {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.visual-story__point.is-active {
+  background: #f3a712;
+  color: #111;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.visual-story__scrollpoints-panel {
+  background: var(--vs-panel);
+  color: #f6f5f1;
+  padding: 1.5rem;
+}
+
+.visual-story__intro {
+  margin: 0 0 1rem;
+  color: rgba(246, 245, 241, 0.88);
+}
+
+.visual-story__point-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.visual-story__point-panel {
+  display: none;
+}
+
+.visual-story__point-panel.is-active {
+  display: block;
+}
+
+.visual-story__point-panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.visual-story__point-panel p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .visual-story--text-media,
+  .visual-story--scrollpoints {
+    grid-template-columns: 1fr;
+  }
+
+  .visual-story--text-media.visual-story--media-left .visual-story__media {
+    order: 0;
+  }
+
+  .visual-story__scrollpoints-media {
+    min-height: 18rem;
+  }
+}
+

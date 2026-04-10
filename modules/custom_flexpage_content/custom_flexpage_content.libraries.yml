@@ -1,0 +1,11 @@
+story_blocks:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-content.css: {}
+  js:
+    js/custom-flexpage-content.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+

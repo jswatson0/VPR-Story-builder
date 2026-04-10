@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Theme hooks for custom flexpage storytelling blocks.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function custom_flexpage_content_theme($existing, $type, $theme, $path) {
+  return [
+    'custom_flexpage_story_hero' => [
+      'variables' => [
+        'eyebrow' => '',
+        'headline' => '',
+        'dek' => '',
+        'cta_label' => '',
+        'cta_url' => '',
+        'background_url' => '',
+        'background_alt' => '',
+        'height' => 'tall',
+        'text_alignment' => 'left',
+        'overlay_strength' => 'medium',
+      ],
+      'template' => 'custom-flexpage-story-hero',
+    ],
+    'custom_flexpage_text_over_media' => [
+      'variables' => [
+        'headline' => '',
+        'body' => '',
+        'media_url' => '',
+        'media_alt' => '',
+        'layout' => 'media-right',
+        'color_theme' => 'dark',
+      ],
+      'template' => 'custom-flexpage-text-over-media',
+    ],
+    'custom_flexpage_scrollpoints' => [
+      'variables' => [
+        'headline' => '',
+        'intro' => '',
+        'image_url' => '',
+        'image_alt' => '',
+        'points' => [],
+      ],
+      'template' => 'custom-flexpage-scrollpoints',
+    ],
+  ];
+}
