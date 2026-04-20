@@ -1,35 +1,141 @@
 .visual-story {
+  --vs-font-display: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --vs-font-body: "Inter", "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --vs-font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --vs-font-size-body: clamp(1.02rem, 0.95rem + 0.2vw, 1.16rem);
+  --vs-font-size-small: clamp(0.84rem, 0.8rem + 0.12vw, 0.94rem);
+  --vs-font-size-lead: clamp(1.14rem, 1rem + 0.45vw, 1.44rem);
+  --vs-line-body: 1.7;
+  --vs-line-lead: 1.55;
   --vs-bg: #05070d;
   --vs-text: #f5f3ea;
   --vs-accent: #f3a712;
   --vs-panel: rgba(8, 12, 20, 0.9);
   position: relative;
   margin: 0 0 2rem;
+  font-family: var(--vs-font-body);
+  font-size: var(--vs-font-size-body);
+  line-height: var(--vs-line-body);
+  letter-spacing: 0.003em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.visual-story__gsap-warning {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  background: #b91c1c;
+  color: #fff;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  position: relative;
+  z-index: 5;
 }
 
 .visual-story__headline {
   margin: 0 0 0.75rem;
+  font-family: var(--vs-font-display);
+  font-weight: 700;
   font-size: clamp(2rem, 4vw, 4rem);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
   color: inherit;
+  text-wrap: balance;
 }
 
-.visual-story--hero {
+.visual-story--hero-classic-depth {
+  --vs-hero-layer-height: 72vh;
+  --vs-content-inset-top: clamp(11rem, 30vh, 17rem);
+  --vs-content-inset-bottom: clamp(2rem, 5vh, 4rem);
+  --vs-content-scroll-space: 68vh;
+  --vs-bg-focal-x: 50%;
+  --vs-bg-focal-y: 32%;
+  --vs-bg-scale: 1.06;
   color: var(--vs-text);
+  overflow: clip;
+  min-height: calc(var(--vs-hero-layer-height) + var(--vs-content-scroll-space));
+}
+
+/*
+ * Prevent theme sticky/sidebar overflow rules from creating a nested scroll
+ * container around hero blocks. Nested scrolling blocks wheel events and makes
+ * ScrollTrigger appear to "stop" (with a visible inner scrollbar).
+ */
+.block:has(.visual-story--hero-classic-depth),
+.block-block-content:has(.visual-story--hero-classic-depth) {
+  position: static;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Layout Builder safety mode: render hero as a static preview so UI controls
+ * are never obscured by sticky layers or transformed content. */
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .visual-story--hero-classic-depth,
+.layout-builder .visual-story--hero-classic-depth {
+  min-height: 0;
   overflow: hidden;
 }
 
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .visual-story--hero-classic-depth .visual-story__bg-layer,
+.layout-builder .visual-story--hero-classic-depth .visual-story__bg-layer {
+  position: relative;
+  top: auto;
+  height: min(65vh, 30rem);
+}
+
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .visual-story--hero-classic-depth .visual-story__content,
+.layout-builder .visual-story--hero-classic-depth .visual-story__content {
+  margin-top: 0;
+  padding: clamp(2rem, 4vw, 3.5rem) 1rem 2rem;
+  transform: none !important;
+}
+
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .layout-builder-block__link,
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .contextual,
+.layout-builder .layout-builder-block__link,
+.layout-builder .contextual {
+  position: relative;
+  z-index: 20;
+}
+
+.visual-story--content-vpos-top {
+  --vs-content-inset-top: clamp(8rem, 22vh, 13rem);
+}
+
+.visual-story--content-vpos-middle {
+  --vs-content-inset-top: clamp(12rem, 32vh, 18rem);
+}
+
+.visual-story--content-vpos-bottom {
+  --vs-content-inset-top: clamp(15rem, 40vh, 23rem);
+}
+
 .visual-story--height-short {
-  min-height: 38vh;
+  --vs-hero-layer-height: 52vh;
+  --vs-content-scroll-space: 54vh;
 }
 
 .visual-story--height-tall {
-  min-height: 65vh;
+  --vs-hero-layer-height: 86vh;
+  --vs-content-scroll-space: 10vh;
+}
+
+.visual-story--height-tall .visual-story__bg-layer {
+  height: calc(var(--vs-hero-layer-height) + var(--vs-content-scroll-space));
 }
 
 .visual-story--height-screen {
-  min-height: 100vh;
+  --vs-hero-layer-height: 100vh;
+  --vs-content-scroll-space: 82vh;
+}
+
+.visual-story__bg-layer {
+  position: sticky;
+  top: 0;
+  height: var(--vs-hero-layer-height);
+  z-index: 0;
+  overflow: hidden;
 }
 
 .visual-story__bg-image {
@@ -38,12 +144,16 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: var(--vs-bg-focal-x) var(--vs-bg-focal-y);
+  transform: translate3d(0, 0, 0) scale(var(--vs-bg-scale));
+  will-change: transform;
 }
 
 .visual-story__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(3, 5, 9, 0.8), rgba(3, 5, 9, 0.35));
+  z-index: 2;
+  background: linear-gradient(135deg, rgba(3, 5, 9, 0.82), rgba(3, 5, 9, 0.35));
 }
 
 .visual-story--overlay-light .visual-story__overlay {
@@ -54,35 +164,100 @@
   background: linear-gradient(135deg, rgba(3, 5, 9, 0.93), rgba(3, 5, 9, 0.55));
 }
 
+.visual-story--overlay-full .visual-story__overlay {
+  background: linear-gradient(135deg, rgba(3, 5, 9, 1), rgba(3, 5, 9, 0.78));
+}
+
+.visual-story__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0) 42%, rgba(0, 0, 0, 0.5) 100%);
+}
+
 .visual-story__content {
   position: relative;
-  z-index: 2;
-  max-width: 58rem;
-  padding: 4rem 1rem;
+  z-index: 4;
+  width: 100%;
+  max-width: 33.333%;
+  margin-top: calc(var(--vs-hero-layer-height) * -1);
+  padding: var(--vs-content-inset-top) 1rem var(--vs-content-inset-bottom);
+  overflow: visible;
+  transform-origin: center top;
+  will-change: transform, opacity;
+}
+
+.visual-story--copy-light .visual-story__content {
+  color: #f6f5f1;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+
+.visual-story--copy-light .visual-story__eyebrow {
+  color: #ffd178;
+}
+
+.visual-story--copy-light .visual-story__cta {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.visual-story--copy-dark .visual-story__content {
+  color: #131820;
+  text-shadow: none;
+}
+
+.visual-story--copy-dark .visual-story__eyebrow {
+  color: #0f2a58;
+}
+
+.visual-story--copy-dark .visual-story__cta {
+  border-color: rgba(19, 24, 32, 0.65);
+  color: #131820;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.visual-story--copy-dark .visual-story__cta:hover,
+.visual-story--copy-dark .visual-story__cta:focus-visible {
+  color: #131820;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .visual-story--align-center .visual-story__content {
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
+}
+
+.visual-story--align-left .visual-story__content {
+  margin-left: clamp(8vw, 12vw, 16rem);
+  margin-right: auto;
 }
 
 .visual-story--align-right .visual-story__content {
   margin-left: auto;
+  margin-right: clamp(8vw, 12vw, 16rem);
   text-align: right;
 }
 
 .visual-story__eyebrow {
   margin: 0 0 0.75rem;
+  font-family: var(--vs-font-display);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  font-size: var(--vs-font-size-small);
   color: var(--vs-accent);
 }
 
 .visual-story__dek {
   margin: 0;
-  font-size: clamp(1.1rem, 1.4vw, 1.5rem);
-  line-height: 1.45;
+  font-size: var(--vs-font-size-lead);
+  line-height: var(--vs-line-lead);
+  text-wrap: pretty;
+  font-weight: 600;
+  color: #fff;
 }
 
 .visual-story__cta-wrap {
@@ -130,8 +305,8 @@
 }
 
 .visual-story--text-media .visual-story__body {
-  font-size: 1.05rem;
-  line-height: 1.65;
+  font-size: var(--vs-font-size-body);
+  line-height: var(--vs-line-body);
 }
 
 .visual-story--text-media .visual-story__media img {
@@ -188,6 +363,8 @@
 
 .visual-story__intro {
   margin: 0 0 1rem;
+  font-size: var(--vs-font-size-body);
+  line-height: var(--vs-line-body);
   color: rgba(246, 245, 241, 0.88);
 }
 
@@ -207,15 +384,30 @@
 
 .visual-story__point-panel h3 {
   margin: 0 0 0.5rem;
-  font-size: 1.1rem;
+  font-family: var(--vs-font-display);
+  font-size: clamp(1.18rem, 1.08rem + 0.2vw, 1.3rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .visual-story__point-panel p {
   margin: 0;
-  line-height: 1.55;
+  font-size: var(--vs-font-size-body);
+  line-height: var(--vs-line-body);
 }
 
 @media (max-width: 900px) {
+  .visual-story--hero-classic-depth {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .visual-story__bg-layer {
+    position: absolute;
+    inset: 0;
+    height: auto;
+  }
+
   .visual-story--text-media,
   .visual-story--scrollpoints {
     grid-template-columns: 1fr;
@@ -228,5 +420,22 @@
   .visual-story__scrollpoints-media {
     min-height: 18rem;
   }
+
+  .visual-story__bg-image {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .visual-story__content {
+    margin-top: 0;
+    padding: 6rem 1rem 4rem;
+  }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .visual-story__bg-image,
+  .visual-story__content {
+    transform: none !important;
+    will-change: auto;
+  }
+}

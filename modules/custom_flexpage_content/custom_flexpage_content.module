@@ -10,7 +10,7 @@
  */
 function custom_flexpage_content_theme($existing, $type, $theme, $path) {
   return [
-    'custom_flexpage_story_hero' => [
+    'custom_flexpage_story_hero_classic_depth_parallax' => [
       'variables' => [
         'eyebrow' => '',
         'headline' => '',
@@ -21,9 +21,17 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
         'background_alt' => '',
         'height' => 'tall',
         'text_alignment' => 'left',
+        'content_vertical_position' => 'middle',
+        'copy_theme' => 'light',
         'overlay_strength' => 'medium',
+        'midground_strength' => 'medium',
+        'foreground_behavior' => 'pinned_then_release',
+        'foreground_pin_vh' => '70',
+        'focal_x' => '50',
+        'focal_y' => '32',
+        'background_zoom' => '1.06',
       ],
-      'template' => 'custom-flexpage-story-hero',
+      'template' => 'custom-flexpage-story-hero-classic-depth-parallax',
     ],
     'custom_flexpage_text_over_media' => [
       'variables' => [

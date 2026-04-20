@@ -8,4 +8,4 @@ dependencies:
   - drupal:media
   - drupal:media_library
   - drupal:media_library_form_element
-
+  - research_frontend_vendor

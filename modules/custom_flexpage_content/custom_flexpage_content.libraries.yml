@@ -8,4 +8,4 @@ story_blocks:
   dependencies:
     - core/drupal
     - core/once
-
+    - research_frontend_vendor/gsap_scrolltrigger

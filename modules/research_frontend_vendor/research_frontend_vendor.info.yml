@@ -1,0 +1,6 @@
+name: 'Research Frontend Vendor'
+type: module
+description: 'Provides shared third-party frontend vendor assets for research modules.'
+package: Research
+core_version_requirement: ^10 || ^11
+

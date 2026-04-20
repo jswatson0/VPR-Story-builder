@@ -1,0 +1,6 @@
+gsap_scrolltrigger:
+  version: 3.12.5
+  js:
+    vendor/gsap/gsap.min.js: { minified: true }
+    vendor/gsap/ScrollTrigger.min.js: { minified: true }
+
