@@ -1,0 +1,33 @@
+{% if items %}
+  <div class="research-image-grid-block" data-image-grid-block style="--research-image-grid-columns: {{ images_per_row|default(3) }};">
+    <div class="mosaic-grid">
+      {% for item in items %}
+        <button type="button"
+          class="mosaic-item mosaic-item-button"
+          data-image-grid-img="{{ item.image_url }}"
+          data-image-grid-title="{{ item.title }}"
+          data-image-grid-desc="{{ item.description }}"
+          aria-label="{{ item.title ?: 'Open image details' }}">
+          <img src="{{ item.image_url }}"
+            class="img-fluid rounded"
+            alt="{{ item.alt_text ?: item.title }}">
+        </button>
+      {% endfor %}
+    </div>
+
+    <div class="modal fade image-grid-modal" tabindex="-1" aria-hidden="true" data-image-grid-modal>
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title text-black" data-image-grid-modal-title>{{ modal_title_default }}</h4>
+            <button type="button" class="mosaic-modal-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+          </div>
+          <div class="modal-body text-center">
+            <img src="" alt="" class="img-fluid mb-3" data-image-grid-modal-image>
+            <p class="mb-0 text-secondary" data-image-grid-modal-description></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

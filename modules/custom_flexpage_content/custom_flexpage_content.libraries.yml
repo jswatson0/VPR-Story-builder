@@ -9,3 +9,15 @@ story_blocks:
     - core/drupal
     - core/once
     - research_frontend_vendor/gsap_scrolltrigger
+
+research_image_grid_block:
+  version: 1.x
+  css:
+    theme:
+      css/research-image-grid-block.css: {}
+  js:
+    js/research-image-grid-block.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - research_frontend_vendor/gsap_scrolltrigger
