@@ -6,12 +6,12 @@
           class="mosaic-item mosaic-item-button"
           data-image-grid-img="{{ item.image_url }}"
           data-image-grid-title="{{ item.title }}"
-          data-image-grid-desc="{{ item.description }}"
           aria-label="{{ item.title ?: 'Open image details' }}">
           <img src="{{ item.image_url }}"
             class="img-fluid rounded"
             alt="{{ item.alt_text ?: item.title }}">
         </button>
+        <div class="d-none" data-image-grid-desc-source>{{ item.description_markup }}</div>
       {% endfor %}
     </div>
 
@@ -24,7 +24,7 @@
           </div>
           <div class="modal-body text-center">
             <img src="" alt="" class="img-fluid mb-3" data-image-grid-modal-image>
-            <p class="mb-0 text-secondary" data-image-grid-modal-description></p>
+            <div class="mb-0 text-secondary" data-image-grid-modal-description></div>
           </div>
         </div>
       </div>

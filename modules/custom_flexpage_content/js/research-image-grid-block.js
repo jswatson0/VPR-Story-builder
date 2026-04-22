@@ -56,7 +56,11 @@
           trigger.addEventListener('click', () => {
             const imageSrc = trigger.getAttribute('data-image-grid-img') || '';
             const title = trigger.getAttribute('data-image-grid-title') || '';
-            const description = trigger.getAttribute('data-image-grid-desc') || '';
+            const descriptionSource = trigger.nextElementSibling;
+            const descriptionHtml = (
+              descriptionSource &&
+              descriptionSource.matches('[data-image-grid-desc-source]')
+            ) ? descriptionSource.innerHTML : '';
 
             if (modalTitle) {
               modalTitle.textContent = title;
@@ -66,7 +70,7 @@
               modalImage.setAttribute('alt', title);
             }
             if (modalDescription) {
-              modalDescription.textContent = description;
+              modalDescription.innerHTML = descriptionHtml;
             }
 
             modalInstance.show();

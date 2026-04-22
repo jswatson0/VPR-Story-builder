@@ -122,9 +122,10 @@ class ResearchImageGridBlock extends BlockBase {
       ];
 
       $form['items'][$index]['description'] = [
-        '#type' => 'textarea',
+        '#type' => 'text_format',
         '#title' => $this->t('Modal description'),
-        '#default_value' => $item['description'] ?? '',
+        '#default_value' => $this->getDescriptionValue($item),
+        '#format' => $this->getDescriptionFormat($item),
         '#rows' => 3,
       ];
     }
@@ -161,7 +162,10 @@ class ResearchImageGridBlock extends BlockBase {
         'media_id' => $media_id,
         'image_url' => $image_url,
         'alt_text' => trim((string) ($item['alt_text'] ?? '')),
-        'description' => trim((string) ($item['description'] ?? '')),
+        'description' => [
+          'value' => $this->getDescriptionValue($item),
+          'format' => $this->getDescriptionFormat($item),
+        ],
       ];
     }
 
@@ -208,7 +212,8 @@ class ResearchImageGridBlock extends BlockBase {
     $title = trim((string) ($item['title'] ?? ''));
     $image_url = trim((string) ($item['image_url'] ?? ''));
     $alt_text = trim((string) ($item['alt_text'] ?? ''));
-    $description = trim((string) ($item['description'] ?? ''));
+    $description_value = $this->getDescriptionValue($item);
+    $description_format = $this->getDescriptionFormat($item);
     $media_id = (int) ($item['media_id'] ?? 0);
 
     if ($media_id > 0) {
@@ -240,7 +245,11 @@ class ResearchImageGridBlock extends BlockBase {
       'title' => $title,
       'image_url' => $image_url,
       'alt_text' => $alt_text,
-      'description' => $description,
+      'description_markup' => [
+        '#type' => 'processed_text',
+        '#text' => $description_value,
+        '#format' => $description_format,
+      ],
     ];
   }
 
@@ -318,6 +327,32 @@ class ResearchImageGridBlock extends BlockBase {
 
     // Fallback: allow all media types if no image type was detected.
     return array_keys($media_types);
+  }
+
+  /**
+   * Gets description text value with backward compatibility.
+   */
+  private function getDescriptionValue(array $item): string {
+    if (isset($item['description']) && is_array($item['description'])) {
+      return trim((string) ($item['description']['value'] ?? ''));
+    }
+
+    return trim((string) ($item['description'] ?? ''));
+  }
+
+  /**
+   * Gets description text format with fallback.
+   */
+  private function getDescriptionFormat(array $item): string {
+    if (isset($item['description']) && is_array($item['description'])) {
+      $format = (string) ($item['description']['format'] ?? '');
+      if ($format !== '') {
+        return $format;
+      }
+    }
+
+    $default_format = \Drupal::config('filter.settings')->get('fallback_format');
+    return is_string($default_format) && $default_format !== '' ? $default_format : 'basic_html';
   }
 
 }
