@@ -1,14 +1,26 @@
-<section class="visual-story visual-story--text-media visual-story--{{ layout }} visual-story--theme-{{ color_theme }}">
+<section class="visual-story visual-story--text-media visual-story--{{ layout }} visual-story--mobile-{{ mobile_stack }} visual-story--ratio-{{ column_ratio }} visual-story--preset-{{ style_preset }} visual-story--theme-{{ color_theme }}{% if drop_cap %} visual-story--drop-cap{% endif %}" data-vs-text-media data-vs-text-media-reveal style="--vs-media-focal-x: {{ media_focal_x }}%; --vs-media-focal-y: {{ media_focal_y }};">
   <div class="visual-story__text">
     {% if headline %}
       <h2 class="visual-story__headline">{{ headline }}</h2>
     {% endif %}
     {% if body %}
-      <div class="visual-story__body">{{ body|nl2br }}</div>
+      <div class="visual-story__body-wrap" data-vs-text-media-body-wrap>
+        <div class="visual-story__body" data-vs-text-media-body>{{ body }}</div>
+      </div>
+    {% endif %}
+    {% if cta_label and cta_url %}
+      <p class="visual-story__cta-wrap">
+        <a class="visual-story__cta" href="{{ cta_url }}">{{ cta_label }}</a>
+      </p>
     {% endif %}
   </div>
   <div class="visual-story__media">
-    <img src="{{ media_url }}" alt="{{ media_alt }}">
+    {% if media_kind == 'video' %}
+      <video autoplay muted loop playsinline preload="metadata">
+        <source src="{{ media_url }}"{% if media_mime %} type="{{ media_mime }}"{% endif %}>
+      </video>
+    {% else %}
+      <img src="{{ media_url }}" alt="{{ media_alt }}">
+    {% endif %}
   </div>
 </section>
-

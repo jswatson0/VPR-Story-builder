@@ -245,27 +245,168 @@
         }
       });
 
-      once('custom-flexpage-scrollpoints', '[data-vs-scrollpoints]', context).forEach((wrapper) => {
-        const pointButtons = wrapper.querySelectorAll('[data-vs-point]');
-        const pointPanels = wrapper.querySelectorAll('[data-vs-panel]');
+      once('custom-flexpage-text-media-reveal', '[data-vs-text-media-reveal]', context).forEach((section) => {
+        if (prefersReducedMotion.matches) {
+          section.classList.add('is-visible');
+          return;
+        }
 
-        const activatePoint = (index) => {
-          pointButtons.forEach((button) => {
-            button.classList.toggle('is-active', button.dataset.vsPoint === index);
+        if (typeof window.IntersectionObserver === 'undefined') {
+          section.classList.add('is-visible');
+          return;
+        }
+
+        const rootFontSize = parseFloat(window.getComputedStyle(document.documentElement).fontSize) || 16;
+        const revealOffsetPx = Math.round(rootFontSize * 7);
+
+        const observer = new window.IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+            section.classList.add('is-visible');
+            observer.unobserve(section);
           });
-          pointPanels.forEach((panel) => {
-            panel.classList.toggle('is-active', panel.dataset.vsPanel === index);
+        }, {
+          root: null,
+          threshold: 0.12,
+          // Delay reveal until the section is scrolled in by roughly 7rem.
+          rootMargin: `0px 0px -${revealOffsetPx}px 0px`,
+        });
+
+        observer.observe(section);
+      });
+
+      once('custom-flexpage-text-media-scrollable', '[data-vs-text-media]', context).forEach((section) => {
+        const text = section.querySelector('.visual-story__text');
+        const media = section.querySelector('.visual-story__media');
+        const bodyWrap = section.querySelector('[data-vs-text-media-body-wrap]');
+        const body = section.querySelector('[data-vs-text-media-body]');
+
+        if (!text || !media || !bodyWrap || !body) {
+          return;
+        }
+
+        const setScrollCues = () => {
+          const maxScrollTop = Math.max(1, body.scrollHeight - body.clientHeight);
+          const topAlpha = body.scrollTop > 4 ? 1 : 0;
+          const bottomAlpha = body.scrollTop < (maxScrollTop - 4) ? 1 : 0;
+
+          if (hasGsap) {
+            window.gsap.to(bodyWrap, {
+              '--vs-scroll-top-alpha': topAlpha,
+              '--vs-scroll-bottom-alpha': bottomAlpha,
+              duration: 0.3,
+              ease: 'power1.out',
+              overwrite: true,
+            });
+            return;
+          }
+
+          bodyWrap.style.setProperty('--vs-scroll-top-alpha', String(topAlpha));
+          bodyWrap.style.setProperty('--vs-scroll-bottom-alpha', String(bottomAlpha));
+        };
+
+        const clearTextScrollState = () => {
+          body.style.maxHeight = 'none';
+          body.style.overflowY = 'visible';
+          body.scrollTop = 0;
+          bodyWrap.style.setProperty('--vs-scroll-top-alpha', '0');
+          bodyWrap.style.setProperty('--vs-scroll-bottom-alpha', '0');
+        };
+
+        let textScrollTrigger = null;
+        const killTextScrollTrigger = () => {
+          if (textScrollTrigger) {
+            textScrollTrigger.kill();
+            textScrollTrigger = null;
+          }
+        };
+
+        const updateScrollableBody = () => {
+          killTextScrollTrigger();
+          clearTextScrollState();
+
+          if (window.innerWidth <= 900 || prefersReducedMotion.matches || !hasGsap) {
+            return;
+          }
+
+          const textStyles = window.getComputedStyle(text);
+          const textPaddingTop = parseFloat(textStyles.paddingTop) || 0;
+          const textPaddingBottom = parseFloat(textStyles.paddingBottom) || 0;
+          const nonBodyHeight = text.offsetHeight - body.offsetHeight;
+          const mediaHeight = media.getBoundingClientRect().height;
+          const availableBodyHeight = Math.max(
+            180,
+            Math.round(mediaHeight - nonBodyHeight - textPaddingTop - textPaddingBottom)
+          );
+
+          const hiddenTextDistance = Math.max(0, body.scrollHeight - availableBodyHeight);
+          if (hiddenTextDistance <= 2) {
+            return;
+          }
+
+          body.style.maxHeight = `${availableBodyHeight}px`;
+          body.style.overflowY = 'hidden';
+          setScrollCues();
+
+          textScrollTrigger = window.ScrollTrigger.create({
+            trigger: section,
+            start: 'bottom bottom',
+            end: `+=${Math.round(hiddenTextDistance + 64)}`,
+            scrub: 1.15,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              body.scrollTop = self.progress * hiddenTextDistance;
+              setScrollCues();
+            },
           });
         };
 
-        pointButtons.forEach((button) => {
-          button.addEventListener('click', () => activatePoint(button.dataset.vsPoint));
+        window.addEventListener('resize', updateScrollableBody);
+        updateScrollableBody();
+      });
+
+      once('custom-flexpage-story-timeline', '[data-vs-story-timeline]', context).forEach((section) => {
+        const items = section.querySelectorAll('[data-vs-timeline-item]');
+        const progressFill = section.querySelector('[data-vs-timeline-progress]');
+
+        if (!items.length || !progressFill) {
+          return;
+        }
+
+        if (prefersReducedMotion.matches || !hasGsap) {
+          items.forEach((item) => item.classList.add('is-active'));
+          progressFill.style.height = '100%';
+          return;
+        }
+
+        const { ScrollTrigger } = window;
+
+        items.forEach((item) => {
+          ScrollTrigger.create({
+            trigger: item,
+            start: 'top 72%',
+            end: 'bottom 38%',
+            onEnter: () => item.classList.add('is-active'),
+            onEnterBack: () => item.classList.add('is-active'),
+            onLeave: () => item.classList.remove('is-active'),
+            onLeaveBack: () => item.classList.remove('is-active'),
+          });
         });
 
-        if (pointButtons.length) {
-          activatePoint(pointButtons[0].dataset.vsPoint);
-        }
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top 70%',
+          end: 'bottom 35%',
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            progressFill.style.height = `${(self.progress * 100).toFixed(2)}%`;
+          },
+        });
       });
+
     },
   };
 })(Drupal, once);

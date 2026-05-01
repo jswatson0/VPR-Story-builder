@@ -1,0 +1,61 @@
+{#
+/**
+ * @file
+ * Theme implementation for Story Timeline: Milestones block.
+ */
+#}
+{% set classes = [
+  'visual-story',
+  'visual-story--timeline',
+  'visual-story--timeline-layout-' ~ layout|clean_class,
+  'visual-story--theme-' ~ color_theme|clean_class,
+] %}
+
+<section class="{{ classes|join(' ') }}"
+  data-vs-story-timeline
+  style="--vs-media-focal-x: {{ media_focal_x|default('50') }}%; --vs-media-focal-y: {{ media_focal_y|default('40') }}%;"
+>
+  {% if media_url %}
+    <div class="visual-story__timeline-media" data-vs-timeline-media>
+      <img src="{{ media_url }}" alt="{{ media_alt }}" loading="lazy" decoding="async">
+    </div>
+  {% endif %}
+
+  <div class="visual-story__timeline-inner">
+    {% if eyebrow %}
+      <p class="visual-story__eyebrow">{{ eyebrow }}</p>
+    {% endif %}
+
+    {% if headline %}
+      <h2 class="visual-story__headline">{{ headline }}</h2>
+    {% endif %}
+
+    {% if intro %}
+      <div class="visual-story__intro">{{ intro }}</div>
+    {% endif %}
+
+    <div class="visual-story__timeline-track" aria-hidden="true">
+      <span class="visual-story__timeline-track-fill" data-vs-timeline-progress></span>
+    </div>
+
+    <ol class="visual-story__timeline-list" data-vs-timeline-list>
+      {% for item in items %}
+        {% set card_side = (layout == 'alternating' and loop.index is odd) ? 'left' : 'right' %}
+        <li class="visual-story__timeline-item visual-story__timeline-item--{{ card_side }}" data-vs-timeline-item>
+          <span class="visual-story__timeline-dot" aria-hidden="true"></span>
+          <article class="visual-story__timeline-card">
+            {% if item.year %}
+              <p class="visual-story__timeline-year">{{ item.year }}</p>
+            {% endif %}
+            {% if item.title %}
+              <h3 class="visual-story__timeline-title">{{ item.title }}</h3>
+            {% endif %}
+            {% if item.description %}
+              <p class="visual-story__timeline-desc">{{ item.description }}</p>
+            {% endif %}
+          </article>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>

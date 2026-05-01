@@ -4,7 +4,7 @@ This module adds a starter set of visual storytelling blocks for Flex pages:
 
 - Story Hero: Classic Depth Parallax
 - Story Text Over Media
-- Story Scrollpoints
+- Story Timeline: Milestones
 
 All blocks are available in Layout Builder under category `Visual Storytelling`.
 
@@ -26,4 +26,9 @@ All blocks are available in Layout Builder under category `Visual Storytelling`.
 - If `layout_builder_restrictions` is later switched to an allowlist, allow this category or block IDs:
   - `custom_flexpage_story_hero_classic_depth_parallax_block`
   - `custom_flexpage_text_over_media_block`
-  - `custom_flexpage_scrollpoints_block`
+  - `custom_flexpage_story_timeline_milestones_block`
+
+## Editor Documentation
+
+- Story Hero guide:
+  - `docs/story-hero-classic-depth-parallax-editor-guide.md`

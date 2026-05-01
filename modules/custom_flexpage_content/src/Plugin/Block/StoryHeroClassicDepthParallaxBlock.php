@@ -3,6 +3,7 @@
 namespace Drupal\custom_flexpage_content\Plugin\Block;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Provides a classic depth parallax visual storytelling hero block.
@@ -25,6 +26,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       'dek' => '',
       'cta_label' => '',
       'cta_url' => '',
+      'cta_node_id' => 0,
       'background_media_id' => 0,
       'background_image_url' => '',
       'background_alt' => '',
@@ -33,7 +35,6 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       'content_vertical_position' => 'bottom',
       'copy_theme' => 'light',
       'overlay_strength' => 'full',
-      'midground_strength' => 'medium',
       'foreground_behavior' => 'pinned_then_release',
       'foreground_pin_vh' => '60',
       'text_zoom_effect' => 'out',
@@ -48,33 +49,24 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
    */
   public function blockForm($form, FormStateInterface $form_state): array {
     $form = parent::blockForm($form, $form_state);
+    $form['#attributes']['data-vs-hero-block-form'] = '1';
+    $form['#attached']['library'][] = 'custom_flexpage_content/block_editor';
 
-    $form['eyebrow'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Eyebrow'),
-      '#default_value' => $this->configuration['eyebrow'] ?? '',
-      '#maxlength' => 255,
+    $form['editor_help'] = [
+      '#type' => 'details',
+      '#title' => $this->t('How This Block Works'),
+      '#open' => TRUE,
     ];
-
-    $form['headline'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Headline'),
-      '#default_value' => $this->configuration['headline'] ?? '',
-      '#required' => TRUE,
-      '#maxlength' => 255,
-    ];
-
-    $form['dek'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Description'),
-      '#default_value' => $this->configuration['dek'] ?? '',
-      '#rows' => 4,
+    $form['editor_help']['summary'] = [
+      '#type' => 'item',
+      '#markup' => $this->t('<p>This hero renders a full-width background image with layered visual treatment and scroll-linked motion. Add short narrative copy (eyebrow, headline, description, CTA), choose alignment and contrast settings, then fine-tune motion.</p><p><strong>Recommended flow:</strong> 1) choose image, 2) set focal point, 3) write concise copy, 4) choose copy theme + overlay for contrast, 5) tune motion settings.</p>'),
     ];
 
     $media_id = (int) ($this->configuration['background_media_id'] ?? 0);
     $form['background_media_id'] = [
       '#type' => 'media_library',
       '#title' => $this->t('Background media image (preferred)'),
+      '#description' => $this->t('Use Media Library when possible for better media management and reuse.'),
       '#allowed_bundles' => $this->getImageMediaTypeIds(),
       '#default_value' => $media_id > 0 ? $media_id : NULL,
       '#cardinality' => 1,
@@ -83,6 +75,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['background_image_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Background image URL (fallback)'),
+      '#description' => $this->t('Optional fallback only if Media Library is not used.'),
       '#default_value' => $this->configuration['background_image_url'] ?? '',
       '#maxlength' => 2048,
     ];
@@ -90,6 +83,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['background_alt'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Background image alt text'),
+      '#description' => $this->t('Accessibility text that describes the image context.'),
       '#default_value' => $this->configuration['background_alt'] ?? '',
       '#maxlength' => 255,
     ];
@@ -127,9 +121,35 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       ],
     ];
 
+    $form['eyebrow'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Eyebrow'),
+      '#description' => $this->t('Short contextual label above the headline. Best kept brief.'),
+      '#default_value' => $this->configuration['eyebrow'] ?? '',
+      '#maxlength' => 255,
+    ];
+
+    $form['headline'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Headline'),
+      '#description' => $this->t('Primary message shown in the hero. Keep concise for best readability.'),
+      '#default_value' => $this->configuration['headline'] ?? '',
+      '#required' => TRUE,
+      '#maxlength' => 255,
+    ];
+
+    $form['dek'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Description'),
+      '#description' => $this->t('Supporting text beneath the headline. 1-2 short sentences is ideal.'),
+      '#default_value' => $this->configuration['dek'] ?? '',
+      '#rows' => 4,
+    ];
+
     $form['height'] = [
       '#type' => 'select',
       '#title' => $this->t('Section height'),
+      '#description' => $this->t('Controls hero prominence. Tall is a good editorial default.'),
       '#default_value' => $this->configuration['height'] ?? 'tall',
       '#options' => [
         'short' => $this->t('Short'),
@@ -141,6 +161,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['text_alignment'] = [
       '#type' => 'select',
       '#title' => $this->t('Text alignment'),
+      '#description' => $this->t('Horizontal placement of the copy container.'),
       '#default_value' => $this->configuration['text_alignment'] ?? 'left',
       '#options' => [
         'left' => $this->t('Left'),
@@ -152,7 +173,8 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['content_vertical_position'] = [
       '#type' => 'select',
       '#title' => $this->t('Text vertical position'),
-      '#default_value' => $this->configuration['content_vertical_position'] ?? 'middle',
+      '#description' => $this->t('Vertical placement of copy over the background image.'),
+      '#default_value' => $this->configuration['content_vertical_position'] ?? 'bottom',
       '#options' => [
         'top' => $this->t('Top'),
         'middle' => $this->t('Middle'),
@@ -174,6 +196,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['overlay_strength'] = [
       '#type' => 'select',
       '#title' => $this->t('Overlay strength'),
+      '#description' => $this->t('Increase overlay strength when text contrast needs improvement.'),
       '#default_value' => $this->configuration['overlay_strength'] ?? 'full',
       '#options' => [
         'light' => $this->t('Light'),
@@ -195,20 +218,10 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       ],
     ];
 
-    $form['midground_strength'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Midground depth strength'),
-      '#default_value' => $this->configuration['midground_strength'] ?? 'medium',
-      '#options' => [
-        'subtle' => $this->t('Subtle'),
-        'medium' => $this->t('Medium'),
-        'strong' => $this->t('Strong'),
-      ],
-    ];
-
     $form['foreground_behavior'] = [
       '#type' => 'select',
       '#title' => $this->t('Foreground scroll behavior'),
+      '#description' => $this->t('Stable is recommended for readability. Use faster motion for more dramatic movement.'),
       '#default_value' => $this->configuration['foreground_behavior'] ?? 'pinned_then_release',
       '#options' => [
         'pinned_then_release' => $this->t('Stable (no vertical movement)'),
@@ -236,13 +249,33 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['cta_label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('CTA label'),
+      '#description' => $this->t('Optional button text, e.g. "Learn more".'),
       '#default_value' => $this->configuration['cta_label'] ?? '',
       '#maxlength' => 255,
     ];
 
+    $cta_node_id = (int) ($this->configuration['cta_node_id'] ?? 0);
+    $cta_node = $cta_node_id > 0 ? \Drupal::entityTypeManager()->getStorage('node')->load($cta_node_id) : NULL;
+    if (!$cta_node instanceof NodeInterface) {
+      $cta_node = NULL;
+    }
+
+    $form['cta_node_id'] = [
+      '#type' => 'entity_autocomplete',
+      '#title' => $this->t('CTA internal page'),
+      '#description' => $this->t('Select a node for internal links. If selected, this is used instead of external URL.'),
+      '#target_type' => 'node',
+      '#selection_settings' => [
+        'target_bundles' => NULL,
+      ],
+      '#default_value' => $cta_node,
+      '#tags' => FALSE,
+    ];
+
     $form['cta_url'] = [
       '#type' => 'url',
-      '#title' => $this->t('CTA URL'),
+      '#title' => $this->t('CTA external URL'),
+      '#description' => $this->t('Use for external destinations. Leave empty if using internal page selector above.'),
       '#default_value' => $this->configuration['cta_url'] ?? '',
     ];
 
@@ -259,6 +292,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $this->configuration['headline'] = trim((string) $form_state->getValue('headline', ''));
     $this->configuration['dek'] = trim((string) $form_state->getValue('dek', ''));
     $this->configuration['cta_label'] = trim((string) $form_state->getValue('cta_label', ''));
+    $this->configuration['cta_node_id'] = $this->extractNodeTargetId($form_state->getValue('cta_node_id'));
     $this->configuration['cta_url'] = trim((string) $form_state->getValue('cta_url', ''));
     $this->configuration['background_media_id'] = $this->extractMediaTargetId($form_state->getValue('background_media_id'));
     $this->configuration['background_image_url'] = trim((string) $form_state->getValue('background_image_url', ''));
@@ -268,7 +302,6 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $this->configuration['content_vertical_position'] = (string) $form_state->getValue('content_vertical_position', 'bottom');
     $this->configuration['copy_theme'] = (string) $form_state->getValue('copy_theme', 'light');
     $this->configuration['overlay_strength'] = (string) $form_state->getValue('overlay_strength', 'full');
-    $this->configuration['midground_strength'] = (string) $form_state->getValue('midground_strength', 'medium');
     $this->configuration['foreground_behavior'] = (string) $form_state->getValue('foreground_behavior', 'pinned_then_release');
     $this->configuration['foreground_pin_vh'] = (string) $form_state->getValue('foreground_pin_vh', '60');
     $this->configuration['text_zoom_effect'] = (string) $form_state->getValue('text_zoom_effect', 'out');
@@ -294,13 +327,23 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       return [];
     }
 
+    $cta_url = trim((string) ($this->configuration['cta_url'] ?? ''));
+    $cta_node_id = (int) ($this->configuration['cta_node_id'] ?? 0);
+    if ($cta_node_id > 0) {
+      $node = \Drupal::entityTypeManager()->getStorage('node')->load($cta_node_id);
+      if ($node instanceof NodeInterface && $node->access('view')) {
+        $cache_tags = array_merge($cache_tags, $node->getCacheTags());
+        $cta_url = $node->toUrl()->toString();
+      }
+    }
+
     return [
       '#theme' => 'custom_flexpage_story_hero_classic_depth_parallax',
       '#eyebrow' => $this->configuration['eyebrow'] ?? '',
       '#headline' => $this->configuration['headline'] ?? '',
       '#dek' => $this->configuration['dek'] ?? '',
       '#cta_label' => $this->configuration['cta_label'] ?? '',
-      '#cta_url' => $this->configuration['cta_url'] ?? '',
+      '#cta_url' => $cta_url,
       '#background_url' => $image['url'],
       '#background_alt' => $image['alt'],
       '#height' => $this->configuration['height'] ?? 'tall',
@@ -308,7 +351,6 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#content_vertical_position' => $this->configuration['content_vertical_position'] ?? 'bottom',
       '#copy_theme' => $this->configuration['copy_theme'] ?? 'light',
       '#overlay_strength' => $this->configuration['overlay_strength'] ?? 'full',
-      '#midground_strength' => $this->configuration['midground_strength'] ?? 'medium',
       '#foreground_behavior' => $this->configuration['foreground_behavior'] ?? 'pinned_then_release',
       '#foreground_pin_vh' => $this->configuration['foreground_pin_vh'] ?? '60',
       '#text_zoom_effect' => $this->configuration['text_zoom_effect'] ?? 'out',
@@ -322,6 +364,29 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
         'tags' => $cache_tags,
       ],
     ];
+  }
+
+  /**
+   * Extracts node target ID from entity autocomplete values.
+   */
+  protected function extractNodeTargetId($value): int {
+    if (is_array($value) && isset($value[0]['target_id'])) {
+      return (int) $value[0]['target_id'];
+    }
+
+    if (is_array($value) && isset($value['target_id'])) {
+      return (int) $value['target_id'];
+    }
+
+    if (is_numeric($value)) {
+      return (int) $value;
+    }
+
+    if (is_string($value) && preg_match('/\((\d+)\)\s*$/', $value, $matches)) {
+      return (int) ($matches[1] ?? 0);
+    }
+
+    return 0;
   }
 
 }

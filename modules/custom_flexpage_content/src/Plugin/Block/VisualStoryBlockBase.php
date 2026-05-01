@@ -33,6 +33,27 @@ abstract class VisualStoryBlockBase extends BlockBase {
   }
 
   /**
+   * Gets media type IDs that use image or video-file source plugins.
+   */
+  protected function getImageAndVideoMediaTypeIds(): array {
+    $media_types = \Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple();
+    $allowed_ids = [];
+
+    foreach ($media_types as $media_type) {
+      if (!$media_type instanceof MediaTypeInterface) {
+        continue;
+      }
+
+      $plugin_id = $media_type->getSource()->getPluginId();
+      if (in_array($plugin_id, ['image', 'video_file'], TRUE)) {
+        $allowed_ids[] = $media_type->id();
+      }
+    }
+
+    return !empty($allowed_ids) ? $allowed_ids : array_keys($media_types);
+  }
+
+  /**
    * Extracts a target ID from media library form values.
    */
   protected function extractMediaTargetId($value): int {
@@ -112,5 +133,34 @@ abstract class VisualStoryBlockBase extends BlockBase {
     return NULL;
   }
 
-}
+  /**
+   * Gets video URL and MIME type from the first video file field on media.
+   */
+  protected function extractVideoFromMedia(MediaInterface $media, array &$cache_tags): ?array {
+    foreach ($media->getFieldDefinitions() as $field_name => $definition) {
+      if ($definition->getType() !== 'file' || $media->get($field_name)->isEmpty()) {
+        continue;
+      }
 
+      $file_item = $media->get($field_name)->first();
+      if (!$file_item || !$file_item->entity) {
+        continue;
+      }
+
+      $file = $file_item->entity;
+      $mime_type = (string) $file->getMimeType();
+      if ($mime_type === '' || !str_starts_with($mime_type, 'video/')) {
+        continue;
+      }
+
+      $cache_tags = Cache::mergeTags($cache_tags, $file->getCacheTags());
+      return [
+        'url' => \Drupal::service('file_url_generator')->generateString($file->getFileUri()),
+        'mime' => $mime_type,
+      ];
+    }
+
+    return NULL;
+  }
+
+}

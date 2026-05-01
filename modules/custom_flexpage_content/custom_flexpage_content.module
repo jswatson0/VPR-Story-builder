@@ -24,7 +24,6 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
         'content_vertical_position' => 'middle',
         'copy_theme' => 'light',
         'overlay_strength' => 'medium',
-        'midground_strength' => 'medium',
         'foreground_behavior' => 'pinned_then_release',
         'foreground_pin_vh' => '70',
         'focal_x' => '50',
@@ -37,22 +36,22 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       'variables' => [
         'headline' => '',
         'body' => '',
+        'cta_label' => '',
+        'cta_url' => '',
         'media_url' => '',
+        'media_kind' => 'image',
+        'media_mime' => '',
         'media_alt' => '',
         'layout' => 'media-right',
+        'mobile_stack' => 'text-first',
+        'column_ratio' => 'equal',
+        'style_preset' => 'editorial',
+        'drop_cap' => FALSE,
+        'media_focal_x' => '50',
+        'media_focal_y' => '50',
         'color_theme' => 'dark',
       ],
       'template' => 'custom-flexpage-text-over-media',
-    ],
-    'custom_flexpage_scrollpoints' => [
-      'variables' => [
-        'headline' => '',
-        'intro' => '',
-        'image_url' => '',
-        'image_alt' => '',
-        'points' => [],
-      ],
-      'template' => 'custom-flexpage-scrollpoints',
     ],
     'research_image_grid_block' => [
       'variables' => [
@@ -61,6 +60,21 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
         'images_per_row' => 3,
       ],
       'template' => 'research-image-grid-block',
+    ],
+    'custom_flexpage_story_timeline_milestones' => [
+      'variables' => [
+        'eyebrow' => '',
+        'headline' => '',
+        'intro' => '',
+        'items' => [],
+        'layout' => 'alternating',
+        'color_theme' => 'light',
+        'media_url' => '',
+        'media_alt' => '',
+        'media_focal_x' => '50',
+        'media_focal_y' => '40',
+      ],
+      'template' => 'custom-flexpage-story-timeline-milestones',
     ],
   ];
 }
