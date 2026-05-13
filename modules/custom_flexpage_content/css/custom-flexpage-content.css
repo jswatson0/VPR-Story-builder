@@ -113,7 +113,7 @@
 
 .visual-story--height-short {
   --vs-hero-layer-height: 52vh;
-  --vs-content-scroll-space: 54vh;
+  --vs-content-scroll-space: 0vh;
 }
 
 .visual-story--height-tall {

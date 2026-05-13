@@ -102,9 +102,7 @@
   const attachGsapClassicDepthHero = (hero, bg, bgLayer, content) => {
     const { gsap, ScrollTrigger } = window;
     gsap.registerPlugin(ScrollTrigger);
-    const foregroundBehavior = hero.dataset.vsForegroundBehavior || 'pinned_then_release';
-    const foregroundTravelVh = parseFloat(hero.dataset.vsForegroundPinVh || '60');
-    const foregroundTravelFactor = Math.max(0.35, Math.min(1, foregroundTravelVh / 100));
+    const backgroundScrollBehavior = hero.dataset.vsBackgroundScrollBehavior || 'parallax';
     const textZoomEffect = hero.dataset.vsTextZoomEffect || 'out';
 
     const setStaticState = () => {
@@ -131,7 +129,7 @@
     // Set a stable baseline before creating scroll-linked tweens to avoid
     // first-paint "jump" when ScrollTrigger initializes.
     const configuredBgScale = getConfiguredBgScale(hero);
-    const scrollZoomDelta = 0.1;
+    const scrollZoomDelta = 0.14;
     const targetBgScale = Math.min(1.28, configuredBgScale + scrollZoomDelta);
 
     gsap.set(bg, { y: 0, scale: configuredBgScale, force3D: true });
@@ -141,10 +139,10 @@
     // This avoids competing transform tweens on the same element at init.
     gsap.fromTo(
       bgLayer,
-      { autoAlpha: 0, scale: 1.05 },
+      backgroundScrollBehavior === 'parallax' ? { autoAlpha: 0, scale: 1.05 } : { autoAlpha: 0 },
       {
         autoAlpha: 1,
-        scale: 1,
+        ...(backgroundScrollBehavior === 'parallax' ? { scale: 1 } : {}),
         duration: 0.9,
         ease: 'power2.out',
       },
@@ -162,48 +160,35 @@
     );
 
     const buildScrollValues = () => getClassicDepthMotionValues(hero, bgLayer, content);
-    const { contentReleaseFactor, bgReleaseFactor } = getReleaseFactors(hero);
+    const motionStart = 'top bottom';
+    const motionEnd = 'bottom top';
 
-    gsap.to(bg, {
-      // Move upward only (negative Y) so the image stays locked to the top edge
-      // while revealing more of the scene as the user scrolls.
-      y: () => -buildScrollValues().bgOffset,
-      scale: targetBgScale,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: () => `+=${Math.round(buildScrollValues().heroScrollRange * bgReleaseFactor)}`,
-        scrub: 1.35,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    const textTargetScale = textZoomEffect === 'in' ? 1.04 : textZoomEffect === 'out' ? 0.96 : 1;
-    if (textTargetScale !== 1) {
-      gsap.to(content, {
-        scale: textTargetScale,
+    if (backgroundScrollBehavior === 'parallax') {
+      gsap.to(bg, {
+        // Move upward only (negative Y) so the image stays locked to the top edge
+        // while revealing more of the scene as the user scrolls.
+        y: () => -buildScrollValues().bgOffset,
+        scale: targetBgScale,
         ease: 'none',
         scrollTrigger: {
           trigger: hero,
-          start: 'top top',
-          end: () => `+=${Math.round(buildScrollValues().heroScrollRange)}`,
+          start: motionStart,
+          end: motionEnd,
           scrub: 1.35,
           invalidateOnRefresh: true,
         },
       });
     }
 
-    // Keep copy position stable for the default behavior to avoid vertical
-    // jumps. Only apply vertical translation in explicit faster-than-scroll mode.
-    if (foregroundBehavior === 'faster_than_scroll') {
+    const textTargetScale = textZoomEffect === 'in' ? 1.1 : textZoomEffect === 'out' ? 0.9 : 1;
+    if (textTargetScale !== 1) {
       gsap.to(content, {
-        y: () => clampOffset(buildScrollValues().fgFastOffset * foregroundTravelFactor),
+        scale: textTargetScale,
         ease: 'none',
         scrollTrigger: {
           trigger: hero,
-          start: 'top top',
-          end: () => `+=${Math.round(buildScrollValues().heroScrollRange * contentReleaseFactor)}`,
+          start: motionStart,
+          end: motionEnd,
           scrub: 1.35,
           invalidateOnRefresh: true,
         },

@@ -35,8 +35,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       'content_vertical_position' => 'bottom',
       'copy_theme' => 'light',
       'overlay_strength' => 'full',
-      'foreground_behavior' => 'pinned_then_release',
-      'foreground_pin_vh' => '60',
+      'background_scroll_behavior' => 'parallax',
       'text_zoom_effect' => 'out',
       'focal_x' => '50',
       'focal_y' => '32',
@@ -218,31 +217,14 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       ],
     ];
 
-    $form['foreground_behavior'] = [
+    $form['background_scroll_behavior'] = [
       '#type' => 'select',
-      '#title' => $this->t('Foreground scroll behavior'),
-      '#description' => $this->t('Stable is recommended for readability. Use faster motion for more dramatic movement.'),
-      '#default_value' => $this->configuration['foreground_behavior'] ?? 'pinned_then_release',
+      '#title' => $this->t('Background scroll behavior'),
+      '#description' => $this->t('Choose whether the background image moves on scroll or stays fixed in place.'),
+      '#default_value' => $this->configuration['background_scroll_behavior'] ?? 'parallax',
       '#options' => [
-        'pinned_then_release' => $this->t('Stable (no vertical movement)'),
-        'faster_than_scroll' => $this->t('Move faster than scroll (1.1x)'),
-      ],
-    ];
-
-    $form['foreground_pin_vh'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Foreground travel distance'),
-      '#description' => $this->t('Controls how far the copy moves when "Move faster than scroll" is selected.'),
-      '#default_value' => (string) ($this->configuration['foreground_pin_vh'] ?? '60'),
-      '#states' => [
-        'visible' => [
-          ':input[name="settings[foreground_behavior]"]' => ['value' => 'faster_than_scroll'],
-        ],
-      ],
-      '#options' => [
-        '40' => $this->t('40vh (subtle)'),
-        '60' => $this->t('60vh'),
-        '80' => $this->t('80vh (strong)'),
+        'parallax' => $this->t('Move on scroll'),
+        'static' => $this->t('No movement on scroll'),
       ],
     ];
 
@@ -302,8 +284,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $this->configuration['content_vertical_position'] = (string) $form_state->getValue('content_vertical_position', 'bottom');
     $this->configuration['copy_theme'] = (string) $form_state->getValue('copy_theme', 'light');
     $this->configuration['overlay_strength'] = (string) $form_state->getValue('overlay_strength', 'full');
-    $this->configuration['foreground_behavior'] = (string) $form_state->getValue('foreground_behavior', 'pinned_then_release');
-    $this->configuration['foreground_pin_vh'] = (string) $form_state->getValue('foreground_pin_vh', '60');
+    $this->configuration['background_scroll_behavior'] = (string) $form_state->getValue('background_scroll_behavior', 'parallax');
     $this->configuration['text_zoom_effect'] = (string) $form_state->getValue('text_zoom_effect', 'out');
     $this->configuration['focal_x'] = (string) max(0, min(100, (float) $form_state->getValue('focal_x', '50')));
     $this->configuration['focal_y'] = (string) max(0, min(100, (float) $form_state->getValue('focal_y', '32')));
@@ -351,8 +332,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#content_vertical_position' => $this->configuration['content_vertical_position'] ?? 'bottom',
       '#copy_theme' => $this->configuration['copy_theme'] ?? 'light',
       '#overlay_strength' => $this->configuration['overlay_strength'] ?? 'full',
-      '#foreground_behavior' => $this->configuration['foreground_behavior'] ?? 'pinned_then_release',
-      '#foreground_pin_vh' => $this->configuration['foreground_pin_vh'] ?? '60',
+      '#background_scroll_behavior' => $this->configuration['background_scroll_behavior'] ?? 'parallax',
       '#text_zoom_effect' => $this->configuration['text_zoom_effect'] ?? 'out',
       '#focal_x' => $this->configuration['focal_x'] ?? '50',
       '#focal_y' => $this->configuration['focal_y'] ?? '32',
