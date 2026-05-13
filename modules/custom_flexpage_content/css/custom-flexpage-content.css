@@ -116,6 +116,18 @@
   --vs-content-scroll-space: 0vh;
 }
 
+.visual-story--height-short.visual-story--content-vpos-top {
+  --vs-content-inset-top: clamp(4rem, 11vh, 6rem);
+}
+
+.visual-story--height-short.visual-story--content-vpos-middle {
+  --vs-content-inset-top: clamp(6.75rem, 19vh, 9rem);
+}
+
+.visual-story--height-short.visual-story--content-vpos-bottom {
+  --vs-content-inset-top: clamp(9.5rem, 31vh, 13rem);
+}
+
 .visual-story--height-tall {
   --vs-hero-layer-height: 86vh;
   --vs-content-scroll-space: 10vh;
@@ -489,6 +501,20 @@
   .visual-story--text-media .visual-story__body-wrap::before,
   .visual-story--text-media .visual-story__body-wrap::after {
     display: none;
+  }
+}
+
+@media (max-height: 760px) {
+  .visual-story--hero-classic-depth.visual-story--height-short {
+    --vs-content-inset-top: clamp(4.75rem, 14vh, 6.75rem);
+  }
+
+  .visual-story--hero-classic-depth.visual-story--height-tall {
+    --vs-content-inset-top: clamp(7rem, 18vh, 10rem);
+  }
+
+  .visual-story--hero-classic-depth.visual-story--height-screen {
+    --vs-content-inset-top: clamp(8.5rem, 21vh, 12rem);
   }
 }
 
