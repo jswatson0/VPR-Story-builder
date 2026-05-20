@@ -395,7 +395,7 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
       '#heading_position' => $this->configuration['heading_position'] ?? 'left',
       '#color_theme' => $this->configuration['theme'] ?? 'light',
       '#attached' => [
-        'library' => ['custom_flexpage_content/story_blocks'],
+        'library' => ['custom_flexpage_content/detail_selector_block'],
       ],
       '#cache' => [
         'tags' => array_values(array_unique($cache_tags)),

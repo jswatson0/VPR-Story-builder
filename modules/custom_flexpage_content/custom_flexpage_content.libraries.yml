@@ -1,14 +1,46 @@
-story_blocks:
+story_blocks_base:
   version: 1.x
   css:
     theme:
-      css/custom-flexpage-content.css: {}
+      css/custom-flexpage-content.base.css: {}
   js:
     js/custom-flexpage-content.js: {}
   dependencies:
     - core/drupal
     - core/once
     - research_frontend_vendor/gsap_scrolltrigger
+
+story_hero_classic_depth_parallax_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-hero-classic-depth-parallax.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
+
+text_over_media_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-text-over-media.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
+
+story_timeline_milestones_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-timeline-milestones.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
+
+detail_selector_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-detail-selector.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
 
 research_image_grid_block:
   version: 1.x

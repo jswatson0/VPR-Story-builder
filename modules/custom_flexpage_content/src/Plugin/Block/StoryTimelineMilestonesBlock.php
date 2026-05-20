@@ -207,7 +207,7 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
       '#media_focal_x' => $this->configuration['media_focal_x'] ?? '50',
       '#media_focal_y' => $this->configuration['media_focal_y'] ?? '40',
       '#attached' => [
-        'library' => ['custom_flexpage_content/story_blocks'],
+        'library' => ['custom_flexpage_content/story_timeline_milestones_block'],
       ],
       '#cache' => [
         'tags' => $cache_tags,

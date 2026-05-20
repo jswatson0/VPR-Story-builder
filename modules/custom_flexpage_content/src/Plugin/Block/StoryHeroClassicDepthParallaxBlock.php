@@ -338,7 +338,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#focal_y' => $this->configuration['focal_y'] ?? '32',
       '#background_zoom' => $this->configuration['background_zoom'] ?? '1.00',
       '#attached' => [
-        'library' => ['custom_flexpage_content/story_blocks'],
+        'library' => ['custom_flexpage_content/story_hero_classic_depth_parallax_block'],
       ],
       '#cache' => [
         'tags' => $cache_tags,

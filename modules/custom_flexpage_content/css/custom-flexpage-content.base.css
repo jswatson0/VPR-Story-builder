@@ -1,0 +1,87 @@
+.visual-story {
+  --vs-font-size-body: clamp(1.02rem, 0.95rem + 0.2vw, 1.16rem);
+  --vs-font-size-small: clamp(0.84rem, 0.8rem + 0.12vw, 0.94rem);
+  --vs-font-size-lead: clamp(1.14rem, 1rem + 0.45vw, 1.44rem);
+  --vs-line-body: 1.7;
+  --vs-line-lead: 1.55;
+  --vs-bg: #05070d;
+  --vs-text: #f5f3ea;
+  --vs-accent: #f3a712;
+  --vs-panel: rgba(8, 12, 20, 0.9);
+  position: relative;
+  margin: 0 0 2rem;
+  font-family: inherit;
+  font-size: var(--vs-font-size-body);
+  line-height: var(--vs-line-body);
+  letter-spacing: 0.003em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.visual-story__gsap-warning {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  background: #b91c1c;
+  color: #fff;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  position: relative;
+  z-index: 5;
+}
+
+.visual-story__headline {
+  margin: 0 0 0.75rem;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: inherit;
+  text-wrap: balance;
+}
+
+.visual-story__eyebrow {
+  margin: 0 0 0.75rem;
+  font-family: inherit;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--vs-font-size-small);
+  color: var(--vs-accent);
+}
+
+.visual-story__dek {
+  margin: 0;
+  font-size: var(--vs-font-size-lead);
+  line-height: var(--vs-line-lead);
+  text-wrap: pretty;
+  font-weight: 600;
+  color: #fff;
+}
+
+.visual-story__intro {
+  margin: 0 0 1rem;
+  font-size: var(--vs-font-size-body);
+  line-height: var(--vs-line-body);
+  color: rgba(246, 245, 241, 0.88);
+}
+
+.visual-story__cta-wrap {
+  margin-top: 1.5rem;
+}
+
+.visual-story__cta {
+  display: inline-block;
+  padding: 0.65rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.visual-story__cta:hover,
+.visual-story__cta:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}

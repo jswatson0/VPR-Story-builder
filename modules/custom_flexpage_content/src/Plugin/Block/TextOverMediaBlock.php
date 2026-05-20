@@ -299,7 +299,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
       '#media_focal_y' => $this->configuration['media_focal_y'] ?? '50',
       '#color_theme' => $this->configuration['theme'] ?? 'dark',
       '#attached' => [
-        'library' => ['custom_flexpage_content/story_blocks'],
+        'library' => ['custom_flexpage_content/text_over_media_block'],
       ],
       '#cache' => [
         'tags' => $cache_tags,
