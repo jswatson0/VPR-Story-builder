@@ -19,7 +19,7 @@
       {% endif %}
 
       {% if headline %}
-        <h2 class="visual-story__headline{% if color_theme == 'dark' %} text-white{% endif %}">{{ headline }}</h2>
+        <h2 class="{% if color_theme == 'dark' %} text-white{% endif %}">{{ headline }}</h2>
       {% endif %}
 
       {% if intro %}
