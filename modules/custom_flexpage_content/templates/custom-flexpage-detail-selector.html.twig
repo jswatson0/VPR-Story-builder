@@ -1,0 +1,112 @@
+{#
+/**
+ * @file
+ * Theme implementation for the two-column detail selector block.
+ */
+#}
+{% set classes = [
+  'visual-story',
+  'visual-story--detail-selector',
+  'visual-story--detail-selector-headings-' ~ heading_position|default('left')|clean_class,
+  'visual-story--theme-' ~ color_theme|clean_class
+] %}
+
+<section class="{{ classes|join(' ') }}" data-vs-detail-selector>
+  <div class="visual-story__detail-shell">
+    <div class="visual-story__detail-header">
+      {% if eyebrow %}
+        <p class="visual-story__eyebrow">{{ eyebrow }}</p>
+      {% endif %}
+
+      {% if headline %}
+        <h2 class="visual-story__headline{% if color_theme == 'dark' %} text-white{% endif %}">{{ headline }}</h2>
+      {% endif %}
+
+      {% if intro %}
+        <div class="visual-story__intro{% if color_theme == 'dark' %} text-white{% endif %}">{{ intro }}</div>
+      {% endif %}
+    </div>
+
+    <div class="visual-story__detail-grid" data-vs-detail-grid>
+      <div class="visual-story__detail-nav {% if heading_position|default('left') == 'right' %}border-start ps-3{% else %}border-end pe-3{% endif %}" role="tablist" aria-label="{{ headline ?: default_panel_label }}">
+        {% for item in items %}
+          {% set panel_id = 'vs-detail-panel-' ~ item.id %}
+          <button
+            class="visual-story__detail-trigger"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-expanded="false"
+            aria-controls="{{ panel_id }}"
+            data-vs-detail-trigger
+            data-vs-target="{{ item.id }}"
+          >
+            <span class="visual-story__detail-trigger-label{% if color_theme == 'dark' %} text-white{% endif %}">{{ item.heading }}</span>
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="visual-story__detail-panels" data-vs-detail-panels>
+        <article
+          class="visual-story__detail-panel is-active"
+          id="vs-detail-panel-default"
+          role="tabpanel"
+          data-vs-detail-panel="default"
+          aria-label="{{ default_panel_label }}"
+        >
+          {% if default_panel.media_url %}
+            <div class="visual-story__detail-media">
+              <img src="{{ default_panel.media_url }}" alt="{{ default_panel.media_alt }}" loading="lazy" decoding="async">
+            </div>
+          {% endif %}
+
+          {% if default_panel.headline %}
+            <h3 class="visual-story__detail-title{% if color_theme == 'dark' %} text-white{% endif %}">{{ default_panel.headline }}</h3>
+          {% endif %}
+
+          {% if default_panel.body %}
+            <div class="visual-story__detail-body{% if color_theme == 'dark' %} text-white{% endif %}">{{ default_panel.body }}</div>
+          {% endif %}
+
+          {% if default_panel.cta_label and default_panel.cta_url %}
+            <p class="visual-story__cta-wrap">
+              <a class="visual-story__cta" href="{{ default_panel.cta_url }}">{{ default_panel.cta_label }}</a>
+            </p>
+          {% endif %}
+        </article>
+
+        {% for item in items %}
+          {% set panel = item.panel %}
+          <article
+            class="visual-story__detail-panel"
+            id="vs-detail-panel-{{ item.id }}"
+            role="tabpanel"
+            data-vs-detail-panel="{{ item.id }}"
+            aria-label="{{ item.heading }}"
+            hidden
+          >
+            {% if panel.media_url %}
+              <div class="visual-story__detail-media">
+                <img src="{{ panel.media_url }}" alt="{{ panel.media_alt }}" loading="lazy" decoding="async">
+              </div>
+            {% endif %}
+
+            {% if panel.headline %}
+              <h3 class="visual-story__detail-title{% if color_theme == 'dark' %} text-white{% endif %}">{{ panel.headline }}</h3>
+            {% endif %}
+
+            {% if panel.body %}
+              <div class="visual-story__detail-body{% if color_theme == 'dark' %} text-white{% endif %}">{{ panel.body }}</div>
+            {% endif %}
+
+            {% if panel.cta_label and panel.cta_url %}
+              <p class="visual-story__cta-wrap">
+                <a class="visual-story__cta" href="{{ panel.cta_url }}">{{ panel.cta_label }}</a>
+              </p>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

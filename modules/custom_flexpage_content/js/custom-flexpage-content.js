@@ -262,6 +262,39 @@
         observer.observe(section);
       });
 
+      once('custom-flexpage-detail-selector', '[data-vs-detail-selector]', context).forEach((section) => {
+        const triggers = Array.from(section.querySelectorAll('[data-vs-detail-trigger]'));
+        const panels = Array.from(section.querySelectorAll('[data-vs-detail-panel]'));
+        if (!triggers.length || !panels.length) {
+          return;
+        }
+
+        const activatePanel = (targetId) => {
+          triggers.forEach((trigger) => {
+            const isActive = trigger.dataset.vsTarget === targetId;
+            trigger.classList.toggle('is-active', isActive);
+            trigger.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            trigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+          });
+
+          panels.forEach((panel) => {
+            const isActive = panel.dataset.vsDetailPanel === targetId;
+            panel.classList.toggle('is-active', isActive);
+            panel.hidden = !isActive;
+          });
+        };
+
+        activatePanel('default');
+
+        triggers.forEach((trigger) => {
+          trigger.addEventListener('click', () => {
+            const targetId = trigger.dataset.vsTarget || 'default';
+            const isAlreadyActive = trigger.classList.contains('is-active');
+            activatePanel(isAlreadyActive ? 'default' : targetId);
+          });
+        });
+      });
+
       once('custom-flexpage-text-media-scrollable', '[data-vs-text-media]', context).forEach((section) => {
         const text = section.querySelector('.visual-story__text');
         const media = section.querySelector('.visual-story__media');

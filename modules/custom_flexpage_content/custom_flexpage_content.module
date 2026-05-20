@@ -76,5 +76,18 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'custom-flexpage-story-timeline-milestones',
     ],
+    'custom_flexpage_detail_selector' => [
+      'variables' => [
+        'eyebrow' => '',
+        'headline' => '',
+        'intro' => '',
+        'default_panel_label' => 'Overview',
+        'default_panel' => [],
+        'items' => [],
+        'heading_position' => 'left',
+        'color_theme' => 'light',
+      ],
+      'template' => 'custom-flexpage-detail-selector',
+    ],
   ];
 }
