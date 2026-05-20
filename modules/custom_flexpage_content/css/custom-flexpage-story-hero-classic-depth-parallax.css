@@ -147,12 +147,16 @@
   position: relative;
   z-index: 4;
   width: 100%;
-  max-width: 33.333%;
+  max-width: min(42rem, 42vw);
   margin-top: calc(var(--vs-hero-layer-height) * -1);
   padding: var(--vs-content-inset-top) 1rem var(--vs-content-inset-bottom);
   overflow: visible;
   transform-origin: center top;
   will-change: transform, opacity;
+}
+
+.visual-story--hero-classic-depth .visual-story__headline {
+  text-wrap: pretty;
 }
 
 .visual-story--copy-light .visual-story__content {
@@ -226,6 +230,7 @@
   }
 
   .visual-story__content {
+    max-width: none;
     margin-top: 0;
     padding: 6rem 1rem 4rem;
   }
