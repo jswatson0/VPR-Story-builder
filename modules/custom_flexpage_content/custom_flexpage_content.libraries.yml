@@ -42,6 +42,14 @@ detail_selector_block:
   dependencies:
     - custom_flexpage_content/story_blocks_base
 
+story_grid_catalog_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-grid-catalog.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
+
 research_image_grid_block:
   version: 1.x
   css:

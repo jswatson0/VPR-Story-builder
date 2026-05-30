@@ -61,6 +61,21 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'research-image-grid-block',
     ],
+    'custom_flexpage_story_grid_catalog' => [
+      'variables' => [
+        'eyebrow' => '',
+        'headline' => '',
+        'intro' => '',
+        'items' => [],
+        'desktop_columns' => 3,
+        'gutter_size' => 'regular',
+        'section_width' => 'wide',
+        'card_surface' => 'filled',
+        'corner_radius' => 'none',
+        'color_theme' => 'light',
+      ],
+      'template' => 'custom-flexpage-story-grid-catalog',
+    ],
     'custom_flexpage_story_timeline_milestones' => [
       'variables' => [
         'eyebrow' => '',

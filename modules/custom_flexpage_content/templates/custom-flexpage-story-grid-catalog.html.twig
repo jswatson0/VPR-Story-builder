@@ -1,0 +1,54 @@
+<section class="visual-story visual-story--grid-catalog visual-story--theme-{{ color_theme }} visual-story--grid-width-{{ section_width }} visual-story--grid-gutter-{{ gutter_size }} visual-story--grid-surface-{{ card_surface }} visual-story--grid-radius-{{ corner_radius }}" data-vs-grid-catalog style="--vs-grid-columns: {{ desktop_columns }};">
+  <div class="visual-story__grid-shell">
+    {% if eyebrow or headline or intro %}
+      <header class="visual-story__grid-header mb-4">
+        {% if eyebrow %}
+          <p class="visual-story__eyebrow">{{ eyebrow }}</p>
+        {% endif %}
+        {% if headline %}
+          <h2 class="visual-story__headline">{{ headline }}</h2>
+        {% endif %}
+        {% if intro %}
+          <div class="visual-story__intro visual-story__grid-intro{% if color_theme == 'dark' %} text-white{% endif %}">{{ intro }}</div>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    <div class="visual-story__grid-items">
+      {% for item in items %}
+        {% set cta_classes = [
+          'btn',
+          'btn-primary',
+          'btn-bs-primary'
+        ] %}
+        <article class="visual-story__grid-card visual-story__grid-card--{{ item.layout }} visual-story__grid-card--ratio-{{ item.image_ratio }}{% if item.is_featured %} visual-story__grid-card--featured{% endif %}{% if not item.has_media %} visual-story__grid-card--no-media{% endif %}{% if card_surface != 'plain' %} overflow-hidden{% endif %}" style="--vs-grid-item-span: {{ item.column_span }};">
+          {% if item.media_url and item.layout != 'overlay' %}
+            <div class="visual-story__grid-media">
+              <img class="w-100 d-block" src="{{ item.media_url }}" alt="{{ item.media_alt ?: item.title }}" loading="lazy" decoding="async">
+            </div>
+          {% endif %}
+
+          {% if item.layout == 'overlay' and item.media_url %}
+            <div class="visual-story__grid-media visual-story__grid-media--background">
+              <img class="w-100 d-block" src="{{ item.media_url }}" alt="{{ item.media_alt ?: item.title }}" loading="lazy" decoding="async">
+            </div>
+          {% endif %}
+
+          <div class="visual-story__grid-content p-3 p-lg-4{% if item.layout == 'overlay' %} visual-story__grid-content--overlay{% endif %}">
+            {% if item.title %}
+              <h3 class="visual-story__grid-card-title">{{ item.title }}</h3>
+            {% endif %}
+
+            {{ item.body }}
+
+            {% if item.cta_label and item.cta_url %}
+              <p class="visual-story__cta-wrap visual-story__grid-cta-wrap mb-0">
+                <a class="{{ cta_classes|join(' ') }}" href="{{ item.cta_url }}">{{ item.cta_label }}</a>
+              </p>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
