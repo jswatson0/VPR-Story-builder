@@ -1,0 +1,135 @@
+{#
+  Story: Title Section block template.
+
+  Layouts:
+    full      — full-width background (image/video) with text overlaid
+    half      — 50/50 split: media one side, text the other
+    text-only — no background media
+
+  Typography uses theme classes (ut-h1, p3) and Bootstrap 5 utilities
+  (text-white, text-start/center/end, small, fw-semibold, text-uppercase).
+#}
+
+{# Map editor values to Bootstrap text-alignment utilities #}
+{% set align_class = {
+  'left':   'text-start',
+  'center': 'text-center',
+  'right':  'text-end',
+}[text_alignment] ?? 'text-start' %}
+
+{# Light copy = white text + shadow; dark copy = body color #}
+{% set copy_class = copy_theme == 'dark' ? 'vs-title--copy-dark' : 'vs-title--copy-light' %}
+
+{% set section_classes = [
+  'vs-title',
+  'vs-title--' ~ layout,
+  'vs-title--height-' ~ height,
+  'vs-title--pad-top-' ~ padding_top,
+  'vs-title--pad-bot-' ~ padding_bottom,
+  copy_class,
+  layout == 'full' ? 'vs-title--pos-' ~ text_position : '',
+  layout == 'half' ? 'vs-title--half-desktop-' ~ half_image_side_desktop : '',
+  layout == 'half' ? 'vs-title--half-mobile-' ~ half_image_side_mobile : '',
+] | filter(v => v) %}
+
+<section
+  class="{{ section_classes | join(' ') }}"
+  data-vs-title
+  data-vs-bg-scroll="{{ bg_scroll_effect }}"
+  data-vs-text-scroll="{{ text_scroll_effect }}"
+  data-vs-text-per-line="{{ text_scroll_per_line ? '1' : '0' }}"
+  style="--vs-overlay-opacity: {{ overlay_opacity }};"
+>
+
+  {# ── Full-width layout ──────────────────────────────────────────────── #}
+  {% if layout == 'full' %}
+
+    {% if bg_kind != 'none' %}
+      <div class="vs-title__bg-layer" data-vs-title-bg>
+        {% if bg_kind == 'video' %}
+          <video class="vs-title__bg-media" autoplay muted loop playsinline aria-hidden="true">
+            <source src="{{ bg_url }}" type="{{ bg_mime }}">
+          </video>
+        {% else %}
+          <img
+            class="vs-title__bg-media"
+            src="{{ bg_url }}"
+            alt="{{ bg_alt }}"
+            style="object-position: {{ focal_x }}% {{ focal_y }}%;"
+            {% if not bg_alt %}aria-hidden="true"{% endif %}
+          >
+        {% endif %}
+        <div class="vs-title__overlay vs-title__overlay--{{ overlay_color }} vs-title__overlay--{{ overlay_style }}"></div>
+      </div>
+    {% endif %}
+
+    <div class="vs-title__content" data-vs-title-content>
+      <div class="vs-title__text-wrap">
+        <div class="vs-title__text-block {{ align_class }}" data-vs-title-textblock>
+          {% if title %}
+            <h1 class="vs-title__h1 ut-h1 mb-3">{{ title }}</h1>
+          {% endif %}
+          {% if subtitle %}
+            <p class="vs-title__subtitle p3 mb-0">{{ subtitle }}</p>
+          {% endif %}
+        </div>
+      </div>
+      {% if byline %}
+        <p class="vs-title__byline small fw-semibold text-uppercase text-{{ byline_position == 'left' ? 'start' : (byline_position == 'right' ? 'end' : 'center') }} mb-0">{{ byline }}</p>
+      {% endif %}
+    </div>
+
+  {# ── Half-width layout ──────────────────────────────────────────────── #}
+  {% elseif layout == 'half' %}
+
+    <div class="vs-title__half-media" data-vs-title-bg>
+      {% if bg_kind == 'video' %}
+        <video class="vs-title__bg-media" autoplay muted loop playsinline aria-hidden="true">
+          <source src="{{ bg_url }}" type="{{ bg_mime }}">
+        </video>
+      {% elseif bg_kind == 'image' %}
+        <img
+          class="vs-title__bg-media"
+          src="{{ bg_url }}"
+          alt="{{ bg_alt }}"
+          style="object-position: {{ focal_x }}% {{ focal_y }}%;"
+          {% if not bg_alt %}aria-hidden="true"{% endif %}
+        >
+      {% endif %}
+      <div class="vs-title__overlay vs-title__overlay--{{ overlay_color }} vs-title__overlay--{{ overlay_style }}"></div>
+    </div>
+
+    <div class="vs-title__half-text">
+      <div class="vs-title__text-block {{ align_class }}" data-vs-title-textblock>
+        {% if title %}
+          <h1 class="vs-title__h1 ut-h1 mb-3">{{ title }}</h1>
+        {% endif %}
+        {% if subtitle %}
+          <p class="vs-title__subtitle p3 mb-0">{{ subtitle }}</p>
+        {% endif %}
+        {% if byline %}
+          <p class="vs-title__byline small fw-semibold text-uppercase mt-3 mb-0 text-{{ byline_position == 'left' ? 'start' : (byline_position == 'right' ? 'end' : 'center') }}">{{ byline }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+  {# ── Text-only layout ───────────────────────────────────────────────── #}
+  {% else %}
+
+    <div class="vs-title__content vs-title__content--text-only" data-vs-title-content>
+      <div class="vs-title__text-block {{ align_class }}" data-vs-title-textblock>
+        {% if title %}
+          <h1 class="vs-title__h1 ut-h1 mb-3">{{ title }}</h1>
+        {% endif %}
+        {% if subtitle %}
+          <p class="vs-title__subtitle p3 mb-0">{{ subtitle }}</p>
+        {% endif %}
+      </div>
+      {% if byline %}
+        <p class="vs-title__byline small fw-semibold text-uppercase mt-3 mb-0 text-{{ byline_position == 'left' ? 'start' : (byline_position == 'right' ? 'end' : 'center') }}">{{ byline }}</p>
+      {% endif %}
+    </div>
+
+  {% endif %}
+
+</section>

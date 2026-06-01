@@ -385,6 +385,127 @@
         updateScrollableBody();
       });
 
+      // ── Story: Title Section ──────────────────────────────────────────
+      once('vs-title-section', '[data-vs-title]', context).forEach((section) => {
+        if (isLayoutBuilderContext()) {
+          return;
+        }
+
+        const bgEl = section.querySelector('[data-vs-title-bg]');
+        const bgMedia = bgEl ? bgEl.querySelector('.vs-title__bg-media') : null;
+        const textBlock = section.querySelector('[data-vs-title-textblock]');
+        const bgScrollEffect = section.dataset.vsBgScroll || 'none';
+        const textScrollEffect = section.dataset.vsTextScroll || 'none';
+        const textPerLine = section.dataset.vsTextPerLine === '1';
+
+        // Entrance fade-in (always, even without GSAP fallback via CSS).
+        if (!hasGsap) {
+          return;
+        }
+
+        const { gsap, ScrollTrigger } = window;
+        gsap.registerPlugin(ScrollTrigger);
+
+        if (prefersReducedMotion.matches || window.innerWidth <= 900) {
+          return;
+        }
+
+        // Background scroll effects.
+        if (bgMedia && bgScrollEffect !== 'none') {
+          if (bgScrollEffect === 'parallax') {
+            // The bg-media is CSS-positioned at height:130%, top:-15% giving
+            // 15% slack on each side. We travel ±12% of the layer height so
+            // there is always a 3% safety margin — the container background
+            // is never exposed at either edge.
+            const getTravelPx = () => Math.round((bgEl ? bgEl.offsetHeight : section.offsetHeight) * 0.12);
+            gsap.fromTo(bgMedia,
+              { y: () => getTravelPx() },
+              {
+                y: () => -getTravelPx(),
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: section,
+                  start: 'top bottom',
+                  end: 'bottom top',
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              }
+            );
+          }
+          else if (bgScrollEffect === 'zoom-in') {
+            // Image already extends beyond container via CSS, so scale
+            // from a slightly zoomed baseline to avoid any edge reveal.
+            gsap.fromTo(bgMedia,
+              { scale: 1.05 },
+              {
+                scale: 1.22,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: section,
+                  start: 'top bottom',
+                  end: 'bottom top',
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              }
+            );
+          }
+        }
+
+        // Text scroll-out effects: fire as section scrolls up and out.
+        if (textScrollEffect !== 'none' && textBlock) {
+          const buildProps = (effect) => {
+            if (effect === 'fade') {
+              return { autoAlpha: 0 };
+            }
+            if (effect === 'blur') {
+              return { autoAlpha: 0.1, filter: 'blur(10px)' };
+            }
+            if (effect === 'zoom') {
+              return { scale: 0.84, autoAlpha: 0.1 };
+            }
+            return {};
+          };
+
+          const scrollEnd = () => `+=${Math.round(section.offsetHeight * 0.55)}`;
+
+          if (textPerLine) {
+            const lines = Array.from(textBlock.children);
+            if (lines.length > 0) {
+              const tl = gsap.timeline({
+                scrollTrigger: {
+                  trigger: section,
+                  start: 'top top',
+                  end: scrollEnd,
+                  scrub: 1.2,
+                  invalidateOnRefresh: true,
+                },
+              });
+              lines.forEach((line, i) => {
+                const position = (i / Math.max(lines.length, 1)) * 0.6;
+                tl.to(line, { ...buildProps(textScrollEffect), ease: 'none' }, position);
+              });
+            }
+          }
+          else {
+            gsap.to(textBlock, {
+              ...buildProps(textScrollEffect),
+              ease: 'none',
+              scrollTrigger: {
+                trigger: section,
+                start: 'top top',
+                end: scrollEnd,
+                scrub: 1.2,
+                invalidateOnRefresh: true,
+              },
+            });
+          }
+        }
+
+        window.addEventListener('resize', () => ScrollTrigger.refresh());
+      });
+
       once('custom-flexpage-story-timeline', '[data-vs-story-timeline]', context).forEach((section) => {
         const items = section.querySelectorAll('[data-vs-timeline-item]');
         const progressFill = section.querySelector('[data-vs-timeline-progress]');

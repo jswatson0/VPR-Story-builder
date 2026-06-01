@@ -1,0 +1,356 @@
+/* ============================================================
+   Story: Title Section
+   Typography defers to theme (ut-h1, p3, Bootstrap utilities).
+   This file owns: layout, positioning, overlay, scroll effects.
+   ============================================================ */
+
+/* ── Shared tokens ─────────────────────────────────────────── */
+.vs-title {
+  --vs-height: 100vh;
+  --vs-pad-top: clamp(4rem, 10vh, 7rem);
+  --vs-pad-bot: clamp(2.5rem, 6vh, 4.5rem);
+  --vs-pad-inline: clamp(1.5rem, 8vw, 10rem);
+  --vs-text-max: min(44rem, 88%);
+  --vs-overlay-opacity: 0.5;
+  /* Nine-position CSS custom property defaults */
+  --vs-valign: flex-end;
+  --vs-halign: flex-start;
+  position: relative;
+  margin: 0;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Copy themes ───────────────────────────────────────────── */
+.vs-title--copy-light .vs-title__text-block,
+.vs-title--copy-light .vs-title__byline {
+  color: #fff;
+}
+
+.vs-title--copy-light .vs-title__h1,
+.vs-title--copy-light .vs-title__subtitle {
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
+}
+
+.vs-title--copy-dark .vs-title__text-block,
+.vs-title--copy-dark .vs-title__byline {
+  color: #1c202c;
+}
+
+.vs-title--copy-dark .vs-title__h1,
+.vs-title--copy-dark .vs-title__subtitle {
+  color: #1c202c;
+  text-shadow: none;
+}
+
+/* ── Height variants ───────────────────────────────────────── */
+.vs-title--height-screen { --vs-height: 100vh; }
+.vs-title--height-150    { --vs-height: 150vh; }
+.vs-title--height-half   { --vs-height: 50vh;  }
+.vs-title--height-third  { --vs-height: 33.33vh; }
+
+/* ── Padding variants ──────────────────────────────────────── */
+.vs-title--pad-top-small  { --vs-pad-top: clamp(2rem, 5vh, 3.5rem); }
+.vs-title--pad-top-medium { --vs-pad-top: clamp(4rem, 10vh, 7rem); }
+.vs-title--pad-top-large  { --vs-pad-top: clamp(6rem, 16vh, 11rem); }
+
+.vs-title--pad-bot-small  { --vs-pad-bot: clamp(1.5rem, 4vh, 2.5rem); }
+.vs-title--pad-bot-medium { --vs-pad-bot: clamp(2.5rem, 6vh, 4.5rem); }
+.vs-title--pad-bot-large  { --vs-pad-bot: clamp(4rem, 10vh, 7rem); }
+
+/* ── Nine-position grid (full layout) ─────────────────────── */
+.vs-title--pos-top-left      { --vs-valign: flex-start; --vs-halign: flex-start; }
+.vs-title--pos-top-center    { --vs-valign: flex-start; --vs-halign: center; }
+.vs-title--pos-top-right     { --vs-valign: flex-start; --vs-halign: flex-end; }
+.vs-title--pos-middle-left   { --vs-valign: center;     --vs-halign: flex-start; }
+.vs-title--pos-middle-center { --vs-valign: center;     --vs-halign: center; }
+.vs-title--pos-middle-right  { --vs-valign: center;     --vs-halign: flex-end; }
+.vs-title--pos-bottom-left   { --vs-valign: flex-end;   --vs-halign: flex-start; }
+.vs-title--pos-bottom-center { --vs-valign: flex-end;   --vs-halign: center; }
+.vs-title--pos-bottom-right  { --vs-valign: flex-end;   --vs-halign: flex-end; }
+
+/* ── Background layer (full & half) ───────────────────────── */
+.vs-title__bg-layer,
+.vs-title__half-media {
+  overflow: hidden;
+}
+
+.vs-title__bg-media {
+  display: block;
+  /* Extend beyond the container in both directions so parallax travel
+     never exposes the layer background. 130% height + top: -15% gives
+     15% slack above and below; JS uses only ±12% for parallax so there
+     is always a 3% safety margin at each edge. */
+  position: absolute;
+  width: 100%;
+  height: 130%;
+  top: -15%;
+  left: 0;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* ── Overlay (shared) ──────────────────────────────────────── */
+.vs-title__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Dark overlays */
+.vs-title__overlay--dark.vs-title__overlay--flat {
+  background: rgba(0, 0, 0, var(--vs-overlay-opacity));
+}
+.vs-title__overlay--dark.vs-title__overlay--gradient-down {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, var(--vs-overlay-opacity)) 0%,
+    rgba(0, 0, 0, calc(var(--vs-overlay-opacity) * 0.25)) 100%
+  );
+}
+.vs-title__overlay--dark.vs-title__overlay--gradient-up {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, var(--vs-overlay-opacity)) 0%,
+    rgba(0, 0, 0, calc(var(--vs-overlay-opacity) * 0.25)) 100%
+  );
+}
+.vs-title__overlay--dark.vs-title__overlay--radial {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 28%,
+    rgba(0, 0, 0, var(--vs-overlay-opacity)) 100%
+  );
+}
+
+/* Light overlays */
+.vs-title__overlay--light.vs-title__overlay--flat {
+  background: rgba(255, 255, 255, var(--vs-overlay-opacity));
+}
+.vs-title__overlay--light.vs-title__overlay--gradient-down {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, var(--vs-overlay-opacity)) 0%,
+    rgba(255, 255, 255, calc(var(--vs-overlay-opacity) * 0.2)) 100%
+  );
+}
+.vs-title__overlay--light.vs-title__overlay--gradient-up {
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, var(--vs-overlay-opacity)) 0%,
+    rgba(255, 255, 255, calc(var(--vs-overlay-opacity) * 0.2)) 100%
+  );
+}
+.vs-title__overlay--light.vs-title__overlay--radial {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 28%,
+    rgba(255, 255, 255, var(--vs-overlay-opacity)) 100%
+  );
+}
+
+/* Burnt orange (UT Austin) */
+.vs-title__overlay--burnt-orange.vs-title__overlay--flat {
+  background: rgba(191, 87, 0, var(--vs-overlay-opacity));
+}
+.vs-title__overlay--burnt-orange.vs-title__overlay--gradient-down {
+  background: linear-gradient(
+    to bottom,
+    rgba(191, 87, 0, var(--vs-overlay-opacity)) 0%,
+    rgba(191, 87, 0, calc(var(--vs-overlay-opacity) * 0.22)) 100%
+  );
+}
+.vs-title__overlay--burnt-orange.vs-title__overlay--gradient-up {
+  background: linear-gradient(
+    to top,
+    rgba(191, 87, 0, var(--vs-overlay-opacity)) 0%,
+    rgba(191, 87, 0, calc(var(--vs-overlay-opacity) * 0.22)) 100%
+  );
+}
+.vs-title__overlay--burnt-orange.vs-title__overlay--radial {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 28%,
+    rgba(191, 87, 0, var(--vs-overlay-opacity)) 100%
+  );
+}
+
+/* ============================================================
+   FULL LAYOUT
+   ============================================================ */
+.vs-title--full {
+  min-height: var(--vs-height);
+}
+
+.vs-title--full .vs-title__bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.vs-title--full .vs-title__content {
+  position: relative;
+  z-index: 2;
+  min-height: var(--vs-height);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: var(--vs-pad-top) var(--vs-pad-inline) var(--vs-pad-bot);
+}
+
+.vs-title--full .vs-title__text-wrap {
+  display: flex;
+  align-items: var(--vs-valign);
+  justify-content: var(--vs-halign);
+}
+
+.vs-title__text-block {
+  max-width: var(--vs-text-max);
+  width: 100%;
+}
+
+/* Override theme h1/p3 sizes upward for hero context */
+.vs-title__h1.ut-h1 {
+  font-size: clamp(2.75rem, 5vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.vs-title__subtitle.p3 {
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  line-height: 1.55;
+  opacity: 0.92;
+}
+
+.vs-title__byline {
+  opacity: 0.72;
+  letter-spacing: 0.06em;
+}
+
+/* Byline sits in the auto grid row pinned to the bottom of the section */
+.vs-title--full .vs-title__byline {
+  align-self: flex-end;
+  padding-top: 0.5rem;
+}
+
+/* Layout Builder admin safety: flatten to static preview */
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .vs-title--full,
+.layout-builder .vs-title--full {
+  min-height: 0;
+  overflow: hidden;
+}
+
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .vs-title--full .vs-title__bg-layer,
+.layout-builder .vs-title--full .vs-title__bg-layer {
+  position: relative;
+  height: min(60vh, 28rem);
+}
+
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .vs-title--full .vs-title__content,
+.layout-builder .vs-title--full .vs-title__content {
+  min-height: 0;
+  padding: clamp(2rem, 4vw, 3rem) var(--vs-pad-inline);
+}
+
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .vs-title--full .vs-title__bg-media,
+.layout-builder .vs-title--full .vs-title__bg-media {
+  transform: none !important;
+  will-change: auto;
+}
+
+/* ============================================================
+   HALF LAYOUT
+   ============================================================ */
+.vs-title--half {
+  display: flex;
+  min-height: var(--vs-height);
+}
+
+.vs-title__half-media {
+  position: relative;
+  flex: 0 0 50%;
+}
+
+.vs-title__half-text {
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--vs-pad-top) clamp(2rem, 6vw, 5rem) var(--vs-pad-bot);
+}
+
+.vs-title--half-desktop-left  .vs-title__half-media { order: 0; }
+.vs-title--half-desktop-left  .vs-title__half-text  { order: 1; }
+.vs-title--half-desktop-right .vs-title__half-media { order: 1; }
+.vs-title--half-desktop-right .vs-title__half-text  { order: 0; }
+
+/* ============================================================
+   TEXT-ONLY LAYOUT
+   ============================================================ */
+.vs-title--text-only {
+  background: transparent;
+}
+
+.vs-title__content--text-only {
+  display: flex;
+  flex-direction: column;
+  padding: var(--vs-pad-top) var(--vs-pad-inline) var(--vs-pad-bot);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  /* Full layout: disable parallax transforms on mobile, reset to natural center */
+  .vs-title--full .vs-title__bg-media {
+    top: -15%; /* keep the centering offset, just remove transforms */
+    transform: none !important;
+    will-change: auto;
+  }
+
+  /* Half layout: stack vertically */
+  .vs-title--half {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .vs-title__half-media {
+    flex: none;
+    height: 50vw;
+    min-height: 14rem;
+    max-height: 22rem;
+  }
+
+  .vs-title__half-text {
+    flex: none;
+    padding: clamp(2rem, 5vw, 3rem) clamp(1.25rem, 5vw, 2.5rem);
+  }
+
+  .vs-title--half-mobile-top    .vs-title__half-media { order: 0; }
+  .vs-title--half-mobile-top    .vs-title__half-text  { order: 1; }
+  .vs-title--half-mobile-bottom .vs-title__half-media { order: 1; }
+  .vs-title--half-mobile-bottom .vs-title__half-text  { order: 0; }
+
+  .vs-title--full .vs-title__content {
+    min-height: clamp(22rem, 60vh, 36rem);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .vs-title__bg-media {
+    /* Keep top:-15% so image stays centered, just strip motion */
+    transform: none !important;
+    will-change: auto;
+  }
+  .vs-title__text-block,
+  .vs-title__content {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    will-change: auto;
+  }
+}

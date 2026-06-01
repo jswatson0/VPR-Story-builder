@@ -10,6 +10,36 @@
  */
 function custom_flexpage_content_theme($existing, $type, $theme, $path) {
   return [
+    'custom_flexpage_story_title_section' => [
+      'variables' => [
+        'layout' => 'full',
+        'title' => '',
+        'subtitle' => '',
+        'byline' => '',
+        'byline_position' => 'left',
+        'text_position' => 'bottom-left',
+        'text_alignment' => 'left',
+        'bg_kind' => 'none',
+        'bg_url' => '',
+        'bg_mime' => '',
+        'bg_alt' => '',
+        'focal_x' => '50',
+        'focal_y' => '50',
+        'overlay_color' => 'dark',
+        'overlay_style' => 'gradient-down',
+        'overlay_opacity' => '0.50',
+        'height' => 'screen',
+        'padding_top' => 'medium',
+        'padding_bottom' => 'medium',
+        'bg_scroll_effect' => 'parallax',
+        'text_scroll_effect' => 'fade',
+        'text_scroll_per_line' => FALSE,
+        'half_image_side_desktop' => 'left',
+        'half_image_side_mobile' => 'top',
+        'copy_theme' => 'light',
+      ],
+      'template' => 'custom-flexpage-story-title-section',
+    ],
     'custom_flexpage_story_hero_classic_depth_parallax' => [
       'variables' => [
         'eyebrow' => '',
