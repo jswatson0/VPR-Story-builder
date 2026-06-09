@@ -83,6 +83,10 @@
   --vs-content-inset-top: clamp(9.5rem, 31vh, 13rem);
 }
 
+.visual-story--height-screen.visual-story--content-vpos-bottom {
+  --vs-content-inset-top: clamp(22rem, 60vh, 48rem);
+}
+
 .visual-story--height-tall {
   --vs-hero-layer-height: 86vh;
   --vs-content-scroll-space: 10vh;
