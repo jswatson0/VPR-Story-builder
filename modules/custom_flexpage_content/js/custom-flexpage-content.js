@@ -349,18 +349,21 @@
             return;
           }
 
-          const textStyles = window.getComputedStyle(text);
-          const textPaddingTop = parseFloat(textStyles.paddingTop) || 0;
-          const textPaddingBottom = parseFloat(textStyles.paddingBottom) || 0;
-          const nonBodyHeight = text.offsetHeight - body.offsetHeight;
-          const mediaHeight = media.getBoundingClientRect().height;
-          const availableBodyHeight = Math.max(
-            180,
-            Math.round(mediaHeight - nonBodyHeight - textPaddingTop - textPaddingBottom)
-          );
+          // Collapse the body to zero so the grid row height is driven purely
+          // by the media column, giving the media's natural rendered height.
+          // Also read the text column height at this point — that's the
+          // headline + CTA + padding with no body content.
+          body.style.maxHeight = '0px';
+          body.style.overflow = 'hidden';
+          const naturalMediaHeight = Math.round(media.getBoundingClientRect().height);
+          const nonBodyHeight = Math.round(text.getBoundingClientRect().height);
+          body.style.maxHeight = 'none';
+          body.style.overflowY = 'visible';
+
+          const availableBodyHeight = naturalMediaHeight - nonBodyHeight;
 
           const hiddenTextDistance = Math.max(0, body.scrollHeight - availableBodyHeight);
-          if (hiddenTextDistance <= 2) {
+          if (availableBodyHeight <= 0 || hiddenTextDistance <= 2) {
             return;
           }
 
@@ -383,6 +386,14 @@
 
         window.addEventListener('resize', updateScrollableBody);
         updateScrollableBody();
+
+        // Re-run after the image loads — lazy-loaded images report zero height
+        // until decoded, which would cause naturalMediaHeight to be wrong.
+        const imgEl = media.querySelector('img');
+        if (imgEl && !imgEl.complete) {
+          imgEl.addEventListener('load', updateScrollableBody, { once: true });
+          imgEl.addEventListener('error', updateScrollableBody, { once: true });
+        }
       });
 
       // ── Story: Title Section ──────────────────────────────────────────

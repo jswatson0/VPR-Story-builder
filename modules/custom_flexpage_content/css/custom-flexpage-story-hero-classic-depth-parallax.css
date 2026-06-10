@@ -83,8 +83,12 @@
   --vs-content-inset-top: clamp(9.5rem, 31vh, 13rem);
 }
 
+.visual-story--height-screen.visual-story--content-vpos-middle {
+  --vs-content-inset-top: clamp(16rem, 40vh, 32rem);
+}
+
 .visual-story--height-screen.visual-story--content-vpos-bottom {
-  --vs-content-inset-top: clamp(22rem, 60vh, 48rem);
+  --vs-content-inset-top: clamp(20rem, 54vh, 44rem);
 }
 
 .visual-story--height-tall {

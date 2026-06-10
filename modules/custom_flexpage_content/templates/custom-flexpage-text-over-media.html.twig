@@ -16,11 +16,11 @@
   </div>
   <div class="visual-story__media">
     {% if media_kind == 'video' %}
-      <video autoplay muted loop playsinline preload="metadata">
+      <video autoplay muted loop playsinline preload="metadata" aria-hidden="true">
         <source src="{{ media_url }}"{% if media_mime %} type="{{ media_mime }}"{% endif %}>
       </video>
     {% else %}
-      <img src="{{ media_url }}" alt="{{ media_alt }}">
+      <img src="{{ media_url }}" alt="{{ media_alt }}" loading="lazy">
     {% endif %}
   </div>
 </section>

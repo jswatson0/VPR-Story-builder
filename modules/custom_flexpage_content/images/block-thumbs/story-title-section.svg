@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="titleBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e2d4a"/>
+      <stop offset="100%" stop-color="#0a1021"/>
+    </linearGradient>
+    <linearGradient id="titleOverlay" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#0a1021" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0a1021" stop-opacity="0.72"/>
+    </linearGradient>
+  </defs>
+  <!-- Background image -->
+  <rect width="400" height="260" fill="url(#titleBg)"/>
+  <!-- Simulated landscape -->
+  <ellipse cx="200" cy="90" rx="180" ry="70" fill="#263355" opacity="0.6"/>
+  <rect x="0" y="150" width="400" height="110" fill="url(#titleOverlay)"/>
+  <!-- Byline / eyebrow -->
+  <rect x="40" y="110" width="55" height="5" rx="2.5" fill="#f3a712" opacity="0.85"/>
+  <!-- Main title -->
+  <rect x="40" y="124" width="240" height="18" rx="4" fill="white" opacity="0.95"/>
+  <rect x="40" y="148" width="190" height="18" rx="4" fill="white" opacity="0.95"/>
+  <!-- Subtitle / byline -->
+  <rect x="40" y="178" width="140" height="7" rx="3.5" fill="white" opacity="0.55"/>
+  <rect x="40" y="192" width="110" height="7" rx="3.5" fill="white" opacity="0.45"/>
+</svg>

@@ -134,6 +134,29 @@ abstract class VisualStoryBlockBase extends BlockBase {
   }
 
   /**
+   * Extracts node target ID from entity autocomplete form values.
+   */
+  protected function extractNodeTargetId(mixed $value): int {
+    if (is_array($value) && isset($value[0]['target_id'])) {
+      return (int) $value[0]['target_id'];
+    }
+
+    if (is_array($value) && isset($value['target_id'])) {
+      return (int) $value['target_id'];
+    }
+
+    if (is_numeric($value)) {
+      return (int) $value;
+    }
+
+    if (is_string($value) && preg_match('/\((\d+)\)\s*$/', $value, $matches)) {
+      return (int) ($matches[1] ?? 0);
+    }
+
+    return 0;
+  }
+
+  /**
    * Gets video URL and MIME type from the first video file field on media.
    */
   protected function extractVideoFromMedia(MediaInterface $media, array &$cache_tags): ?array {

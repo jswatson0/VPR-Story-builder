@@ -2,6 +2,7 @@
 
 namespace Drupal\custom_flexpage_content\Plugin\Block;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 
@@ -268,7 +269,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
     if ($cta_node_id > 0) {
       $node = \Drupal::entityTypeManager()->getStorage('node')->load($cta_node_id);
       if ($node instanceof NodeInterface && $node->access('view')) {
-        $cache_tags = array_merge($cache_tags, $node->getCacheTags());
+        $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTags());
         $cta_url = $node->toUrl()->toString();
       }
     }
@@ -317,7 +318,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
     if ($media_id > 0) {
       $media = \Drupal::entityTypeManager()->getStorage('media')->load($media_id);
       if ($media) {
-        $cache_tags = array_merge($cache_tags, $media->getCacheTags());
+        $cache_tags = Cache::mergeTags($cache_tags, $media->getCacheTags());
         $video = $this->extractVideoFromMedia($media, $cache_tags);
         if ($video) {
           return [
@@ -365,27 +366,5 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
     ];
   }
 
-  /**
-   * Extracts node target ID from entity autocomplete values.
-   */
-  protected function extractNodeTargetId($value): int {
-    if (is_array($value) && isset($value[0]['target_id'])) {
-      return (int) $value[0]['target_id'];
-    }
-
-    if (is_array($value) && isset($value['target_id'])) {
-      return (int) $value['target_id'];
-    }
-
-    if (is_numeric($value)) {
-      return (int) $value;
-    }
-
-    if (is_string($value) && preg_match('/\((\d+)\)\s*$/', $value, $matches)) {
-      return (int) ($matches[1] ?? 0);
-    }
-
-    return 0;
-  }
 
 }

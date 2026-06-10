@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <rect width="400" height="260" fill="#0a1021"/>
+  <!-- Left column: selector items -->
+  <rect x="0" y="0" width="148" height="260" fill="#111827"/>
+  <!-- Active item highlight -->
+  <rect x="0" y="56" width="148" height="52" fill="#1e2d44"/>
+  <rect x="0" y="56" width="3" height="52" fill="#f3a712"/>
+  <!-- Selector items -->
+  <rect x="18" y="24" width="90" height="9" rx="3" fill="white" opacity="0.3"/>
+  <rect x="18" y="38" width="70" height="7" rx="3" fill="white" opacity="0.2"/>
+  <rect x="18" y="68" width="90" height="9" rx="3" fill="white" opacity="0.9"/>
+  <rect x="18" y="82" width="70" height="7" rx="3" fill="white" opacity="0.6"/>
+  <rect x="18" y="122" width="90" height="9" rx="3" fill="white" opacity="0.3"/>
+  <rect x="18" y="136" width="70" height="7" rx="3" fill="white" opacity="0.2"/>
+  <rect x="18" y="178" width="90" height="9" rx="3" fill="white" opacity="0.3"/>
+  <rect x="18" y="192" width="70" height="7" rx="3" fill="white" opacity="0.2"/>
+  <!-- Right column: detail panel -->
+  <!-- Image area -->
+  <rect x="164" y="20" width="216" height="110" rx="4" fill="#1e3050"/>
+  <!-- Detail text -->
+  <rect x="164" y="142" width="160" height="11" rx="3" fill="white" opacity="0.85"/>
+  <rect x="164" y="160" width="210" height="7" rx="3" fill="white" opacity="0.35"/>
+  <rect x="164" y="173" width="195" height="7" rx="3" fill="white" opacity="0.35"/>
+  <rect x="164" y="186" width="180" height="7" rx="3" fill="white" opacity="0.35"/>
+  <!-- CTA -->
+  <rect x="164" y="210" width="80" height="26" rx="4" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect x="176" y="220" width="56" height="7" rx="3" fill="white" opacity="0.6"/>
+</svg>

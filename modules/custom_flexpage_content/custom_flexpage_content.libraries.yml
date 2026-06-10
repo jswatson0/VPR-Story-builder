@@ -72,6 +72,9 @@ research_image_grid_block:
 
 block_editor:
   version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-block-editor.css: {}
   js:
     js/custom-flexpage-block-editor.js: {}
   dependencies:

@@ -1,0 +1,20 @@
+/* Layout Builder block browser modal — viewport containment.
+ * height:auto + autoResize can push the dialog below the fold on long flex pages.
+ * These rules cap the dialog at 90vh and make its content area scroll instead.
+ */
+div.ui-dialog[aria-describedby="layout-builder-modal"] {
+  top: calc(5vh + 50px) !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+div.ui-dialog[aria-describedby="layout-builder-modal"] .ui-dialog-titlebar {
+  flex: 0 0 auto;
+}
+
+div.ui-dialog[aria-describedby="layout-builder-modal"] .ui-dialog-content {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  min-height: 0 !important;
+}

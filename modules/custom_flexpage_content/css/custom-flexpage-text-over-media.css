@@ -1,6 +1,6 @@
 .visual-story--text-media {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: stretch;
 }
 
@@ -35,9 +35,11 @@
 .visual-story--text-media .visual-story__body {
   font-size: var(--vs-font-size-body);
   line-height: var(--vs-line-body);
-  max-height: var(--vs-text-body-max-height, none);
+  max-height: none;
   overflow-y: auto;
   padding-right: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.32) transparent;
 }
 
 .visual-story--text-media .visual-story__body > :first-child {
@@ -99,6 +101,10 @@
   background: rgba(17, 24, 39, 0.25);
 }
 
+.visual-story--theme-light .visual-story--text-media .visual-story__body {
+  scrollbar-color: rgba(17, 24, 39, 0.25) transparent;
+}
+
 .visual-story--text-media.visual-story--drop-cap .visual-story__body > p:first-of-type::first-letter {
   float: left;
   margin: 0.08em 0.22em 0 0;
@@ -133,6 +139,20 @@
   background: linear-gradient(155deg, rgba(76, 201, 240, 0.12), rgba(76, 201, 240, 0.03));
 }
 
+.visual-story--theme-light.visual-story--text-media.visual-story--preset-editorial .visual-story__text {
+  background: linear-gradient(160deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+}
+
+.visual-story--theme-light.visual-story--text-media.visual-story--preset-feature .visual-story__text {
+  border-left: 6px solid #c47d00;
+  background: linear-gradient(155deg, rgba(196, 125, 0, 0.1), rgba(196, 125, 0, 0.03));
+}
+
+.visual-story--theme-light.visual-story--text-media.visual-story--preset-data-story .visual-story__text {
+  border-left: 4px solid #0077aa;
+  background: linear-gradient(155deg, rgba(0, 119, 170, 0.1), rgba(0, 119, 170, 0.03));
+}
+
 .visual-story--text-media[data-vs-text-media-reveal] .visual-story__text,
 .visual-story--text-media[data-vs-text-media-reveal] .visual-story__media {
   opacity: 0;
@@ -145,7 +165,7 @@
 }
 
 .visual-story--text-media[data-vs-text-media-reveal].is-visible .visual-story__media {
-  transition-delay: 0.1s;
+  transition-delay: 0.2s;
 }
 
 @media (max-width: 900px) {

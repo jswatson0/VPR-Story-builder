@@ -6,6 +6,73 @@
  */
 
 /**
+ * Implements hook_layout_builder_browser_alter().
+ */
+function custom_flexpage_content_layout_builder_browser_alter(array &$build, array $context) {
+  $build['#attached']['library'][] = 'custom_flexpage_content/block_editor';
+
+  _custom_flexpage_content_inject_views_blocks($build, $context);
+}
+
+/**
+ * Injects all Views display blocks into a collapsed "List (views)" category.
+ */
+function _custom_flexpage_content_inject_views_blocks(array &$build, array $context) {
+  $section_storage = $context['section_storage'];
+  $delta = $context['delta'];
+  $region = $context['region'];
+
+  $all_definitions = \Drupal::service('plugin.manager.block')->getDefinitions();
+  $views_definitions = array_filter($all_definitions, fn($def) => $def['provider'] === 'views');
+
+  if (empty($views_definitions)) {
+    return;
+  }
+
+  uasort($views_definitions, fn($a, $b) => strcmp((string) $a['admin_label'], (string) $b['admin_label']));
+
+  $is_ajax = \Drupal::request()->isXmlHttpRequest();
+  $links = [];
+
+  foreach ($views_definitions as $block_id => $definition) {
+    $attributes = ['class' => ['js-layout-builder-block-link']];
+    if ($is_ajax) {
+      $attributes['class'][] = 'use-ajax';
+      $attributes['data-dialog-type'] = 'dialog';
+      $attributes['data-dialog-renderer'] = 'off_canvas';
+      $attributes['data-dialog-options'] = \Drupal\Component\Serialization\Json::encode(['width' => '500px']);
+    }
+
+    $links[] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['layout-builder-browser-block-item']],
+      'link' => [
+        '#type' => 'link',
+        '#title' => ['label' => ['#markup' => $definition['admin_label']]],
+        '#url' => \Drupal\Core\Url::fromRoute('layout_builder.add_block', [
+          'section_storage_type' => $section_storage->getStorageType(),
+          'section_storage' => $section_storage->getStorageId(),
+          'delta' => $delta,
+          'region' => $region,
+          'plugin_id' => $block_id,
+        ]),
+        '#attributes' => $attributes,
+      ],
+    ];
+  }
+
+  if ($links) {
+    $build['block_categories']['views'] = [
+      '#type' => 'details',
+      '#title' => t('List (views)'),
+      '#open' => FALSE,
+      '#attributes' => ['class' => ['js-layout-builder-category']],
+      'links' => $links,
+    ];
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function custom_flexpage_content_theme($existing, $type, $theme, $path) {
