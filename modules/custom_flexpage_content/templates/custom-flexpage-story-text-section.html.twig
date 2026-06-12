@@ -1,0 +1,25 @@
+<section class="visual-story visual-story--text-section visual-story--theme-{{ color_theme }} visual-story--ts-columns-{{ columns }} visual-story--ts-width-{{ content_width }} visual-story--ts-align-{{ text_alignment }}{% if drop_cap %} visual-story--drop-cap{% endif %}"{% if fade_in %} data-vs-text-section-fade{% endif %}>
+  <div class="visual-story__ts-shell">
+    {% if eyebrow or headline or lead %}
+      <header class="visual-story__ts-header">
+        {% if eyebrow %}
+          <p class="visual-story__eyebrow">{{ eyebrow }}</p>
+        {% endif %}
+        {% if headline %}
+          <h2 class="visual-story__headline visual-story__ts-headline">{{ headline }}</h2>
+        {% endif %}
+        {% if lead %}
+          <p class="visual-story__lead">{{ lead }}</p>
+        {% endif %}
+      </header>
+    {% endif %}
+    <div class="visual-story__ts-body{% if color_theme == 'dark' %} text-white{% endif %}">
+      {{ body }}
+    </div>
+    {% if cta_label and cta_url %}
+      <p class="visual-story__cta-wrap">
+        <a class="visual-story__cta" href="{{ cta_url }}">{{ cta_label }}</a>
+      </p>
+    {% endif %}
+  </div>
+</section>

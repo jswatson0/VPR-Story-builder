@@ -133,7 +133,6 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#title' => $this->t('Headline'),
       '#description' => $this->t('Primary message shown in the hero. Keep concise for best readability.'),
       '#default_value' => $this->configuration['headline'] ?? '',
-      '#required' => TRUE,
       '#maxlength' => 255,
     ];
 
@@ -198,6 +197,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#description' => $this->t('Increase overlay strength when text contrast needs improvement.'),
       '#default_value' => $this->configuration['overlay_strength'] ?? 'full',
       '#options' => [
+        'none' => $this->t('None'),
         'light' => $this->t('Light'),
         'medium' => $this->t('Medium'),
         'heavy' => $this->t('Heavy'),

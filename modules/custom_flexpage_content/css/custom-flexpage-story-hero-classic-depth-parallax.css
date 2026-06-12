@@ -131,6 +131,10 @@
   background: linear-gradient(135deg, rgba(3, 5, 9, 0.82), rgba(3, 5, 9, 0.35));
 }
 
+.visual-story--overlay-none .visual-story__overlay {
+  background: none;
+}
+
 .visual-story--overlay-light .visual-story__overlay {
   background: linear-gradient(135deg, rgba(3, 5, 9, 0.55), rgba(3, 5, 9, 0.2));
 }

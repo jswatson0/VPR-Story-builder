@@ -517,6 +517,33 @@
         window.addEventListener('resize', () => ScrollTrigger.refresh());
       });
 
+      once('vs-text-section-fade', '[data-vs-text-section-fade]', context).forEach((section) => {
+        if (isLayoutBuilderContext() || prefersReducedMotion.matches) {
+          return;
+        }
+
+        if (typeof window.IntersectionObserver === 'undefined') {
+          return;
+        }
+
+        section.classList.add('will-fade');
+
+        const observer = new window.IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+            section.classList.add('is-visible');
+            observer.unobserve(section);
+          });
+        }, {
+          root: null,
+          threshold: 0.1,
+        });
+
+        observer.observe(section);
+      });
+
       once('custom-flexpage-story-timeline', '[data-vs-story-timeline]', context).forEach((section) => {
         const items = section.querySelectorAll('[data-vs-timeline-item]');
         const progressFill = section.querySelector('[data-vs-timeline-progress]');

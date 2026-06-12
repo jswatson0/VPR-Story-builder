@@ -1,0 +1,138 @@
+/* ── Text Section block ─────────────────────────────────────────────────── */
+
+.visual-story--text-section {
+  padding: 4rem 1.5rem;
+}
+
+/* Shell: centered, max-width controlled by width variant */
+.visual-story__ts-shell {
+  --vs-ts-max-width: 80ch;
+  max-width: var(--vs-ts-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.visual-story--ts-width-narrow .visual-story__ts-shell {
+  --vs-ts-max-width: 54ch;
+}
+
+.visual-story--ts-width-wide .visual-story__ts-shell {
+  --vs-ts-max-width: 110ch;
+}
+
+/* Center alignment */
+.visual-story--ts-align-center .visual-story__ts-shell {
+  text-align: center;
+}
+
+.visual-story--ts-align-center .visual-story__ts-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header spacing */
+.visual-story__ts-header {
+  margin-bottom: 2rem;
+}
+
+.visual-story__ts-headline {
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  margin-bottom: 0.5rem;
+}
+
+/* Lead paragraph */
+.visual-story__lead {
+  margin: 0.75rem 0 0;
+  font-size: var(--vs-font-size-lead);
+  line-height: var(--vs-line-lead);
+  font-weight: 500;
+  text-wrap: pretty;
+  color: inherit;
+}
+
+/* Body: standard prose */
+.visual-story__ts-body > * {
+  max-width: 100%;
+}
+
+.visual-story__ts-body > * + * {
+  margin-top: 1em;
+}
+
+.visual-story__ts-body > *:first-child {
+  margin-top: 0;
+}
+
+/* Two-column layout */
+.visual-story--ts-columns-2 .visual-story__ts-body {
+  columns: 2;
+  column-gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+.visual-story--ts-columns-2 .visual-story__ts-body > * {
+  break-inside: avoid;
+}
+
+/* Drop cap */
+.visual-story--drop-cap .visual-story__ts-body p:first-of-type::first-letter {
+  float: left;
+  font-size: clamp(3.5rem, 6vw, 5rem);
+  line-height: 0.82;
+  font-weight: 700;
+  margin: 0.05em 0.12em 0 0;
+  color: var(--vs-accent, #f3a712);
+}
+
+/* ── Themes ─────────────────────────────────────────────────────────────── */
+
+.visual-story--theme-light.visual-story--text-section {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.visual-story--theme-light .visual-story__lead {
+  color: #444;
+}
+
+.visual-story--theme-light .visual-story__ts-body {
+  color: #2a2a2a;
+}
+
+.visual-story--theme-dark.visual-story--text-section {
+  background: var(--vs-bg, #05070d);
+  color: var(--vs-text, #f5f3ea);
+}
+
+.visual-story--theme-dark .visual-story__lead {
+  color: rgba(245, 243, 234, 0.8);
+}
+
+.visual-story--theme-dark .visual-story__ts-body {
+  color: rgba(245, 243, 234, 0.88);
+}
+
+/* ── Fade-in on scroll ──────────────────────────────────────────────────── */
+
+.visual-story--text-section.will-fade .visual-story__ts-body {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.visual-story--text-section.is-visible .visual-story__ts-body {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .visual-story--text-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .visual-story--ts-columns-2 .visual-story__ts-body {
+    columns: 1;
+  }
+}
