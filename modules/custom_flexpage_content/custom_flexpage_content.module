@@ -106,12 +106,21 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'custom-flexpage-story-title-section',
     ],
+    'custom_flexpage_story_reveal_section' => [
+      'variables' => [
+        'panels'          => [],
+        'scroll_duration' => 'medium',
+        'page_turn'       => FALSE,
+      ],
+      'template' => 'custom-flexpage-story-reveal-section',
+    ],
     'custom_flexpage_story_text_section' => [
       'variables' => [
         'eyebrow' => '',
         'headline' => '',
         'lead' => '',
         'body' => '',
+        'body_2' => '',
         'columns' => '1',
         'content_width' => 'normal',
         'text_alignment' => 'left',

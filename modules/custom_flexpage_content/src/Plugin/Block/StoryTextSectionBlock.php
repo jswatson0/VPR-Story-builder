@@ -27,6 +27,8 @@ class StoryTextSectionBlock extends VisualStoryBlockBase {
       'lead' => '',
       'body_value' => '',
       'body_format' => 'basic_html',
+      'body_2_value' => '',
+      'body_2_format' => 'basic_html',
       'columns' => '1',
       'content_width' => 'normal',
       'text_alignment' => 'left',
@@ -114,6 +116,24 @@ class StoryTextSectionBlock extends VisualStoryBlockBase {
       ],
     ];
 
+    $form['body_2'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('Second column body copy'),
+      '#description' => $this->t('Rich-text content for the second column when two-column layout is selected.'),
+      '#default_value' => $this->configuration['body_2_value'] ?? '',
+      '#format' => $this->configuration['body_2_format'] ?? filter_default_format(),
+      '#required' => ($this->configuration['columns'] ?? '1') === '2',
+      '#rows' => 10,
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[columns]"]' => ['value' => '2'],
+        ],
+        'required' => [
+          ':input[name="settings[columns]"]' => ['value' => '2'],
+        ],
+      ],
+    ];
+
     $form['content_width'] = [
       '#type' => 'select',
       '#title' => $this->t('Content width'),
@@ -192,8 +212,11 @@ class StoryTextSectionBlock extends VisualStoryBlockBase {
     $this->configuration['headline'] = trim((string) $form_state->getValue('headline', ''));
     $this->configuration['lead'] = trim((string) $form_state->getValue('lead', ''));
     $body = $form_state->getValue('body', []);
+    $body_2 = $form_state->getValue('body_2', []);
     $this->configuration['body_value'] = trim((string) ($body['value'] ?? ''));
     $this->configuration['body_format'] = (string) ($body['format'] ?? filter_default_format());
+    $this->configuration['body_2_value'] = trim((string) ($body_2['value'] ?? ''));
+    $this->configuration['body_2_format'] = (string) ($body_2['format'] ?? filter_default_format());
     $this->configuration['columns'] = (string) $form_state->getValue('columns', '1');
     $this->configuration['content_width'] = (string) $form_state->getValue('content_width', 'normal');
     $this->configuration['text_alignment'] = (string) $form_state->getValue('text_alignment', 'left');
@@ -211,6 +234,12 @@ class StoryTextSectionBlock extends VisualStoryBlockBase {
   public function build(): array {
     $body_value = (string) ($this->configuration['body_value'] ?? '');
     if (trim(strip_tags($body_value)) === '') {
+      return [];
+    }
+
+    $columns = (string) ($this->configuration['columns'] ?? '1');
+    $body_2_value = (string) ($this->configuration['body_2_value'] ?? '');
+    if ($columns === '2' && trim(strip_tags($body_2_value)) === '') {
       return [];
     }
 
@@ -236,7 +265,12 @@ class StoryTextSectionBlock extends VisualStoryBlockBase {
         '#text' => $body_value,
         '#format' => $this->configuration['body_format'] ?? filter_default_format(),
       ],
-      '#columns' => $this->configuration['columns'] ?? '1',
+      '#body_2' => [
+        '#type' => 'processed_text',
+        '#text' => $body_2_value,
+        '#format' => $this->configuration['body_2_format'] ?? filter_default_format(),
+      ],
+      '#columns' => $columns,
       '#content_width' => $this->configuration['content_width'] ?? 'normal',
       '#text_alignment' => $this->configuration['text_alignment'] ?? 'left',
       '#color_theme' => $this->configuration['color_theme'] ?? 'light',

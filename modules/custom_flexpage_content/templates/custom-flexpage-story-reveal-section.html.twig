@@ -1,0 +1,30 @@
+<section class="visual-story visual-story--reveal{% if page_turn %} visual-story--page-turn{% endif %}" data-vs-reveal data-vs-reveal-duration="{{ scroll_duration }}"{% if page_turn %} data-vs-page-turn{% endif %}>
+  {% for panel in panels %}
+    <div class="visual-story__reveal-panel visual-story--copy-{{ panel.copy_theme }} visual-story--overlay-{{ panel.overlay }} visual-story--text-{{ panel.text_position }}" data-vs-reveal-panel data-vs-reveal-direction="{{ panel.slide_direction }}" style="--vs-bg-focal-x: {{ panel.focal_x }}%; --vs-bg-focal-y: {{ panel.focal_y }}%;">
+      <div class="visual-story__reveal-panel-bg">
+        <img class="visual-story__reveal-panel-img" src="{{ panel.image_url }}" alt="{{ panel.alt }}" decoding="async">
+        <div class="visual-story__reveal-panel-overlay"></div>
+      </div>
+      {% if panel.eyebrow or panel.headline or panel.dek or (panel.cta_label and panel.cta_url) %}
+        <div class="visual-story__reveal-panel-content">
+          <div class="visual-story__reveal-panel-content-inner">
+            {% if panel.eyebrow %}
+              <p class="visual-story__eyebrow">{{ panel.eyebrow }}</p>
+            {% endif %}
+            {% if panel.headline %}
+              <h2 class="visual-story__headline visual-story__reveal-headline">{{ panel.headline }}</h2>
+            {% endif %}
+            {% if panel.dek %}
+              <p class="visual-story__dek visual-story__reveal-dek">{{ panel.dek }}</p>
+            {% endif %}
+            {% if panel.cta_label and panel.cta_url %}
+              <p class="visual-story__cta-wrap">
+                <a class="visual-story__cta" href="{{ panel.cta_url }}">{{ panel.cta_label }}</a>
+              </p>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</section>

@@ -50,6 +50,14 @@ detail_selector_block:
   dependencies:
     - custom_flexpage_content/story_blocks_base
 
+story_reveal_section_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-reveal-section.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
+
 story_text_section_block:
   version: 1.x
   css:

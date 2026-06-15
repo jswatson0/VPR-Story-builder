@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <defs>
+    <linearGradient id="rsBg1" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#0a1021"/>
+    </linearGradient>
+    <linearGradient id="rsBg2" x1="0.3" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2d1a3a"/>
+      <stop offset="100%" stop-color="#120820"/>
+    </linearGradient>
+    <linearGradient id="rsBg3" x1="0" y1="0" x2="1" y2="0.8">
+      <stop offset="0%" stop-color="#0f2818"/>
+      <stop offset="100%" stop-color="#071410"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Panel 1 (full width, behind) -->
+  <rect width="400" height="260" fill="url(#rsBg1)"/>
+  <ellipse cx="160" cy="90" rx="160" ry="70" fill="#263a5c" opacity="0.6"/>
+  <!-- Panel 1 text (bottom-left) -->
+  <rect x="20" y="185" width="40" height="5" rx="2.5" fill="#f3a712" opacity="0.8"/>
+  <rect x="20" y="198" width="130" height="10" rx="3" fill="white" opacity="0.85"/>
+  <rect x="20" y="214" width="100" height="7" rx="3" fill="white" opacity="0.5"/>
+
+  <!-- Panel 2 (partially swiped in from right) -->
+  <rect x="255" y="0" width="145" height="260" fill="url(#rsBg2)"/>
+  <ellipse cx="330" cy="100" rx="90" ry="60" fill="#3d2055" opacity="0.6"/>
+  <!-- Panel 2 text -->
+  <rect x="265" y="198" width="80" height="9" rx="3" fill="white" opacity="0.85"/>
+  <rect x="265" y="213" width="60" height="6" rx="3" fill="white" opacity="0.45"/>
+
+  <!-- Panel 3 indicator (peeking from right edge) -->
+  <rect x="388" y="0" width="12" height="260" fill="url(#rsBg3)" opacity="0.7"/>
+
+  <!-- Swipe direction arrow -->
+  <g opacity="0.55">
+    <line x1="230" y1="130" x2="265" y2="130" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <polyline points="258,124 265,130 258,136" fill="none" stroke="white" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+
+  <!-- Panel seam / divider -->
+  <line x1="255" y1="0" x2="255" y2="260" stroke="white" stroke-width="0.75" opacity="0.2"/>
+</svg>

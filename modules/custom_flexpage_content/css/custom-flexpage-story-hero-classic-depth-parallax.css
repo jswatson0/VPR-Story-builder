@@ -242,9 +242,36 @@
   }
 
   .visual-story__content {
-    max-width: none;
+    width: min(100% - 2rem, 36rem);
+    max-width: 36rem;
     margin-top: 0;
-    padding: 6rem 1rem 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: clamp(4.5rem, 14vw, 6rem) clamp(1rem, 4vw, 1.5rem) clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .visual-story--align-left .visual-story__content,
+  .visual-story--align-center .visual-story__content,
+  .visual-story--align-right .visual-story__content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .visual-story--hero-classic-depth .visual-story__headline {
+    font-size: clamp(1.9rem, 7vw, 3rem);
+  }
+
+  .visual-story--hero-classic-depth .visual-story__dek {
+    font-size: clamp(1rem, 3.8vw, 1.25rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .visual-story__content {
+    width: calc(100% - 1.5rem);
+    padding-top: clamp(4rem, 18vw, 5.5rem);
+    padding-right: 0.875rem;
+    padding-left: 0.875rem;
   }
 }
 

@@ -10,7 +10,7 @@
     return document.body.classList.contains('layout-builder') ||
       document.body.classList.contains('layout-builder-enabled') ||
       document.body.classList.contains('path-admin') ||
-      document.querySelector('.layout-builder') !== null;
+      document.querySelector('form.layout-builder') !== null;
   };
 
   const clearHeroTransforms = (bg, content) => {
@@ -515,6 +515,120 @@
         }
 
         window.addEventListener('resize', () => ScrollTrigger.refresh());
+      });
+
+      once('vs-reveal-section', '[data-vs-reveal]', context).forEach((section) => {
+        if (isLayoutBuilderContext() || !hasGsap) {
+          return;
+        }
+
+        const panels = Array.from(section.querySelectorAll('[data-vs-reveal-panel]'));
+        if (panels.length < 2) {
+          return;
+        }
+
+        const { gsap, ScrollTrigger } = window;
+        gsap.registerPlugin(ScrollTrigger);
+
+        if (prefersReducedMotion.matches) {
+          return;
+        }
+
+        const durationMap = { short: 800, medium: 1600, long: 3000 };
+        const perTransition = durationMap[section.dataset.vsRevealDuration] || 800;
+        const totalDistance = (panels.length - 1) * perTransition;
+        const numTransitions = panels.length - 1;
+        const isPageTurn = section.hasAttribute('data-vs-page-turn');
+
+        // fromTo with explicit from values so invalidate() can never
+        // re-read a stale in-progress position as the new "from".
+        const tl = gsap.timeline({ defaults: { ease: 'none' } });
+
+        if (isPageTurn) {
+          // Page-turn: outgoing panels fold away toward the left spine (rotateY 0→-90),
+          // revealing the panel beneath. Stack so the first panel is on top.
+          panels.forEach((panel, i) => {
+            gsap.set(panel, { zIndex: panels.length - i, force3D: true });
+          });
+
+          panels.forEach((panel, i) => {
+            if (i === panels.length - 1) {
+              return; // Last panel has nothing beneath it — stays put.
+            }
+
+            // Inject the fold corner: a single fixed-size div scaled from 0 at
+            // the top-right corner so GSAP never has to wrestle with percentage
+            // children of a zero-sized container.
+            const fold = document.createElement('div');
+            fold.className = 'visual-story__page-fold';
+            panel.appendChild(fold);
+            gsap.set(fold, { scaleX: 0, scaleY: 0, transformOrigin: '100% 0%' });
+
+            const pos = i / numTransitions;
+            const dur = 1 / numTransitions;
+            const peak = dur * 0.28;
+
+            // Corner lifts as the page begins to turn, then retreats as the
+            // full-panel rotation takes over.
+            tl.to(fold, { scaleX: 1, scaleY: 1, ease: 'power2.out', duration: peak }, pos);
+            tl.to(fold, { scaleX: 0, scaleY: 0, ease: 'power2.in', duration: dur - peak }, pos + peak);
+
+            tl.fromTo(
+              panel,
+              { rotateY: 0 },
+              { rotateY: -90, duration: dur },
+              pos,
+            );
+          });
+        }
+        else {
+          const getOffscreen = (panel) => {
+            const dir = panel.dataset.vsRevealDirection || 'from-right';
+            const w = section.offsetWidth;
+            const h = section.offsetHeight;
+            return ({
+              'from-right':  { x: w,  y: 0 },
+              'from-left':   { x: -w, y: 0 },
+              'from-bottom': { x: 0,  y: h },
+              'from-top':    { x: 0,  y: -h },
+            })[dir] || { x: w, y: 0 };
+          };
+
+          // Place panels off-screen via GSAP so it owns the transforms.
+          panels.forEach((panel, i) => {
+            if (i === 0) {
+              return;
+            }
+            const off = getOffscreen(panel);
+            gsap.set(panel, { x: off.x, y: off.y, force3D: true });
+          });
+
+          panels.forEach((panel, i) => {
+            if (i === 0) {
+              return;
+            }
+            const off = getOffscreen(panel);
+            tl.fromTo(
+              panel,
+              { x: off.x, y: off.y },
+              { x: 0, y: 0, duration: 1 / numTransitions },
+              (i - 1) / numTransitions,
+            );
+          });
+        }
+
+        ScrollTrigger.create({
+          trigger: section,
+          pin: true,
+          start: 'top top',
+          end: `+=${totalDistance}`,
+          scrub: true,
+          animation: tl,
+        });
+
+        window.addEventListener('resize', () => {
+          ScrollTrigger.refresh();
+        });
       });
 
       once('vs-text-section-fade', '[data-vs-text-section-fade]', context).forEach((section) => {

@@ -1,0 +1,228 @@
+/* ── Reveal Section block ───────────────────────────────────────────────── */
+
+.visual-story--reveal {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/*
+ * Prevent theme sticky/overflow rules from creating a nested scroll
+ * container that would break GSAP pin.
+ */
+.block:has(.visual-story--reveal),
+.block-block-content:has(.visual-story--reveal) {
+  position: static;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* ── Layout Builder: stack panels as static previews ─────────────────────── */
+
+/* Scope to body classes only — a bare .layout-builder ancestor selector can
+   accidentally match toolbar/region elements on the frontend and apply
+   `transform: none !important`, overriding GSAP's inline style.transform. */
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .visual-story--reveal {
+  height: auto;
+  overflow: visible;
+}
+
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .visual-story__reveal-panel {
+  position: relative;
+  transform: none;
+  height: min(55vh, 28rem);
+}
+
+/* ── Panel: each fills the full viewport and stacks in DOM order ────────── */
+
+.visual-story__reveal-panel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* z-index:0 creates a stacking context so panel-bg's z-index:1 stays
+     contained within each panel and can't paint over sibling panels. */
+  z-index: 0;
+  /* JS sets transform to push non-first panels off-screen */
+}
+
+/* ── Background layer ───────────────────────────────────────────────────── */
+
+.visual-story__reveal-panel-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.visual-story__reveal-panel-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--vs-bg-focal-x, 50%) var(--vs-bg-focal-y, 40%);
+}
+
+/* ── Overlay ────────────────────────────────────────────────────────────── */
+
+.visual-story__reveal-panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 5, 9, 0.45);
+  z-index: 2;
+}
+
+.visual-story--overlay-none .visual-story__reveal-panel-overlay {
+  display: none;
+}
+
+.visual-story--overlay-light .visual-story__reveal-panel-overlay {
+  background: rgba(3, 5, 9, 0.22);
+}
+
+.visual-story--overlay-medium .visual-story__reveal-panel-overlay {
+  background: rgba(3, 5, 9, 0.45);
+}
+
+.visual-story--overlay-heavy .visual-story__reveal-panel-overlay {
+  background: rgba(3, 5, 9, 0.7);
+}
+
+/* ── Content layer ──────────────────────────────────────────────────────── */
+
+.visual-story__reveal-panel-content {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.visual-story__reveal-panel-content-inner {
+  max-width: 65ch;
+}
+
+/* Vertical positioning */
+.visual-story--text-top-left .visual-story__reveal-panel-content,
+.visual-story--text-top-center .visual-story__reveal-panel-content,
+.visual-story--text-top-right .visual-story__reveal-panel-content {
+  justify-content: flex-start;
+}
+
+.visual-story--text-center-left .visual-story__reveal-panel-content,
+.visual-story--text-center .visual-story__reveal-panel-content,
+.visual-story--text-center-right .visual-story__reveal-panel-content {
+  justify-content: center;
+}
+
+.visual-story--text-bottom-left .visual-story__reveal-panel-content,
+.visual-story--text-bottom-center .visual-story__reveal-panel-content,
+.visual-story--text-bottom-right .visual-story__reveal-panel-content {
+  justify-content: flex-end;
+}
+
+/* Horizontal positioning */
+.visual-story--text-top-left .visual-story__reveal-panel-content-inner,
+.visual-story--text-center-left .visual-story__reveal-panel-content-inner,
+.visual-story--text-bottom-left .visual-story__reveal-panel-content-inner {
+  margin-right: auto;
+}
+
+.visual-story--text-top-center .visual-story__reveal-panel-content-inner,
+.visual-story--text-center .visual-story__reveal-panel-content-inner,
+.visual-story--text-bottom-center .visual-story__reveal-panel-content-inner {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.visual-story--text-top-right .visual-story__reveal-panel-content-inner,
+.visual-story--text-center-right .visual-story__reveal-panel-content-inner,
+.visual-story--text-bottom-right .visual-story__reveal-panel-content-inner {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* ── Copy themes ────────────────────────────────────────────────────────── */
+
+.visual-story--copy-light .visual-story__reveal-panel-content {
+  color: #fff;
+}
+
+.visual-story--copy-dark .visual-story__reveal-panel-content {
+  color: #1a1a1a;
+}
+
+.visual-story--copy-dark .visual-story__eyebrow {
+  color: #333;
+}
+
+.visual-story--copy-dark .visual-story__dek {
+  color: #222;
+}
+
+.visual-story--copy-dark .visual-story__cta {
+  border-color: rgba(0, 0, 0, 0.45);
+  color: #1a1a1a;
+}
+
+.visual-story--copy-dark .visual-story__cta:hover,
+.visual-story--copy-dark .visual-story__cta:focus-visible {
+  background: rgba(0, 0, 0, 0.08);
+  color: #1a1a1a;
+}
+
+/* ── Reveal headline sizing ─────────────────────────────────────────────── */
+
+.visual-story__reveal-headline {
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
+  margin-bottom: 0.75rem;
+}
+
+.visual-story__reveal-dek {
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 55ch;
+}
+
+/* ── Page-turn mode ─────────────────────────────────────────────────────── */
+
+.visual-story--page-turn {
+  perspective: 1800px;
+  background: #111;
+}
+
+.visual-story--page-turn .visual-story__reveal-panel {
+  transform-origin: left center;
+  backface-visibility: hidden;
+}
+
+/* Reset to default transform-origin in admin/LB previews where panels stack statically */
+:is(body.layout-builder, body.layout-builder-enabled, body.path-admin) .visual-story--page-turn .visual-story__reveal-panel {
+  transform-origin: center center;
+}
+
+/* ── Page-fold corner element (injected by JS) ──────────────────────────── */
+
+.visual-story__page-fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 160px;
+  height: 160px;
+  z-index: 20;
+  pointer-events: none;
+  /* Paper-coloured back face visible as the corner lifts */
+  background: linear-gradient(225deg, #f0ece4 0%, #c8c2b8 100%);
+  clip-path: polygon(100% 0%, 100% 100%, 0% 0%);
+  /* Shadow the fold casts on the page surface */
+  filter: drop-shadow(-6px 6px 10px rgba(0, 0, 0, 0.32));
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .visual-story--reveal {
+    height: 100dvh;
+  }
+}
