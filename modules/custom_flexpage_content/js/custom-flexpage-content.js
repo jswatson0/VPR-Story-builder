@@ -519,6 +519,7 @@
         ScrollTrigger.create({
           trigger: section,
           pin: true,
+          anticipatePin: 1,
           start: 'top top',
           end: `+=${totalDistance}`,
           scrub: true,
