@@ -1,0 +1,8 @@
+custom_flexpage_content.vs_block_docs:
+  path: '/vs-blocks/docs'
+  defaults:
+    _controller: '\Drupal\custom_flexpage_content\Controller\VsBlockDocsController::index'
+    _title: 'Visual Storytelling Block Reference'
+  requirements:
+    _permission: 'access content'
+    _user_is_logged_in: 'TRUE'

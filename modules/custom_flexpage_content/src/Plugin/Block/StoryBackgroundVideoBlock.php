@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @Block(
  *   id = "custom_flexpage_story_background_video_block",
- *   admin_label = @Translation("Story Background Video"),
+ *   admin_label = @Translation("Background Video"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -46,7 +46,7 @@ class StoryBackgroundVideoBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type'  => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open'  => TRUE,
+      '#open'  => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type'   => 'item',
@@ -64,10 +64,11 @@ class StoryBackgroundVideoBlock extends VisualStoryBlockBase {
     ];
 
     $form['video_url'] = [
-      '#type'          => 'url',
-      '#title'         => $this->t('Background video URL (fallback)'),
-      '#description'   => $this->t('Direct URL to an MP4 file. Used only if no Media Library video is selected.'),
-      '#default_value' => $this->configuration['video_url'] ?? '',
+      '#type'               => 'url',
+      '#title'              => $this->t('Or enter a direct video URL'),
+      '#description'        => $this->t('Skip if you selected from Media Library above. MP4 recommended.'),
+      '#default_value'      => $this->configuration['video_url'] ?? '',
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     $poster_media_id = (int) ($this->configuration['poster_media_id'] ?? 0);
@@ -81,10 +82,12 @@ class StoryBackgroundVideoBlock extends VisualStoryBlockBase {
     ];
 
     $form['poster_url'] = [
-      '#type'          => 'textfield',
-      '#title'         => $this->t('Poster image URL (fallback)'),
-      '#default_value' => $this->configuration['poster_url'] ?? '',
-      '#maxlength'     => 2048,
+      '#type'               => 'textfield',
+      '#title'              => $this->t('Or enter a direct poster image URL'),
+      '#description'        => $this->t('Skip if you selected from Media Library above.'),
+      '#default_value'      => $this->configuration['poster_url'] ?? '',
+      '#maxlength'          => 2048,
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     $form['poster_alt'] = [

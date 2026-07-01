@@ -2,6 +2,19 @@
  * height:auto + autoResize can push the dialog below the fold on long flex pages.
  * These rules cap the dialog at 90vh and make its content area scroll instead.
  */
+/* Fallback / secondary fields — visually subordinate to the primary Media Library field above */
+.vs-field-fallback {
+  margin-top: -.25rem;
+  padding-left: 1rem;
+  border-left: 3px solid #ddd;
+  opacity: .75;
+}
+
+.vs-field-fallback label {
+  font-size: .875em;
+  color: #555;
+}
+
 div.ui-dialog[aria-describedby="layout-builder-modal"] {
   top: calc(5vh + 50px) !important;
   max-height: 90vh !important;
@@ -17,4 +30,38 @@ div.ui-dialog[aria-describedby="layout-builder-modal"] .ui-dialog-content {
   flex: 1 1 auto !important;
   overflow-y: auto !important;
   min-height: 0 !important;
+}
+
+/* VS block reference callout in the Layout Builder browser */
+.vs-docs-browser-link {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  padding: .6rem .75rem;
+  margin-bottom: .75rem;
+  background: #fff3e0;
+  border: 2px solid #bf5700;
+  border-radius: 5px;
+  text-decoration: none !important;
+  transition: background .15s;
+}
+
+.vs-docs-browser-link:hover {
+  background: #ffe8c0;
+}
+
+.vs-docs-browser-link__title {
+  display: block;
+  font-size: .85rem;
+  font-weight: 700;
+  color: #7a3500;
+  line-height: 1.3;
+}
+
+.vs-docs-browser-link__desc {
+  display: block;
+  font-size: .75rem;
+  font-weight: 400;
+  color: #5a4030;
+  line-height: 1.4;
 }

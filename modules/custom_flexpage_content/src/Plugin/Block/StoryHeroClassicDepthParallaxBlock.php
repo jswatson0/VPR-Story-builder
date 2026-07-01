@@ -10,7 +10,7 @@ use Drupal\node\NodeInterface;
  *
  * @Block(
  *   id = "custom_flexpage_story_hero_classic_depth_parallax_block",
- *   admin_label = @Translation("Story Hero: Classic Depth Parallax"),
+ *   admin_label = @Translation("Cover"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -54,7 +54,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type' => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',
@@ -73,10 +73,11 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
 
     $form['background_image_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Background image URL (fallback)'),
-      '#description' => $this->t('Optional fallback only if Media Library is not used.'),
+      '#title' => $this->t('Or enter a direct image URL'),
+      '#description' => $this->t('Skip if you selected from Media Library above.'),
       '#default_value' => $this->configuration['background_image_url'] ?? '',
       '#maxlength' => 2048,
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     $form['background_alt'] = [
@@ -256,9 +257,10 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
 
     $form['cta_url'] = [
       '#type' => 'url',
-      '#title' => $this->t('CTA external URL'),
-      '#description' => $this->t('Use for external destinations. Leave empty if using internal page selector above.'),
+      '#title' => $this->t('Or enter an external URL'),
+      '#description' => $this->t('For links outside this site only. Leave empty if you selected a page above.'),
       '#default_value' => $this->configuration['cta_url'] ?? '',
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     return $form;

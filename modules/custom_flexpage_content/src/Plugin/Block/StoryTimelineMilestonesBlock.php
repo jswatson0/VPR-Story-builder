@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @Block(
  *   id = "custom_flexpage_story_timeline_milestones_block",
- *   admin_label = @Translation("Story Timeline: Milestones"),
+ *   admin_label = @Translation("Timeline"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -44,7 +44,7 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type' => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',

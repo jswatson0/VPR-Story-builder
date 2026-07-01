@@ -13,7 +13,7 @@ use Drupal\media\MediaTypeInterface;
  *
  * @Block(
  *   id = "research_image_grid_block",
- *   admin_label = @Translation("Research Image Grid"),
+ *   admin_label = @Translation("Photo Grid"),
  *   category = @Translation("Research")
  * )
  */
@@ -107,10 +107,11 @@ class ResearchImageGridBlock extends BlockBase {
 
       $form['items'][$index]['image_url'] = [
         '#type' => 'textfield',
-        '#title' => $this->t('Image URL or path (fallback)'),
-        '#description' => $this->t('Example: /themes/research/research_theme/images/example-image.png'),
+        '#title' => $this->t('Or enter a direct image URL'),
+        '#description' => $this->t('Skip if you selected from Media Library above.'),
         '#default_value' => $item['image_url'] ?? '',
         '#maxlength' => 2048,
+        '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
       ];
 
       $form['items'][$index]['alt_text'] = [

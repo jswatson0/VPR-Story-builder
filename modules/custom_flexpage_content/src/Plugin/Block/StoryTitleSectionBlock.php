@@ -11,7 +11,7 @@ use Drupal\media\MediaInterface;
  *
  * @Block(
  *   id = "custom_flexpage_story_title_section_block",
- *   admin_label = @Translation("Story: Title Section"),
+ *   admin_label = @Translation("Section Header"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -111,10 +111,11 @@ class StoryTitleSectionBlock extends VisualStoryBlockBase {
 
     $form['background_media']['bg_image_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Background image URL (fallback)'),
-      '#description' => $this->t('Used only when no Media Library item is selected above.'),
+      '#title' => $this->t('Or enter a direct image URL'),
+      '#description' => $this->t('Skip if you selected from Media Library above.'),
       '#default_value' => $this->configuration['bg_image_url'] ?? '',
       '#maxlength' => 2048,
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     $form['background_media']['bg_alt'] = [

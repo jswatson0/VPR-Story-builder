@@ -10,7 +10,7 @@ use Drupal\node\NodeInterface;
  *
  * @Block(
  *   id = "custom_flexpage_story_grid_catalog_block",
- *   admin_label = @Translation("Story Grid Catalog"),
+ *   admin_label = @Translation("Card Grid"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -66,7 +66,7 @@ class StoryGridCatalogBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type' => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',
@@ -233,8 +233,10 @@ class StoryGridCatalogBlock extends VisualStoryBlockBase {
 
       $form[$key]["{$key}_cta_url"] = [
         '#type' => 'url',
-        '#title' => $this->t('CTA external URL'),
+        '#title' => $this->t('Or enter an external URL'),
+        '#description' => $this->t('For links outside this site only. Leave empty if you selected a page above.'),
         '#default_value' => $this->configuration["{$key}_cta_url"] ?? '',
+        '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
       ];
 
       $form[$key]["{$key}_column_span"] = [

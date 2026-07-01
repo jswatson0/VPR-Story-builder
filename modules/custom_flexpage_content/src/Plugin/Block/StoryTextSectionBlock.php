@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
  *
  * @Block(
  *   id = "custom_flexpage_story_text_section_block",
- *   admin_label = @Translation("Story Text Section"),
+ *   admin_label = @Translation("Text Section"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -50,7 +50,7 @@ class StoryTextSectionBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type' => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',

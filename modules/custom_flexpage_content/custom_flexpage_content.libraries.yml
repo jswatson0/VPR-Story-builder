@@ -94,6 +94,16 @@ story_background_video_block:
   dependencies:
     - custom_flexpage_content/story_blocks_base
 
+block_docs:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-block-docs.css: {}
+  js:
+    js/custom-flexpage-block-docs.js: {}
+  dependencies:
+    - core/drupal
+
 block_editor:
   version: 1.x
   css:

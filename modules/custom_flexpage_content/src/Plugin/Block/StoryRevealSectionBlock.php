@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
  *
  * @Block(
  *   id = "custom_flexpage_story_reveal_section_block",
- *   admin_label = @Translation("Story Reveal Section"),
+ *   admin_label = @Translation("Panel Reveal"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -60,7 +60,7 @@ class StoryRevealSectionBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type' => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',
@@ -119,10 +119,12 @@ class StoryRevealSectionBlock extends VisualStoryBlockBase {
       ];
 
       $form[$p]["{$p}_image_url"] = [
-        '#type'          => 'textfield',
-        '#title'         => $this->t('Background image URL (fallback)'),
-        '#default_value' => $this->configuration["{$p}_image_url"] ?? '',
-        '#maxlength'     => 2048,
+        '#type'                => 'textfield',
+        '#title'               => $this->t('Or enter a direct image URL'),
+        '#description'         => $this->t('Skip if you selected from Media Library above.'),
+        '#default_value'       => $this->configuration["{$p}_image_url"] ?? '',
+        '#maxlength'           => 2048,
+        '#wrapper_attributes'  => ['class' => ['vs-field-fallback']],
       ];
 
       $form[$p]["{$p}_alt"] = [
@@ -238,9 +240,11 @@ class StoryRevealSectionBlock extends VisualStoryBlockBase {
       ];
 
       $form[$p]["{$p}_cta_url"] = [
-        '#type'          => 'url',
-        '#title'         => $this->t('CTA external URL'),
-        '#default_value' => $this->configuration["{$p}_cta_url"] ?? '',
+        '#type'               => 'url',
+        '#title'              => $this->t('Or enter an external URL'),
+        '#description'        => $this->t('For links outside this site only. Leave empty if you selected a page above.'),
+        '#default_value'      => $this->configuration["{$p}_cta_url"] ?? '',
+        '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
       ];
     }
 

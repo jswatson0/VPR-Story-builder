@@ -1,0 +1,70 @@
+{#
+  Template for the Visual Storytelling block reference documentation page.
+  Variables:
+  - blocks: array of block definition arrays, each with keys:
+      id, label, description, use_for, fields (assoc), tips
+#}
+<div class="vs-docs">
+
+  <div class="vs-docs__header">
+    <p class="vs-docs__intro">Use these blocks on any <strong>Flex Page</strong> to build Shorthand-style stories. Add blocks through the Layout Builder browser — the Visual Storytelling category holds all ten block types documented here.</p>
+    <nav class="vs-docs__toc" aria-label="Block list">
+      <ul>
+        {% for block in blocks %}
+          <li><a href="#vs-block-{{ block.id }}">{{ block.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+
+  {% for block in blocks %}
+    <section class="vs-docs__block" id="vs-block-{{ block.id }}">
+      <div class="vs-docs__block-header">
+        <h2 class="vs-docs__block-name">{{ block.label }}</h2>
+        <p class="vs-docs__block-desc">{{ block.description }}</p>
+        {% if block.use_for %}
+          <ul class="vs-docs__use-for">
+            {% for use in block.use_for %}
+              <li>{{ use }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {% if block.example %}
+        <div class="vs-docs__example-wrap">
+          <div class="vs-docs__example-label">Example</div>
+          <div class="vs-docs__example" aria-hidden="true">
+            <div class="vs-docs__example-inner">
+              {{ block.example }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if block.fields %}
+        <div class="vs-docs__fields">
+          <h3>Fields</h3>
+          <dl>
+            {% for field_name, field_desc in block.fields %}
+              <dt>{{ field_name }}</dt>
+              <dd>{{ field_desc }}</dd>
+            {% endfor %}
+          </dl>
+        </div>
+      {% endif %}
+
+      {% if block.tips %}
+        <div class="vs-docs__tips">
+          <h3>Tips</h3>
+          <ul>
+            {% for tip in block.tips %}
+              <li>{{ tip }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </section>
+  {% endfor %}
+
+</div>

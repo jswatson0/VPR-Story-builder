@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
  *
  * @Block(
  *   id = "custom_flexpage_text_over_media_block",
- *   admin_label = @Translation("Story Split Content (Text + Media)"),
+ *   admin_label = @Translation("Text + Image"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -51,7 +51,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type' => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',
@@ -70,10 +70,11 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
 
     $form['media_image_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Media URL (fallback)'),
-      '#description' => $this->t('Optional fallback if Media Library is not used. Use an image URL or a direct .mp4/.webm/.ogg URL.'),
+      '#title' => $this->t('Or enter a direct media URL'),
+      '#description' => $this->t('Skip if you selected from Media Library above. Accepts image or video URL (.mp4/.webm).'),
       '#default_value' => $this->configuration['media_image_url'] ?? '',
       '#maxlength' => 2048,
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     $form['media_alt'] = [
@@ -214,9 +215,10 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
 
     $form['cta_url'] = [
       '#type' => 'url',
-      '#title' => $this->t('CTA external URL'),
-      '#description' => $this->t('Use for external destinations. Leave empty if using internal page selector above.'),
+      '#title' => $this->t('Or enter an external URL'),
+      '#description' => $this->t('For links outside this site only. Leave empty if you selected a page above.'),
       '#default_value' => $this->configuration['cta_url'] ?? '',
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     return $form;

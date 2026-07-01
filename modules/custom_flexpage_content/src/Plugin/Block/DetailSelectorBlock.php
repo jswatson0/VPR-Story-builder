@@ -10,7 +10,7 @@ use Drupal\node\NodeInterface;
  *
  * @Block(
  *   id = "custom_flexpage_detail_selector_block",
- *   admin_label = @Translation("Story Detail Selector: Two Column"),
+ *   admin_label = @Translation("Interactive Panels"),
  *   category = @Translation("Visual Storytelling")
  * )
  */
@@ -69,7 +69,7 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
     $form['editor_help'] = [
       '#type' => 'details',
       '#title' => $this->t('How This Block Works'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',
@@ -123,7 +123,7 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
     $form['default_panel'] = [
       '#type' => 'details',
       '#title' => $this->t('Default detail panel'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
 
     $form['default_panel']['default_panel_label'] = [
@@ -193,8 +193,10 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
 
     $form['default_panel']['default_cta_url'] = [
       '#type' => 'url',
-      '#title' => $this->t('Default panel CTA external URL'),
+      '#title' => $this->t('Or enter an external URL'),
+      '#description' => $this->t('For links outside this site only. Leave empty if you selected a page above.'),
       '#default_value' => $this->configuration['default_cta_url'] ?? '',
+      '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
     ];
 
     for ($i = 1; $i <= self::MAX_ITEMS; $i++) {
@@ -272,8 +274,10 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
 
       $fieldset["{$key}_cta_url"] = [
         '#type' => 'url',
-        '#title' => $this->t('Detail panel CTA external URL'),
+        '#title' => $this->t('Or enter an external URL'),
+        '#description' => $this->t('For links outside this site only. Leave empty if you selected a page above.'),
         '#default_value' => $this->configuration["{$key}_cta_url"] ?? '',
+        '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
       ];
 
       $form[$key] = $fieldset;

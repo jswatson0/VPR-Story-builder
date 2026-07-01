@@ -11,6 +11,25 @@
 function custom_flexpage_content_layout_builder_browser_alter(array &$build, array $context) {
   $build['#attached']['library'][] = 'custom_flexpage_content/block_editor';
   _custom_flexpage_content_inject_views_blocks($build, $context);
+  _custom_flexpage_content_inject_vs_docs_link($build);
+}
+
+/**
+ * Injects a "Block Reference" documentation link into the VS category header.
+ */
+function _custom_flexpage_content_inject_vs_docs_link(array &$build) {
+  if (empty($build['block_categories']['visual_storytelling'])) {
+    return;
+  }
+
+  $docs_url = \Drupal\Core\Url::fromRoute('custom_flexpage_content.vs_block_docs')
+    ->setAbsolute(FALSE)
+    ->toString();
+
+  $build['block_categories']['visual_storytelling']['docs_link'] = [
+    '#weight' => -100,
+    '#markup' => '<a href="' . $docs_url . '" target="_blank" rel="noopener" class="vs-docs-browser-link"><span class="vs-docs-browser-link__title">📖 Block Reference &amp; Tips</span><span class="vs-docs-browser-link__desc">Examples, field descriptions, and usage tips for every block type</span></a>',
+  ];
 }
 
 /**
@@ -230,6 +249,12 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
         'overlay_strength' => 'medium',
       ],
       'template' => 'custom-flexpage-story-background-video',
+    ],
+    'vs_block_docs_page' => [
+      'variables' => [
+        'blocks' => [],
+      ],
+      'template' => 'vs-block-docs-page',
     ],
     'custom_flexpage_detail_selector' => [
       'variables' => [
