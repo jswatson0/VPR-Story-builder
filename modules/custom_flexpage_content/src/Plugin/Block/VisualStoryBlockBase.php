@@ -157,6 +157,49 @@ abstract class VisualStoryBlockBase extends BlockBase {
   }
 
   /**
+   * Gets media type IDs that use the video_file source plugin.
+   */
+  protected function getVideoMediaTypeIds(): array {
+    $media_types = \Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple();
+    $video_ids = [];
+
+    foreach ($media_types as $media_type) {
+      if (!$media_type instanceof MediaTypeInterface) {
+        continue;
+      }
+
+      if ($media_type->getSource()->getPluginId() === 'video_file') {
+        $video_ids[] = $media_type->id();
+      }
+    }
+
+    return !empty($video_ids) ? $video_ids : array_keys($media_types);
+  }
+
+  /**
+   * Resolves video URL and MIME type from media or fallback URL.
+   */
+  protected function resolveVideoSource(int $media_id, string $fallback_url, array &$cache_tags): ?array {
+    if ($media_id > 0) {
+      $media = \Drupal::entityTypeManager()->getStorage('media')->load($media_id);
+      if ($media instanceof MediaInterface) {
+        $cache_tags = Cache::mergeTags($cache_tags, $media->getCacheTags());
+        $video = $this->extractVideoFromMedia($media, $cache_tags);
+        if ($video) {
+          return $video;
+        }
+      }
+    }
+
+    $url = trim($fallback_url);
+    if ($url !== '') {
+      return ['url' => $url, 'mime' => 'video/mp4'];
+    }
+
+    return NULL;
+  }
+
+  /**
    * Gets video URL and MIME type from the first video file field on media.
    */
   protected function extractVideoFromMedia(MediaInterface $media, array &$cache_tags): ?array {

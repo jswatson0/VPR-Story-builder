@@ -230,6 +230,55 @@
         }
       });
 
+      once('vs-bg-video-parallax', '[data-vs-bg-video]', context).forEach((section) => {
+        const content = section.querySelector('.visual-story__content');
+        if (!content) {
+          return;
+        }
+
+        if (isLayoutBuilderContext() || !hasGsap) {
+          return;
+        }
+
+        if (prefersReducedMotion.matches || window.innerWidth <= 900) {
+          return;
+        }
+
+        const { gsap, ScrollTrigger } = window;
+        gsap.registerPlugin(ScrollTrigger);
+
+        const pinDistance = Math.round(window.innerHeight * 0.85);
+
+        // Content starts below its natural position and faded out.
+        gsap.set(content, { y: '40vh', autoAlpha: 0 });
+
+        // Pin the section (video locks in place) for the scroll travel distance.
+        ScrollTrigger.create({
+          trigger: section,
+          pin: true,
+          pinSpacing: true,
+          start: 'top top',
+          end: `+=${pinDistance}`,
+          invalidateOnRefresh: true,
+        });
+
+        // Scrub content up into its configured position as the user scrolls.
+        gsap.to(content, {
+          y: 0,
+          autoAlpha: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: `+=${pinDistance}`,
+            scrub: 1.2,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        window.addEventListener('resize', () => ScrollTrigger.refresh());
+      });
+
       once('custom-flexpage-text-media-reveal', '[data-vs-text-media-reveal]', context).forEach((section) => {
         if (prefersReducedMotion.matches) {
           section.classList.add('is-visible');

@@ -213,6 +213,24 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'custom-flexpage-story-timeline-milestones',
     ],
+    'custom_flexpage_story_background_video' => [
+      'variables' => [
+        'video_url'        => '',
+        'video_mime'       => 'video/mp4',
+        'poster_url'       => '',
+        'poster_alt'       => '',
+        'eyebrow'          => '',
+        'headline'         => '',
+        'dek'              => '',
+        'cta_label'        => '',
+        'cta_url'          => '',
+        'height'           => 'screen',
+        'text_position'    => 'bottom-left',
+        'copy_theme'       => 'light',
+        'overlay_strength' => 'medium',
+      ],
+      'template' => 'custom-flexpage-story-background-video',
+    ],
     'custom_flexpage_detail_selector' => [
       'variables' => [
         'eyebrow' => '',

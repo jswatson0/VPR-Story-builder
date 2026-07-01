@@ -155,7 +155,7 @@
   background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0) 42%, rgba(0, 0, 0, 0.5) 100%);
 }
 
-.visual-story__content {
+.visual-story--hero-classic-depth .visual-story__content {
   position: relative;
   z-index: 4;
   width: 100%;
@@ -241,7 +241,7 @@
     will-change: auto;
   }
 
-  .visual-story__content {
+  .visual-story--hero-classic-depth .visual-story__content {
     width: min(100% - 2rem, 36rem);
     max-width: 36rem;
     margin-top: 0;
@@ -250,9 +250,9 @@
     padding: clamp(4.5rem, 14vw, 6rem) clamp(1rem, 4vw, 1.5rem) clamp(2.5rem, 8vw, 4rem);
   }
 
-  .visual-story--align-left .visual-story__content,
-  .visual-story--align-center .visual-story__content,
-  .visual-story--align-right .visual-story__content {
+  .visual-story--hero-classic-depth.visual-story--align-left .visual-story__content,
+  .visual-story--hero-classic-depth.visual-story--align-center .visual-story__content,
+  .visual-story--hero-classic-depth.visual-story--align-right .visual-story__content {
     margin-left: auto;
     margin-right: auto;
   }
@@ -267,7 +267,7 @@
 }
 
 @media (max-width: 640px) {
-  .visual-story__content {
+  .visual-story--hero-classic-depth .visual-story__content {
     width: calc(100% - 1.5rem);
     padding-top: clamp(4rem, 18vw, 5.5rem);
     padding-right: 0.875rem;
@@ -291,7 +291,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .visual-story__bg-image,
-  .visual-story__content {
+  .visual-story--hero-classic-depth .visual-story__content {
     transform: none !important;
     will-change: auto;
   }

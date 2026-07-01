@@ -86,6 +86,14 @@ research_image_grid_block:
     - core/once
     - research_frontend_vendor/gsap_scrolltrigger
 
+story_background_video_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-background-video.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
+
 block_editor:
   version: 1.x
   css:
