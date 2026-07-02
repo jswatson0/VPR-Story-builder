@@ -1,0 +1,15 @@
+storybuilder.start:
+  path: '/admin/content/storybuilder'
+  defaults:
+    _form: '\Drupal\storybuilder\Form\StorybuilderStartForm'
+    _title: 'Storybuilder'
+  requirements:
+    _permission: 'use storybuilder'
+
+storybuilder.settings:
+  path: '/admin/config/content/storybuilder'
+  defaults:
+    _form: '\Drupal\storybuilder\Form\StorybuilderSettingsForm'
+    _title: 'Storybuilder settings'
+  requirements:
+    _permission: 'administer storybuilder'

@@ -1,0 +1,7 @@
+use storybuilder:
+  title: 'Use Storybuilder'
+  description: 'Create new story flex pages from templates.'
+administer storybuilder:
+  title: 'Administer Storybuilder'
+  description: 'Configure which nodes serve as Storybuilder templates.'
+  restrict access: true

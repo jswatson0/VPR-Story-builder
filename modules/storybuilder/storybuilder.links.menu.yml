@@ -1,0 +1,6 @@
+storybuilder.start:
+  title: 'Storybuilder'
+  description: 'Start a new story page from a template'
+  parent: system.admin_content
+  route_name: storybuilder.start
+  weight: 40

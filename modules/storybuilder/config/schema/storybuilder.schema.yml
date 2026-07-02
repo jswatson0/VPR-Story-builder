@@ -1,0 +1,19 @@
+storybuilder.settings:
+  type: config_object
+  label: 'Storybuilder settings'
+  mapping:
+    templates:
+      type: sequence
+      label: 'Templates'
+      sequence:
+        type: mapping
+        mapping:
+          label:
+            type: label
+            label: 'Template label'
+          nid:
+            type: integer
+            label: 'Master node ID'
+          description:
+            type: text
+            label: 'Template description'

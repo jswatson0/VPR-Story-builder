@@ -1,0 +1,9 @@
+name: Storybuilder
+type: module
+description: 'Guided starting point for Visual Storytelling flex pages.'
+package: Research
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:node
+  - drupal:layout_builder
+  - entity_clone:entity_clone

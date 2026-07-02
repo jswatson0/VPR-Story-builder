@@ -1,0 +1,7 @@
+templates:
+  - label: 'Profile'
+    nid: 0
+    description: 'Profile layout with bio, media, and quotes.'
+  - label: 'Feature Article'
+    nid: 0
+    description: 'Long-form feature article layout.'
