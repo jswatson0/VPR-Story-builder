@@ -85,3 +85,10 @@
   background: rgba(255, 255, 255, 0.14);
   color: #fff;
 }
+
+/* research_theme.css sets fixed dark colors on blockquote/blockquote p,
+   which beat the inherited light text inside dark-themed story blocks. */
+.visual-story--theme-dark blockquote,
+.visual-story--theme-dark blockquote p {
+  color: inherit;
+}
