@@ -96,6 +96,68 @@
   transform: scaleY(1);
 }
 
+/*
+ * speedway's buttons.css has a generic reset,
+ * `button:not(.trigger, .ui-button, .ck-button, .link-edit-summary,
+ * .navbar-toggler, .tablesaw-sortable-btn, [data-bs-target])`, that fills any
+ * plain <button> as a solid burnt-orange UT button (background, border,
+ * border-radius, padding, font-weight, margin-bottom, white text) including
+ * its own :hover/:focus-visible state. Its specificity (one element + one
+ * class from :not()) beats this file's single-class `.visual-story__detail-
+ * trigger` selectors above, silently replacing the intended flat/underline
+ * tab design with a boxy button look. `.trigger` in the :not() list doesn't
+ * match `.visual-story__detail-trigger` (different class, not a substring
+ * match), so this button isn't excluded.
+ *
+ * Re-scope the same rules under the trigger's own nav wrapper - two classes
+ * beats speedway's one-class-plus-element combination outright, so this wins
+ * regardless of CSS load order (no !important needed).
+ *
+ * The :hover/:focus-visible/:active states are trickier: speedway writes
+ * them as native-CSS-nested `&:hover { ... }` under a rule whose selector
+ * list also includes `.ut-btn:not(.button--primary)` (specificity 0,2,0).
+ * Per the CSS Nesting spec, `&` takes the *most specific* selector in the
+ * parent's list for specificity purposes - even branches that don't match
+ * this element - so the nested hover/focus rule inherits (0,3,0), not the
+ * (0,2,1) you'd expect from `button:not(...):hover` alone. That exactly
+ * ties a plain two-class hover selector here, and the tie can go either way
+ * depending on module-vs-theme CSS load order (unlike research_theme's own
+ * CSS, a module's isn't guaranteed to load after speedway's). Repeating the
+ * class pushes past the tie outright instead of gambling on load order.
+ */
+.visual-story__detail-nav .visual-story__detail-trigger {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 1rem 1.35rem 1.05rem 1.2rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(24, 26, 30, 0.56);
+  font: inherit;
+}
+
+.visual-story__detail-nav .visual-story__detail-trigger.visual-story__detail-trigger:hover,
+.visual-story__detail-nav .visual-story__detail-trigger.visual-story__detail-trigger:focus-visible,
+.visual-story__detail-nav .visual-story__detail-trigger.visual-story__detail-trigger:active {
+  border: 0;
+  background: #9d4700;
+  color: #fff;
+}
+
+.visual-story__detail-nav .visual-story__detail-trigger.visual-story__detail-trigger:focus-visible {
+  color: #fff;
+}
+
+/* Bumped the same way as :hover above, so an already-active trigger keeps
+ * its active color on hover instead of fading to the plain hover color -
+ * matching the original (pre-speedway) precedence, where .is-active came
+ * after :hover in source order and won on a same-specificity tie. */
+.visual-story__detail-nav .visual-story__detail-trigger.visual-story__detail-trigger.is-active.is-active {
+  background: transparent;
+  color: #181a1e;
+}
+
 .visual-story__detail-trigger-label {
   display: block;
   font-family: inherit;
