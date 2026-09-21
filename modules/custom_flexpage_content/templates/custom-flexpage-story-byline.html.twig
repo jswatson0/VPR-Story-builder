@@ -1,0 +1,31 @@
+{#
+  Story: Byline block template.
+
+  Renders one or two News authors (name, optional photo, linked to their
+  author term page) plus an optional formatted publication date.
+#}
+
+{% set align_class = {
+  'left':   'text-start',
+  'center': 'text-center',
+  'right':  'text-end',
+}[alignment] ?? 'text-start' %}
+
+{% set copy_class = color_theme == 'dark' ? 'vs-byline--copy-dark' : 'vs-byline--copy-light' %}
+
+<div class="vs-byline {{ copy_class }} {{ align_class }}">
+  <p class="vs-byline__authors small fw-semibold text-uppercase mb-0">
+    <span class="vs-byline__by">{{ 'By'|t }}</span>
+    {% for author in authors %}
+      <span class="vs-byline__author">
+        {% if author.image_url %}
+          <img class="vs-byline__author-photo" src="{{ author.image_url }}" alt="" aria-hidden="true">
+        {% endif %}
+        <a class="vs-byline__author-name" href="{{ author.url }}">{{ author.name }}</a>
+      </span>{% if not loop.last %} <span class="vs-byline__and">{{ 'and'|t }}</span> {% endif %}
+    {% endfor %}
+  </p>
+  {% if publication_date %}
+    <time class="vs-byline__date small" datetime="{{ publication_date_iso }}">{{ publication_date }}</time>
+  {% endif %}
+</div>

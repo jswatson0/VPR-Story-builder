@@ -18,6 +18,14 @@ story_title_section_block:
   dependencies:
     - custom_flexpage_content/story_blocks_base
 
+story_byline_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-byline.css: {}
+  dependencies:
+    - custom_flexpage_content/story_blocks_base
+
 story_hero_classic_depth_parallax_block:
   version: 1.x
   css:

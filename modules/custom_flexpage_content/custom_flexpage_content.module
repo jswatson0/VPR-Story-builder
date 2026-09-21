@@ -256,6 +256,16 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'vs-block-docs-page',
     ],
+    'custom_flexpage_story_byline' => [
+      'variables' => [
+        'authors' => [],
+        'publication_date' => '',
+        'publication_date_iso' => '',
+        'alignment' => 'left',
+        'color_theme' => 'light',
+      ],
+      'template' => 'custom-flexpage-story-byline',
+    ],
     'custom_flexpage_detail_selector' => [
       'variables' => [
         'eyebrow' => '',

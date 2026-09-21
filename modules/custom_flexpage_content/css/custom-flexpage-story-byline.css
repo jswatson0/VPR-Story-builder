@@ -1,0 +1,61 @@
+/* ── Story: Byline block ──────────────────────────────────── */
+.vs-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  margin: 0 0 1.5rem;
+  padding: 1.5rem clamp(1.5rem, 8vw, 10rem);
+}
+
+.vs-byline.text-center {
+  justify-content: center;
+}
+
+.vs-byline.text-end {
+  justify-content: flex-end;
+}
+
+.vs-byline__authors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.4rem;
+  letter-spacing: 0.03em;
+}
+
+.vs-byline__author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vs-byline__author-photo {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.vs-byline__author-name {
+  color: inherit;
+  text-decoration: none;
+}
+
+.vs-byline__author-name:hover,
+.vs-byline__author-name:focus {
+  text-decoration: underline;
+}
+
+.vs-byline__date {
+  opacity: 0.75;
+}
+
+.vs-byline--copy-light {
+  color: #fff;
+}
+
+.vs-byline--copy-dark {
+  color: inherit;
+}
