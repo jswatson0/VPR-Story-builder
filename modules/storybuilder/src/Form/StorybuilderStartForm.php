@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -79,6 +80,16 @@ class StorybuilderStartForm extends FormBase {
     foreach ($descriptions as $key => $description) {
       $form['template'][$key]['#description'] = $description;
     }
+    // utexas_form_elements globally forces #description_display to 'before'
+    // for all radio/checkbox/etc. elements, so descriptions land directly
+    // under their labels on ordinary fields (where the label displays
+    // before the input). Individual radio options display their label
+    // *after* the input, so that same 'before' setting instead places each
+    // option's description above the *previous* option, reading as if it
+    // belongs to the wrong choice. Reset it to 'after' here, in #after_build
+    // (which runs once all children - and that site-wide #process override -
+    // have already been built) so it sticks for just this radio group.
+    $form['template']['#after_build'][] = [static::class, 'moveOptionDescriptionsAfter'];
 
     $form['title'] = [
       '#type' => 'textfield',
@@ -107,6 +118,20 @@ class StorybuilderStartForm extends FormBase {
     ];
 
     return $form;
+  }
+
+  /**
+   * Form #after_build callback: renders option descriptions below each label.
+   *
+   * @see ::buildForm()
+   */
+  public static function moveOptionDescriptionsAfter(array $element, FormStateInterface $form_state): array {
+    foreach (Element::children($element) as $key) {
+      if (isset($element[$key]['#description'])) {
+        $element[$key]['#description_display'] = 'after';
+      }
+    }
+    return $element;
   }
 
   /**

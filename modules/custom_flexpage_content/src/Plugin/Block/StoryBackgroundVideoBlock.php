@@ -93,6 +93,7 @@ class StoryBackgroundVideoBlock extends VisualStoryBlockBase {
     $form['poster_alt'] = [
       '#type'          => 'textfield',
       '#title'         => $this->t('Poster image alt text'),
+      '#description'   => $this->mediaAltDescription(),
       '#default_value' => $this->configuration['poster_alt'] ?? '',
       '#maxlength'     => 255,
     ];

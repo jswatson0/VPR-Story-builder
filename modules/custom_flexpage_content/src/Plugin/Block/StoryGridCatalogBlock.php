@@ -201,6 +201,7 @@ class StoryGridCatalogBlock extends VisualStoryBlockBase {
       $form[$key]["{$key}_media_alt"] = [
         '#type' => 'textfield',
         '#title' => $this->t('Card image alt text'),
+        '#description' => $this->mediaAltDescription(),
         '#default_value' => $this->configuration["{$key}_media_alt"] ?? '',
         '#maxlength' => 255,
       ];

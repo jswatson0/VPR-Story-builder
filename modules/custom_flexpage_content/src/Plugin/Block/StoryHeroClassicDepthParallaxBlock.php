@@ -30,6 +30,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       'background_media_id' => 0,
       'background_image_url' => '',
       'background_alt' => '',
+      'background_caption' => '',
       'height' => 'tall',
       'text_alignment' => 'left',
       'content_vertical_position' => 'bottom',
@@ -83,8 +84,16 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['background_alt'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Background image alt text'),
-      '#description' => $this->t('Accessibility text that describes the image context.'),
+      '#description' => $this->mediaAltDescription(),
       '#default_value' => $this->configuration['background_alt'] ?? '',
+      '#maxlength' => 255,
+    ];
+
+    $form['background_caption'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Image caption (optional)'),
+      '#description' => $this->t('Optional short credit or context note for the image, e.g. a photo credit. Rendered as a small overlay label, not a full caption. Leave blank to hide.'),
+      '#default_value' => $this->configuration['background_caption'] ?? '',
       '#maxlength' => 255,
     ];
 
@@ -281,6 +290,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $this->configuration['background_media_id'] = $this->extractMediaTargetId($form_state->getValue('background_media_id'));
     $this->configuration['background_image_url'] = trim((string) $form_state->getValue('background_image_url', ''));
     $this->configuration['background_alt'] = trim((string) $form_state->getValue('background_alt', ''));
+    $this->configuration['background_caption'] = trim((string) $form_state->getValue('background_caption', ''));
     $this->configuration['height'] = (string) $form_state->getValue('height', 'tall');
     $this->configuration['text_alignment'] = (string) $form_state->getValue('text_alignment', 'left');
     $this->configuration['content_vertical_position'] = (string) $form_state->getValue('content_vertical_position', 'bottom');
@@ -329,6 +339,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#cta_url' => $cta_url,
       '#background_url' => $image['url'],
       '#background_alt' => $image['alt'],
+      '#background_caption' => $this->configuration['background_caption'] ?? '',
       '#height' => $this->configuration['height'] ?? 'tall',
       '#text_alignment' => $this->configuration['text_alignment'] ?? 'left',
       '#content_vertical_position' => $this->configuration['content_vertical_position'] ?? 'bottom',

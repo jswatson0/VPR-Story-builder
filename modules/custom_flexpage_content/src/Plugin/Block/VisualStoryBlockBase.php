@@ -4,6 +4,7 @@ namespace Drupal\custom_flexpage_content\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\media\MediaInterface;
 use Drupal\media\MediaTypeInterface;
 
@@ -11,6 +12,13 @@ use Drupal\media\MediaTypeInterface;
  * Shared helpers for visual storytelling block plugins.
  */
 abstract class VisualStoryBlockBase extends BlockBase {
+
+  /**
+   * Gets the shared help text for an optional media alt-text field.
+   */
+  protected function mediaAltDescription(): TranslatableMarkup {
+    return $this->t('Leave blank to use the alt text already set on the selected image in Media Library. Only fill this in to override it, or when using a direct image URL instead of Media Library.');
+  }
 
   /**
    * Gets media type IDs that use the image source plugin.

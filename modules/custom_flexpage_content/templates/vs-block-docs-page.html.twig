@@ -10,12 +10,40 @@
     <p class="vs-docs__intro">Use these blocks on any <strong>Flex Page</strong> to build Shorthand-style stories. Add blocks through the Layout Builder browser — the Visual Storytelling category holds all ten block types documented here.</p>
     <nav class="vs-docs__toc" aria-label="Block list">
       <ul>
+        <li><a href="#vs-block-publishing-and-tags">Publishing &amp; Tagging</a></li>
         {% for block in blocks %}
           <li><a href="#vs-block-{{ block.id }}">{{ block.label }}</a></li>
         {% endfor %}
       </ul>
     </nav>
   </div>
+
+  <section class="vs-docs__block" id="vs-block-publishing-and-tags">
+    <div class="vs-docs__block-header">
+      <h2 class="vs-docs__block-name">Publishing &amp; Tagging Your Story</h2>
+      <p class="vs-docs__block-desc">A story page (Flex Page) has no tags field of its own. To make a story discoverable — including tagging it for Bridging Barriers (BB) — publish a short companion News article that links out to it.</p>
+    </div>
+    <div class="vs-docs__fields">
+      <h3>Steps</h3>
+      <dl>
+        <dt>1. Build &amp; publish the story</dt>
+        <dd>Finish your story page in Story Builder and publish it. Copy its URL.</dd>
+        <dt>2. Create a companion News article</dt>
+        <dd>Go to Content &gt; Add content &gt; News. Give it a title, and leave the Body field empty (it won't be shown).</dd>
+        <dt>3. Set the External link</dt>
+        <dd>Paste the story's URL into the News article's <strong>External link</strong> field. This makes the article's title link straight to your story instead of a separate News page.</dd>
+        <dt>4. Add News tags</dt>
+        <dd>Tag every story's companion article with the existing <strong>Visual Story</strong> News tag so all stories can be found as a group. For Bridging Barriers stories, also add a <strong>Bridging Barriers</strong> tag (create it once under Structure &gt; Taxonomy &gt; News tags — it doesn't exist yet).</dd>
+      </dl>
+    </div>
+    <div class="vs-docs__tips">
+      <h3>Tips</h3>
+      <ul>
+        <li>The News article is just a pointer — most of its own fields (body, image, etc.) can stay blank once the External link is set.</li>
+        <li>The News RSS feed currently links to the News article itself rather than the external story URL; everything else (listing blocks, listing pages) follows the External link correctly.</li>
+      </ul>
+    </div>
+  </section>
 
   {% for block in blocks %}
     <section class="vs-docs__block" id="vs-block-{{ block.id }}">

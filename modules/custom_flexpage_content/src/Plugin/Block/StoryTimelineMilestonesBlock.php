@@ -72,6 +72,7 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
     $form['media_alt'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Header image alt text'),
+      '#description' => $this->mediaAltDescription(),
       '#default_value' => $this->configuration['media_alt'] ?? '',
       '#maxlength' => 255,
     ];

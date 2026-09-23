@@ -27,7 +27,7 @@ class StoryBylineBlock extends VisualStoryBlockBase {
       'second_author_term_id' => 0,
       'publication_date' => '',
       'show_image' => TRUE,
-      'alignment' => 'left',
+      'alignment' => 'right',
       'color_theme' => 'light',
     ];
   }
@@ -81,7 +81,7 @@ class StoryBylineBlock extends VisualStoryBlockBase {
     $form['alignment'] = [
       '#type' => 'select',
       '#title' => $this->t('Alignment'),
-      '#default_value' => $this->configuration['alignment'] ?? 'left',
+      '#default_value' => $this->configuration['alignment'] ?? 'right',
       '#options' => [
         'left' => $this->t('Left'),
         'center' => $this->t('Center'),
@@ -113,7 +113,7 @@ class StoryBylineBlock extends VisualStoryBlockBase {
     $this->configuration['second_author_term_id'] = $this->extractNodeTargetId($form_state->getValue('second_author_term_id'));
     $this->configuration['show_image'] = (bool) $form_state->getValue('show_image', TRUE);
     $this->configuration['publication_date'] = (string) $form_state->getValue('publication_date', '');
-    $this->configuration['alignment'] = (string) $form_state->getValue('alignment', 'left');
+    $this->configuration['alignment'] = (string) $form_state->getValue('alignment', 'right');
     $this->configuration['color_theme'] = (string) $form_state->getValue('color_theme', 'light');
   }
 
@@ -156,7 +156,7 @@ class StoryBylineBlock extends VisualStoryBlockBase {
       '#authors' => $authors,
       '#publication_date' => $date_object ? $date_object->format('F j, Y') : '',
       '#publication_date_iso' => $date_object ? $date_object->format('Y-m-d') : '',
-      '#alignment' => $this->configuration['alignment'] ?? 'left',
+      '#alignment' => $this->configuration['alignment'] ?? 'right',
       '#color_theme' => $this->configuration['color_theme'] ?? 'light',
       '#attached' => [
         'library' => ['custom_flexpage_content/story_byline_block'],

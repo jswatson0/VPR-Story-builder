@@ -16,6 +16,19 @@
   order: -1;
 }
 
+/*
+ * When media is reordered to the first grid track above, the ratio
+ * rules need to swap too — otherwise "text wider" widens whichever
+ * element ends up in the first track (media), not the text.
+ */
+.visual-story--text-media.visual-story--media-left.visual-story--ratio-text-wide {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+}
+
+.visual-story--text-media.visual-story--media-left.visual-story--ratio-media-wide {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
 .visual-story--theme-dark {
   background: linear-gradient(130deg, #0a1021, #05070d);
   color: #f6f5f1;

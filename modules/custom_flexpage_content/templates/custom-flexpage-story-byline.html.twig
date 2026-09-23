@@ -26,6 +26,9 @@
     {% endfor %}
   </p>
   {% if publication_date %}
-    <time class="vs-byline__date small" datetime="{{ publication_date_iso }}">{{ publication_date }}</time>
+    <time class="vs-byline__date small" datetime="{{ publication_date_iso }}">
+      <i class="bi bi-calendar3 vs-byline__date-icon" aria-hidden="true"></i>
+      {{ publication_date }}
+    </time>
   {% endif %}
 </div>

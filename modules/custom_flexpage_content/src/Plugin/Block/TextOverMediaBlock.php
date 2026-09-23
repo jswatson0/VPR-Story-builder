@@ -80,7 +80,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
     $form['media_alt'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Media image alt text'),
-      '#description' => $this->t('Accessibility text that describes the image context.'),
+      '#description' => $this->mediaAltDescription(),
       '#default_value' => $this->configuration['media_alt'] ?? '',
       '#maxlength' => 255,
     ];

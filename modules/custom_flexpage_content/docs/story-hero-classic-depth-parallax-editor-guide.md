@@ -70,7 +70,7 @@ In Layout Builder editing context:
   - Used only when no media entity is selected.
 
 - `Background image alt text`
-  - Required for accessibility context.
+  - Optional. Leave blank to inherit the alt text already set on the selected Media Library image. Only fill this in to override it, or when using the direct image URL fallback (which has no alt text of its own to inherit).
 
 - `Image focal point X (%)`
   - Horizontal crop focus.

@@ -168,6 +168,7 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
     $form['default_panel']['default_media_alt'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default panel image alt text'),
+      '#description' => $this->mediaAltDescription(),
       '#default_value' => $this->configuration['default_media_alt'] ?? '',
       '#maxlength' => 255,
     ];
@@ -250,6 +251,7 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
       $fieldset["{$key}_media_alt"] = [
         '#type' => 'textfield',
         '#title' => $this->t('Detail panel image alt text'),
+        '#description' => $this->mediaAltDescription(),
         '#default_value' => $this->configuration["{$key}_media_alt"] ?? '',
         '#maxlength' => 255,
       ];

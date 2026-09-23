@@ -117,7 +117,7 @@ class ResearchImageGridBlock extends BlockBase {
       $form['items'][$index]['alt_text'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Image alt text'),
-        '#description' => $this->t('If left blank, title is used.'),
+        '#description' => $this->t('Leave blank to use the alt text already set on the selected image in Media Library (or the card title if none is set). Only fill this in to override it, or when using a direct image URL instead of Media Library.'),
         '#default_value' => $item['alt_text'] ?? '',
         '#maxlength' => 255,
       ];

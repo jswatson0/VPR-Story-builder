@@ -130,6 +130,7 @@ class StoryRevealSectionBlock extends VisualStoryBlockBase {
       $form[$p]["{$p}_alt"] = [
         '#type'          => 'textfield',
         '#title'         => $this->t('Alt text'),
+        '#description'   => $this->mediaAltDescription(),
         '#default_value' => $this->configuration["{$p}_alt"] ?? '',
         '#maxlength'     => 255,
       ];

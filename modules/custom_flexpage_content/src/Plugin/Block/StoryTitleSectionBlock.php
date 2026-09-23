@@ -121,7 +121,7 @@ class StoryTitleSectionBlock extends VisualStoryBlockBase {
     $form['background_media']['bg_alt'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Image alt text'),
-      '#description' => $this->t('Describe the image for screen readers. Leave empty to inherit from the media item.'),
+      '#description' => $this->mediaAltDescription(),
       '#default_value' => $this->configuration['bg_alt'] ?? '',
       '#maxlength' => 255,
     ];

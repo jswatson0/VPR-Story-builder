@@ -160,6 +160,7 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
         'cta_url' => '',
         'background_url' => '',
         'background_alt' => '',
+        'background_caption' => '',
         'height' => 'tall',
         'text_alignment' => 'left',
         'content_vertical_position' => 'middle',

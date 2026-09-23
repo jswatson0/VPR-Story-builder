@@ -3,6 +3,9 @@
     <img class="visual-story__bg-image" src="{{ background_url }}" alt="{{ background_alt }}" data-vs-classic-bg>
     <div class="visual-story__overlay"></div>
     <div class="visual-story__vignette"></div>
+    {% if background_caption %}
+      <span class="visual-story__hero-caption">{{ background_caption }}</span>
+    {% endif %}
   </div>
   <div class="visual-story__content" data-vs-classic-content>
     {% if eyebrow %}
