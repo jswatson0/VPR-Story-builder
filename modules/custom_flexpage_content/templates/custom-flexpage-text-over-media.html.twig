@@ -22,5 +22,8 @@
     {% else %}
       <img src="{{ media_url }}" alt="{{ media_alt }}" loading="lazy">
     {% endif %}
+    {% if media_caption %}
+      <span class="visual-story__media-caption">{{ media_caption }}</span>
+    {% endif %}
   </div>
 </section>

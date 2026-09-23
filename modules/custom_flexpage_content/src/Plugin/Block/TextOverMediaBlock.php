@@ -31,6 +31,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
       'media_id' => 0,
       'media_image_url' => '',
       'media_alt' => '',
+      'media_caption' => '',
       'layout' => 'media-right',
       'mobile_stack' => 'text-first',
       'style_preset' => 'editorial',
@@ -82,6 +83,14 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
       '#title' => $this->t('Media image alt text'),
       '#description' => $this->mediaAltDescription(),
       '#default_value' => $this->configuration['media_alt'] ?? '',
+      '#maxlength' => 255,
+    ];
+
+    $form['media_caption'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Media caption (optional)'),
+      '#description' => $this->t('Optional short credit or context note for the media, e.g. a photo credit. Leave blank to hide.'),
+      '#default_value' => $this->configuration['media_caption'] ?? '',
       '#maxlength' => 255,
     ];
 
@@ -240,6 +249,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
     $this->configuration['media_id'] = $this->extractMediaTargetId($form_state->getValue('media_id'));
     $this->configuration['media_image_url'] = trim((string) $form_state->getValue('media_image_url', ''));
     $this->configuration['media_alt'] = trim((string) $form_state->getValue('media_alt', ''));
+    $this->configuration['media_caption'] = trim((string) $form_state->getValue('media_caption', ''));
     $this->configuration['media_focal_x'] = (string) max(0, min(100, (float) $form_state->getValue('media_focal_x', '50')));
     $this->configuration['media_focal_y'] = (string) max(0, min(100, (float) $form_state->getValue('media_focal_y', '50')));
     $this->configuration['layout'] = (string) $form_state->getValue('layout', 'media-right');
@@ -293,6 +303,7 @@ class TextOverMediaBlock extends VisualStoryBlockBase {
       '#media_kind' => $media_kind,
       '#media_mime' => $media_mime,
       '#media_alt' => $image['alt'],
+      '#media_caption' => $this->configuration['media_caption'] ?? '',
       '#layout' => $this->configuration['layout'] ?? 'media-right',
       '#mobile_stack' => $this->configuration['mobile_stack'] ?? 'text-first',
       '#column_ratio' => $this->configuration['column_ratio'] ?? 'equal',

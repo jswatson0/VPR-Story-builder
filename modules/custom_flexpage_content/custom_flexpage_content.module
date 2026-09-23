@@ -184,6 +184,7 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
         'media_kind' => 'image',
         'media_mime' => '',
         'media_alt' => '',
+        'media_caption' => '',
         'layout' => 'media-right',
         'mobile_stack' => 'text-first',
         'column_ratio' => 'equal',
