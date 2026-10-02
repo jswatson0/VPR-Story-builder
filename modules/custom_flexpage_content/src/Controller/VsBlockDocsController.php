@@ -59,13 +59,14 @@ class VsBlockDocsController extends ControllerBase {
         'fields'      => [
           'Background image' => 'Upload via Media Library (preferred) or paste an image URL. Landscape images at 1920 × 1080 or wider work best.',
           'Focal point' => 'X/Y sliders (0–100) control which part of the image stays visible when cropped on different screen sizes.',
-          'Height' => 'Short (~40vh), Tall (~70vh), or Full screen (100vh). Full screen is the default for a dramatic opener.',
+          'Height' => 'Short (~40vh), Tall (~70vh), or Full screen (100vh). Full screen is the default for a dramatic opener, and the only height with the parallax effect (image holds in place while the text scrolls over it). Short and Tall still get the text zoom on scroll.',
           'Text alignment' => 'Left, center, or right — applies to all copy inside the block.',
           'Vertical position' => 'Top, middle, or bottom — where the copy sits within the block height.',
           'Overlay strength' => 'Controls the dark film over the image. Increase it if white copy is hard to read.',
           'Copy theme' => 'Light (white text) or Dark (dark text). Match to the image brightness.',
-          'Scroll behavior' => 'Parallax (image moves slower than the page) or Scroll (image moves with the page).',
+          'Scroll behavior' => 'Parallax (image moves slower than the page) or Scroll (image moves with the page). Only takes effect at Full screen height.',
           'Headline, Eyebrow, Dek' => 'Eyebrow is a small label above the headline. Dek is supporting text below it.',
+          'Author info' => 'Optional author(s), photo and publication date from the News authors taxonomy. Shown beneath the description in the same style as the Byline block, following the cover\'s alignment and copy theme.',
           'CTA label / URL' => 'Optional button. Leave both empty to hide the button.',
         ],
         'tips'        => [

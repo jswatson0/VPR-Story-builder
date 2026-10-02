@@ -24,6 +24,10 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       'eyebrow' => '',
       'headline' => '',
       'dek' => '',
+      'author_term_id' => 0,
+      'second_author_term_id' => 0,
+      'publication_date' => '',
+      'show_image' => TRUE,
       'cta_label' => '',
       'cta_url' => '',
       'cta_node_id' => 0,
@@ -154,10 +158,17 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#rows' => 4,
     ];
 
+    $form['byline'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Author info'),
+      '#description' => $this->t('Optional. Shown beneath the description in the same style as the Byline block. Leave Author empty to hide.'),
+      '#open' => (int) ($this->configuration['author_term_id'] ?? 0) > 0,
+    ] + $this->bylineFormElements(FALSE);
+
     $form['height'] = [
       '#type' => 'select',
       '#title' => $this->t('Section height'),
-      '#description' => $this->t('Controls hero prominence. Tall is a good editorial default.'),
+      '#description' => $this->t('Controls hero prominence. Tall is a good editorial default. Note: the parallax effect (background image holds in place while the text scrolls over it) only happens with Full screen. Short and Tall still apply the text zoom on scroll.'),
       '#default_value' => $this->configuration['height'] ?? 'tall',
       '#options' => [
         'short' => $this->t('Short'),
@@ -230,7 +241,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $form['background_scroll_behavior'] = [
       '#type' => 'select',
       '#title' => $this->t('Background scroll behavior'),
-      '#description' => $this->t('Choose whether the background image moves on scroll or stays fixed in place.'),
+      '#description' => $this->t('Choose whether the background image moves on scroll or stays fixed in place. Only takes effect with the Full screen section height.'),
       '#default_value' => $this->configuration['background_scroll_behavior'] ?? 'parallax',
       '#options' => [
         'parallax' => $this->t('Move on scroll'),
@@ -284,6 +295,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
     $this->configuration['eyebrow'] = trim((string) $form_state->getValue('eyebrow', ''));
     $this->configuration['headline'] = trim((string) $form_state->getValue('headline', ''));
     $this->configuration['dek'] = trim((string) $form_state->getValue('dek', ''));
+    $this->bylineFormSubmit($form_state, ['byline']);
     $this->configuration['cta_label'] = trim((string) $form_state->getValue('cta_label', ''));
     $this->configuration['cta_node_id'] = $this->extractNodeTargetId($form_state->getValue('cta_node_id'));
     $this->configuration['cta_url'] = trim((string) $form_state->getValue('cta_url', ''));
@@ -330,11 +342,20 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       }
     }
 
+    $copy_theme = $this->configuration['copy_theme'] ?? 'light';
+    $byline = $this->buildByline(
+      $this->configuration['text_alignment'] ?? 'left',
+      $copy_theme,
+      TRUE,
+      $cache_tags
+    );
+
     return [
       '#theme' => 'custom_flexpage_story_hero_classic_depth_parallax',
       '#eyebrow' => $this->configuration['eyebrow'] ?? '',
       '#headline' => $this->configuration['headline'] ?? '',
       '#dek' => $this->configuration['dek'] ?? '',
+      '#byline' => $byline,
       '#cta_label' => $this->configuration['cta_label'] ?? '',
       '#cta_url' => $cta_url,
       '#background_url' => $image['url'],
@@ -343,7 +364,7 @@ class StoryHeroClassicDepthParallaxBlock extends VisualStoryBlockBase {
       '#height' => $this->configuration['height'] ?? 'tall',
       '#text_alignment' => $this->configuration['text_alignment'] ?? 'left',
       '#content_vertical_position' => $this->configuration['content_vertical_position'] ?? 'bottom',
-      '#copy_theme' => $this->configuration['copy_theme'] ?? 'light',
+      '#copy_theme' => $copy_theme,
       '#overlay_strength' => $this->configuration['overlay_strength'] ?? 'full',
       '#background_scroll_behavior' => $this->configuration['background_scroll_behavior'] ?? 'parallax',
       '#text_zoom_effect' => $this->configuration['text_zoom_effect'] ?? 'out',

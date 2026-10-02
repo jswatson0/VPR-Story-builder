@@ -3,6 +3,8 @@
 
   Renders one or two News authors (name, optional photo, linked to their
   author term page) plus an optional formatted publication date.
+  When embedded (e.g. inside the Cover block), the section padding is dropped
+  and the copy color is inherited from the host block.
 #}
 
 {% set align_class = {
@@ -13,8 +15,8 @@
 
 {% set copy_class = color_theme == 'dark' ? 'vs-byline--copy-dark' : 'vs-byline--copy-light' %}
 
-<div class="vs-byline {{ copy_class }} {{ align_class }}">
-  <p class="vs-byline__authors small fw-semibold text-uppercase mb-0">
+<div class="vs-byline {{ copy_class }} {{ align_class }}{{ embedded ? ' vs-byline--embedded' }}">
+  <div class="vs-byline__authors small fw-semibold text-uppercase mb-0">
     <span class="vs-byline__by">{{ 'By'|t }}</span>
     {% for author in authors %}
       <span class="vs-byline__author">
@@ -24,10 +26,9 @@
         <a class="vs-byline__author-name" href="{{ author.url }}">{{ author.name }}</a>
       </span>{% if not loop.last %} <span class="vs-byline__and">{{ 'and'|t }}</span> {% endif %}
     {% endfor %}
-  </p>
+  </div>
   {% if publication_date %}
     <time class="vs-byline__date small" datetime="{{ publication_date_iso }}">
-      <i class="bi bi-calendar3 vs-byline__date-icon" aria-hidden="true"></i>
       {{ publication_date }}
     </time>
   {% endif %}
