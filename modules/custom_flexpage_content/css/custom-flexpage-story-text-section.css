@@ -80,7 +80,8 @@
 }
 
 /* Drop cap */
-.visual-story--drop-cap .visual-story__ts-body p:first-of-type::first-letter {
+/* First column only; direct-child p so blockquotes etc. are skipped. */
+.visual-story--drop-cap .visual-story__ts-body--first > p:first-of-type::first-letter {
   float: left;
   font-size: clamp(3.5rem, 6vw, 5rem);
   line-height: 0.82;

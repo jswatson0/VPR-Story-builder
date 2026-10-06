@@ -15,7 +15,7 @@
     {% endif %}
     {% if columns == '2' %}
       <div class="visual-story__ts-columns">
-        <div class="visual-story__ts-body{% if color_theme == 'dark' %} text-white{% endif %}">
+        <div class="visual-story__ts-body visual-story__ts-body--first{% if color_theme == 'dark' %} text-white{% endif %}">
           {{ body }}
         </div>
         <div class="visual-story__ts-body{% if color_theme == 'dark' %} text-white{% endif %}">
@@ -23,7 +23,7 @@
         </div>
       </div>
     {% else %}
-      <div class="visual-story__ts-body{% if color_theme == 'dark' %} text-white{% endif %}">
+      <div class="visual-story__ts-body visual-story__ts-body--first{% if color_theme == 'dark' %} text-white{% endif %}">
         {{ body }}
       </div>
     {% endif %}
