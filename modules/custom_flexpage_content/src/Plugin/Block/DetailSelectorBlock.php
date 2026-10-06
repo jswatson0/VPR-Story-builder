@@ -219,7 +219,7 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
       $fieldset["{$key}_headline"] = [
         '#type' => 'textfield',
         '#title' => $this->t('Detail panel headline'),
-        '#description' => $this->t('Optional replacement headline for the right column. If blank, the heading label is reused.'),
+        '#description' => $this->t('Optional headline for the right column. Leave blank to show no headline.'),
         '#default_value' => $this->configuration["{$key}_headline"] ?? '',
         '#maxlength' => 255,
       ];
@@ -374,7 +374,6 @@ class DetailSelectorBlock extends VisualStoryBlockBase {
         $cache_tags
       );
 
-      $panel['headline'] = $panel['headline'] !== '' ? $panel['headline'] : $heading;
       $items[] = [
         'id' => $key,
         'heading' => $heading,
