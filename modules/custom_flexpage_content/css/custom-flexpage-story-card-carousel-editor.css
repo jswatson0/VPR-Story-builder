@@ -1,0 +1,41 @@
+/* Card Carousel block form: each draggable row holds a whole card fieldset. */
+.vs-card-carousel-cards {
+  width: 100%;
+}
+
+.vs-card-carousel-cards td {
+  vertical-align: top;
+}
+
+/* tabledrag centers the handle beside the cell content and lets the content
+   shrink to fit; pin the handle to the top and let the card fill the row. */
+.vs-card-carousel-cards .tabledrag-cell-content {
+  align-items: flex-start;
+}
+
+.vs-card-carousel-cards .tabledrag-cell-content__item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.vs-card-carousel-cards .tabledrag-handle {
+  margin-top: 0.4rem;
+}
+
+.vs-card-carousel-cards details {
+  margin: 0;
+}
+
+.vs-card-carousel-card-heading {
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.vs-card-carousel-add-card {
+  margin-top: 1rem;
+}
+
+.vs-card-carousel-add-card .description {
+  font-size: 0.85em;
+  opacity: 0.75;
+}

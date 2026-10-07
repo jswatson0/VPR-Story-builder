@@ -82,6 +82,29 @@ story_grid_catalog_block:
   dependencies:
     - custom_flexpage_content/story_blocks_base
 
+story_card_carousel_block:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-card-carousel.css: {}
+  js:
+    js/custom-flexpage-story-card-carousel.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - custom_flexpage_content/story_blocks_base
+
+story_card_carousel_editor:
+  version: 1.x
+  css:
+    theme:
+      css/custom-flexpage-story-card-carousel-editor.css: {}
+  js:
+    js/custom-flexpage-story-card-carousel-editor.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 research_image_grid_block:
   version: 1.x
   css:

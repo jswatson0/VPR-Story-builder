@@ -1,0 +1,65 @@
+{% set card_count = items|length %}
+<section class="visual-story visual-story--card-carousel visual-story--theme-{{ color_theme }} visual-story--carousel-shape-{{ card_shape }} visual-story--carousel-size-{{ card_size }}{% if show_peek %} visual-story--carousel-peek{% endif %}" data-vs-card-carousel{% if loop %} data-vs-carousel-loop{% endif %} aria-roledescription="carousel" aria-label="{{ headline ?: 'Card carousel'|t }}">
+  <div class="visual-story__carousel-shell">
+    {% if eyebrow or headline or intro %}
+      <header class="visual-story__carousel-header">
+        {% if eyebrow %}
+          <p class="visual-story__eyebrow">{{ eyebrow }}</p>
+        {% endif %}
+        {% if headline %}
+          <h2 class="visual-story__headline">{{ headline }}</h2>
+        {% endif %}
+        {% if intro %}
+          <div class="visual-story__intro visual-story__carousel-intro">{{ intro }}</div>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    <div class="visual-story__carousel-viewport">
+      <div class="visual-story__carousel-track" data-vs-carousel-track tabindex="0" aria-label="{{ 'Cards. Use left and right arrow keys to move between cards.'|t }}">
+        {% for item in items %}
+          <article class="visual-story__carousel-card visual-story__carousel-card--text-{{ item.text_color }} visual-story__carousel-card--pos-{{ item.text_position }} visual-story__carousel-card--align-{{ item.text_alignment }} visual-story__carousel-card--overlay-{{ item.overlay_strength }}" data-vs-carousel-card role="group" aria-roledescription="slide" aria-label="{{ '@current of @total'|t({'@current': loop.index, '@total': card_count}) }}">
+            {% if item.media_url %}
+              <img class="visual-story__carousel-image" src="{{ item.media_url }}" alt="{{ item.media_alt }}" style="object-position: {{ item.focal_x }}% {{ item.focal_y }}%;"{% if not loop.first %} loading="lazy"{% endif %} decoding="async">
+            {% endif %}
+            <div class="visual-story__carousel-overlay" aria-hidden="true"></div>
+
+            {% if item.title or item.has_body or (item.cta_label and item.cta_url) %}
+              <div class="visual-story__carousel-content">
+                {% if item.title %}
+                  <h3 class="visual-story__carousel-card-title">{{ item.title }}</h3>
+                {% endif %}
+
+                {% if item.has_body %}
+                  <div class="visual-story__carousel-body">{{ item.body }}</div>
+                {% endif %}
+
+                {% if item.cta_label and item.cta_url %}
+                  <p class="visual-story__carousel-cta-wrap">
+                    <a class="btn btn-primary btn-bs-primary" href="{{ item.cta_url }}">{{ item.cta_label }}</a>
+                  </p>
+                {% endif %}
+              </div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if card_count > 1 %}
+      <div class="visual-story__carousel-controls">
+        <button type="button" class="visual-story__carousel-arrow visual-story__carousel-arrow--prev" data-vs-carousel-prev aria-label="{{ 'Previous card'|t }}">
+          <svg viewBox="0 0 12 14" aria-hidden="true" focusable="false"><polygon points="11,1 11,13 1,7" /></svg>
+        </button>
+        <div class="visual-story__carousel-dots">
+          {% for item in items %}
+            <button type="button" class="visual-story__carousel-dot" data-vs-carousel-dot="{{ loop.index0 }}" aria-label="{{ 'Go to card @num'|t({'@num': loop.index}) }}"></button>
+          {% endfor %}
+        </div>
+        <button type="button" class="visual-story__carousel-arrow visual-story__carousel-arrow--next" data-vs-carousel-next aria-label="{{ 'Next card'|t }}">
+          <svg viewBox="0 0 12 14" aria-hidden="true" focusable="false"><polygon points="1,1 1,13 11,7" /></svg>
+        </button>
+      </div>
+    {% endif %}
+  </div>
+</section>

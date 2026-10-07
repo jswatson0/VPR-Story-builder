@@ -220,6 +220,20 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'custom-flexpage-story-grid-catalog',
     ],
+    'custom_flexpage_story_card_carousel' => [
+      'variables' => [
+        'eyebrow' => '',
+        'headline' => '',
+        'intro' => '',
+        'items' => [],
+        'color_theme' => 'light',
+        'card_shape' => 'portrait',
+        'card_size' => 'medium',
+        'show_peek' => TRUE,
+        'loop' => FALSE,
+      ],
+      'template' => 'custom-flexpage-story-card-carousel',
+    ],
     'custom_flexpage_story_timeline_milestones' => [
       'variables' => [
         'eyebrow' => '',

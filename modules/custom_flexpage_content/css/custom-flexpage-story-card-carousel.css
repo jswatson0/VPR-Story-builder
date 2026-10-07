@@ -1,0 +1,375 @@
+.visual-story--card-carousel {
+  --vs-carousel-card-max: 22rem;
+  --vs-carousel-card-ratio: 4 / 5;
+  --vs-carousel-gap: 0.85rem;
+  --vs-carousel-radius: 5px;
+  --vs-carousel-copy: #1e293b;
+  --vs-carousel-headline: #111827;
+  --vs-carousel-accent: #8a3d12;
+  --vs-carousel-control: #1e293b;
+  --vs-carousel-control-muted: rgba(30, 41, 59, 0.28);
+  --vs-carousel-bg: transparent;
+  padding: clamp(1.25rem, 1rem + 1.5vw, 2.75rem) 0;
+  background: var(--vs-carousel-bg);
+  color: var(--vs-carousel-copy);
+  overflow: clip;
+}
+
+.visual-story--card-carousel.visual-story--theme-dark {
+  --vs-carousel-copy: rgba(245, 243, 234, 0.88);
+  --vs-carousel-headline: #f8f5ec;
+  --vs-carousel-accent: #f3a712;
+  --vs-carousel-control: #f8f5ec;
+  --vs-carousel-control-muted: rgba(248, 245, 236, 0.3);
+  --vs-carousel-bg: radial-gradient(circle at top left, #1d3557 0%, #0b1320 48%, #05070d 100%);
+}
+
+/* Text + Image's CSS sets unscoped .visual-story--theme-light/-dark
+   backgrounds that leak onto any story block on the same page, so restate the
+   carousel's own background at higher specificity. */
+.visual-story--card-carousel.visual-story--theme-light,
+.visual-story--card-carousel.visual-story--theme-dark {
+  background: var(--vs-carousel-bg);
+  color: var(--vs-carousel-copy);
+}
+
+.visual-story--carousel-size-small {
+  --vs-carousel-card-max: 18rem;
+}
+
+.visual-story--carousel-size-large {
+  --vs-carousel-card-max: 26rem;
+}
+
+.visual-story--carousel-shape-tall {
+  --vs-carousel-card-ratio: 2 / 3;
+}
+
+.visual-story--carousel-shape-story {
+  --vs-carousel-card-ratio: 9 / 16;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.visual-story__carousel-header {
+  max-width: 40rem;
+  margin: 0 auto 1.5rem;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.visual-story--card-carousel .visual-story__eyebrow {
+  color: var(--vs-carousel-accent);
+}
+
+.visual-story--card-carousel .visual-story__headline {
+  color: var(--vs-carousel-headline);
+}
+
+.visual-story__carousel-intro {
+  color: var(--vs-carousel-copy);
+}
+
+.visual-story__carousel-intro > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── Track ──────────────────────────────────────────────────────────── */
+
+/* The viewport is the size container so card widths follow the region the
+   block is placed in (e.g. a narrow Layout Builder column), not the window. */
+.visual-story__carousel-viewport {
+  container-type: inline-size;
+}
+
+.visual-story__carousel-track {
+  --vs-carousel-card-w: min(84cqi, var(--vs-carousel-card-max));
+  position: relative;
+  display: flex;
+  gap: var(--vs-carousel-gap);
+  width: var(--vs-carousel-card-w);
+  margin: 0 auto;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.visual-story__carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.visual-story__carousel-track:focus-visible {
+  outline: 2px solid var(--vs-carousel-accent);
+  outline-offset: 4px;
+}
+
+/* With peek on, the track spans the full width and is padded so the first
+   and last cards can still snap to the center. */
+.visual-story--carousel-peek .visual-story__carousel-track {
+  width: 100%;
+  padding-inline: calc((100cqi - var(--vs-carousel-card-w)) / 2);
+  scroll-padding-inline: calc((100cqi - var(--vs-carousel-card-w)) / 2);
+}
+
+/* ── Card ───────────────────────────────────────────────────────────── */
+
+.visual-story__carousel-card {
+  position: relative;
+  display: flex;
+  flex: 0 0 var(--vs-carousel-card-w);
+  flex-direction: column;
+  justify-content: flex-end;
+  aspect-ratio: var(--vs-carousel-card-ratio);
+  overflow: hidden;
+  border-radius: var(--vs-carousel-radius);
+  background: #1f2937;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+[data-vs-carousel-ready].visual-story--carousel-peek .visual-story__carousel-card:not(.is-active) {
+  opacity: 0.55;
+  transform: scale(0.94);
+}
+
+.visual-story__carousel-card--pos-top {
+  justify-content: flex-start;
+}
+
+.visual-story__carousel-card--pos-middle {
+  justify-content: center;
+}
+
+.visual-story__carousel-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+/* ── Overlay ────────────────────────────────────────────────────────── */
+
+/* Overlay color follows the text color (dark film under light text, light
+   film under dark text) and is densest on the side where the text sits. */
+.visual-story__carousel-overlay {
+  --vs-carousel-overlay-rgb: 5 7 13;
+  --vs-carousel-overlay-alpha: 0.6;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgb(var(--vs-carousel-overlay-rgb) / var(--vs-carousel-overlay-alpha)) 0%,
+    rgb(var(--vs-carousel-overlay-rgb) / calc(var(--vs-carousel-overlay-alpha) * 0.55)) 40%,
+    rgb(var(--vs-carousel-overlay-rgb) / 0) 75%
+  );
+}
+
+.visual-story__carousel-card--pos-top .visual-story__carousel-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--vs-carousel-overlay-rgb) / var(--vs-carousel-overlay-alpha)) 0%,
+    rgb(var(--vs-carousel-overlay-rgb) / calc(var(--vs-carousel-overlay-alpha) * 0.55)) 40%,
+    rgb(var(--vs-carousel-overlay-rgb) / 0) 75%
+  );
+}
+
+.visual-story__carousel-card--pos-middle .visual-story__carousel-overlay {
+  background: rgb(var(--vs-carousel-overlay-rgb) / calc(var(--vs-carousel-overlay-alpha) * 0.75));
+}
+
+.visual-story__carousel-card--text-dark .visual-story__carousel-overlay {
+  --vs-carousel-overlay-rgb: 255 255 255;
+}
+
+.visual-story__carousel-card--overlay-none .visual-story__carousel-overlay {
+  display: none;
+}
+
+.visual-story__carousel-card--overlay-light .visual-story__carousel-overlay {
+  --vs-carousel-overlay-alpha: 0.35;
+}
+
+.visual-story__carousel-card--overlay-heavy .visual-story__carousel-overlay {
+  --vs-carousel-overlay-alpha: 0.88;
+}
+
+/* ── Card copy ──────────────────────────────────────────────────────── */
+
+.visual-story__carousel-content {
+  position: relative;
+  z-index: 1;
+  padding: clamp(1rem, 6cqi, 1.5rem);
+  color: #fff;
+  font-size: var(--vs-font-size-small);
+  line-height: 1.5;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.visual-story__carousel-card--text-dark .visual-story__carousel-content {
+  color: #111827;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+.visual-story__carousel-card--align-center .visual-story__carousel-content {
+  text-align: center;
+}
+
+.visual-story__carousel-card--align-right .visual-story__carousel-content {
+  text-align: right;
+}
+
+.visual-story__carousel-card-title {
+  margin: 0 0 0.4rem;
+  font-family: inherit;
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: inherit;
+  text-wrap: balance;
+}
+
+.visual-story__carousel-body p,
+.visual-story__carousel-body li,
+.visual-story__carousel-body a {
+  color: inherit;
+}
+
+.visual-story__carousel-body > :last-child {
+  margin-bottom: 0;
+}
+
+.visual-story__carousel-cta-wrap {
+  margin: 0.9rem 0 0;
+  text-shadow: none;
+}
+
+/* ── Controls ───────────────────────────────────────────────────────── */
+
+.visual-story__carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+
+/* Speedway styles every button:not(...) as a burnt-orange pill, and that :not()
+   list outranks a single class, so the control resets are scoped under the
+   section class. */
+.visual-story--card-carousel .visual-story__carousel-arrow,
+.visual-story--card-carousel .visual-story__carousel-dot {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--vs-carousel-control);
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.visual-story--card-carousel .visual-story__carousel-arrow:hover,
+.visual-story--card-carousel .visual-story__carousel-arrow:focus-visible,
+.visual-story--card-carousel .visual-story__carousel-arrow:active,
+.visual-story--card-carousel .visual-story__carousel-dot:hover,
+.visual-story--card-carousel .visual-story__carousel-dot:focus-visible,
+.visual-story--card-carousel .visual-story__carousel-dot:active {
+  border: 0;
+  background: transparent;
+  color: var(--vs-carousel-control);
+}
+
+.visual-story--card-carousel .visual-story__carousel-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  /* Speedway sets button transitions with !important. */
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+.visual-story__carousel-arrow svg {
+  width: 0.7rem;
+  height: 0.8rem;
+  fill: currentColor;
+}
+
+.visual-story--card-carousel .visual-story__carousel-arrow:hover:not(:disabled) {
+  transform: scale(1.15);
+}
+
+.visual-story--card-carousel .visual-story__carousel-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.visual-story__carousel-dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Each dot sits in a 1.5rem hit area; the visible dot is drawn by ::before. */
+.visual-story--card-carousel .visual-story__carousel-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+}
+
+.visual-story__carousel-dot::before {
+  content: "";
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--vs-carousel-control-muted);
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.visual-story__carousel-dot:hover::before {
+  background: var(--vs-carousel-control);
+}
+
+.visual-story--card-carousel .visual-story__carousel-dot.is-active {
+  width: 1.75rem;
+}
+
+.visual-story__carousel-dot.is-active::before {
+  width: 1.25rem;
+  background: var(--vs-carousel-control);
+}
+
+.visual-story--card-carousel .visual-story__carousel-arrow:focus-visible,
+.visual-story--card-carousel .visual-story__carousel-dot:focus-visible {
+  outline: 2px solid var(--vs-carousel-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-story__carousel-track {
+    scroll-behavior: auto;
+  }
+
+  .visual-story__carousel-card,
+  .visual-story__carousel-dot::before {
+    transition: none;
+  }
+
+  .visual-story--card-carousel .visual-story__carousel-arrow {
+    transition: none !important;
+  }
+}
