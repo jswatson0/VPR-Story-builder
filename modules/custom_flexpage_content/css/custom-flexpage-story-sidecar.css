@@ -1,0 +1,319 @@
+/* ── Sidecar block ──────────────────────────────────────────────────────── */
+
+.visual-story--sidecar {
+  --vs-sidecar-panel: 40%;
+  /* Clears Drupal's admin toolbar for logged-in editors; 0 for visitors. */
+  --vs-sidecar-top: var(--drupal-displace-offset-top, 0px);
+  --vs-sidecar-stage-h: calc(100vh - var(--vs-sidecar-top));
+  --vs-sidecar-copy: #1e293b;
+  --vs-sidecar-headline: #111827;
+  --vs-sidecar-accent: #8a3d12;
+  --vs-sidecar-bg: #f7f5ef;
+  --vs-sidecar-card-bg: rgba(255, 255, 255, 0.92);
+  --vs-sidecar-media-bg: #0b1320;
+  --vs-sidecar-fade: 700ms;
+  margin-bottom: 0;
+  background: var(--vs-sidecar-bg);
+  color: var(--vs-sidecar-copy);
+}
+
+@supports (height: 100svh) {
+  .visual-story--sidecar {
+    --vs-sidecar-stage-h: calc(100svh - var(--vs-sidecar-top));
+  }
+}
+
+.visual-story--sidecar.visual-story--theme-dark {
+  --vs-sidecar-copy: rgba(245, 243, 234, 0.88);
+  --vs-sidecar-headline: #f8f5ec;
+  --vs-sidecar-accent: #f3a712;
+  --vs-sidecar-bg: #0b1320;
+  --vs-sidecar-card-bg: rgba(11, 19, 32, 0.9);
+  --vs-sidecar-media-bg: #05070d;
+}
+
+/* Text + Image's CSS sets unscoped .visual-story--theme-light/-dark
+   backgrounds that leak onto any story block on the same page, so restate the
+   sidecar's own background at higher specificity. */
+.visual-story--sidecar.visual-story--theme-light,
+.visual-story--sidecar.visual-story--theme-dark {
+  background: var(--vs-sidecar-bg);
+  color: var(--vs-sidecar-copy);
+}
+
+.visual-story--sidecar-width-narrow {
+  --vs-sidecar-panel: 33.333%;
+}
+
+.visual-story--sidecar-width-wide {
+  --vs-sidecar-panel: 50%;
+}
+
+/*
+ * Sticky media only works when no ancestor clips or scrolls; undo theme
+ * block wrapper rules that would.
+ */
+.block:has(.visual-story--sidecar),
+.block-block-content:has(.visual-story--sidecar) {
+  position: static;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+
+/* Crossfade has one row holding every slide; Release has one row per slide.
+   Either way the media column's stage sticks while the row's text scrolls,
+   and unlocks when the row ends. */
+.visual-story__sidecar-row {
+  display: grid;
+  grid-template-columns: var(--vs-sidecar-panel) minmax(0, 1fr);
+  grid-template-areas: "text media";
+}
+
+.visual-story--sidecar-text-right .visual-story__sidecar-row {
+  grid-template-columns: minmax(0, 1fr) var(--vs-sidecar-panel);
+  grid-template-areas: "media text";
+}
+
+.visual-story__sidecar-media-col {
+  grid-area: media;
+  background: var(--vs-sidecar-media-bg);
+}
+
+.visual-story__sidecar-text-col {
+  grid-area: text;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.visual-story__sidecar-stage {
+  position: sticky;
+  top: var(--vs-sidecar-top);
+  height: var(--vs-sidecar-stage-h);
+  overflow: hidden;
+}
+
+.visual-story__sidecar-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.visual-story__sidecar-media-el {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visual-story__sidecar-caption {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  max-width: calc(100% - 1.5rem);
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 3px;
+  background: rgba(5, 7, 13, 0.62);
+  color: #f5f3ea;
+  font-size: var(--vs-font-size-small);
+  line-height: 1.4;
+}
+
+/* Whole image and Portrait frame: the media sits inside the column with
+   margins on the section background, and the caption moves below it. */
+.visual-story__sidecar-layer--contain,
+.visual-story__sidecar-layer--portrait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  background: var(--vs-sidecar-bg);
+}
+
+.visual-story__sidecar-layer--contain .visual-story__sidecar-media-el {
+  flex: 0 1 auto;
+  min-height: 0;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.visual-story__sidecar-layer--portrait .visual-story__sidecar-media-el {
+  flex: 0 1 auto;
+  min-height: 0;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.visual-story__sidecar-layer--contain .visual-story__sidecar-caption,
+.visual-story__sidecar-layer--portrait .visual-story__sidecar-caption {
+  position: static;
+  flex: none;
+  margin-top: 0.6rem;
+  padding: 0;
+  background: none;
+  color: var(--vs-sidecar-copy);
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* Crossfade: every layer sits in the one stage; only the active one shows. */
+.visual-story--sidecar-crossfade .visual-story__sidecar-layer {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--vs-sidecar-fade) ease, visibility 0s linear var(--vs-sidecar-fade);
+}
+
+.visual-story--sidecar-crossfade .visual-story__sidecar-layer.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--vs-sidecar-fade) ease, visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-story--sidecar {
+    --vs-sidecar-fade: 0ms;
+  }
+}
+
+/* ── Text ───────────────────────────────────────────────────────────────── */
+
+.visual-story__sidecar-header {
+  padding: clamp(3rem, 12vh, 7rem) clamp(1.25rem, 3.5vw, 3.5rem) 0;
+}
+
+.visual-story--sidecar .visual-story__eyebrow {
+  color: var(--vs-sidecar-accent);
+}
+
+.visual-story--sidecar .visual-story__headline {
+  color: var(--vs-sidecar-headline);
+}
+
+.visual-story__sidecar-intro > :last-child {
+  margin-bottom: 0;
+}
+
+/* Each slide's text gets about a screen of scroll, so its media dwells. */
+.visual-story__sidecar-slide {
+  display: flex;
+  align-items: center;
+  min-height: var(--vs-sidecar-stage-h);
+  padding: 10vh clamp(1.25rem, 3.5vw, 3.5rem);
+}
+
+/* Release: room after the text so the media stays locked a little past it
+   before the row ends and the media scrolls away. */
+.visual-story--sidecar-release .visual-story__sidecar-slide {
+  min-height: calc(var(--vs-sidecar-stage-h) * 1.2);
+}
+
+.visual-story__sidecar-card {
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.visual-story__sidecar-title {
+  margin: 0 0 0.75rem;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem);
+  line-height: 1.15;
+  color: var(--vs-sidecar-headline);
+  text-wrap: balance;
+}
+
+.visual-story__sidecar-body {
+  font-size: var(--vs-font-size-body);
+  line-height: var(--vs-line-body);
+}
+
+/* research_theme colors every p (and article p) dark, which would override
+   the dark theme's light copy. */
+.visual-story__sidecar-body p,
+.visual-story__sidecar-body li,
+.visual-story__sidecar-intro p,
+.visual-story__sidecar-intro li {
+  color: inherit;
+}
+
+.visual-story__sidecar-body > :first-child {
+  margin-top: 0;
+}
+
+.visual-story__sidecar-body > :last-child {
+  margin-bottom: 0;
+}
+
+.visual-story--theme-dark .visual-story__sidecar-body a,
+.visual-story--theme-dark .visual-story__sidecar-body a:visited {
+  color: var(--vs-accent, #f3a712);
+}
+
+/* ── Phones and small tablets: text scrolls over full-screen media ──────── */
+
+@media (max-width: 900px) {
+  .visual-story__sidecar-row,
+  .visual-story--sidecar-text-right .visual-story__sidecar-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "stack";
+  }
+
+  .visual-story__sidecar-media-col,
+  .visual-story__sidecar-text-col {
+    grid-area: stack;
+  }
+
+  /* Text cards scroll over the bottom of the media; keep the credit clear. */
+  .visual-story__sidecar-caption {
+    top: 0.75rem;
+    bottom: auto;
+  }
+
+  .visual-story__sidecar-header {
+    margin: 30vh 1rem 0;
+    padding: 1.5rem;
+    background: var(--vs-sidecar-card-bg);
+    border-radius: 5px;
+  }
+
+  .visual-story__sidecar-slide {
+    padding: 40vh 1rem;
+  }
+
+  .visual-story__sidecar-card {
+    padding: 1.25rem 1.5rem;
+    background: var(--vs-sidecar-card-bg);
+    border-radius: 5px;
+    box-shadow: 0 6px 24px rgba(5, 7, 13, 0.18);
+  }
+
+  /* No text means nothing to scroll over the media, but keep the slide's
+     screen of scroll so its media still gets its turn. */
+  .visual-story__sidecar-slide:not(:has(.visual-story__sidecar-card)) {
+    padding: 0;
+  }
+}
+
+/* ── Layout Builder: compact preview ────────────────────────────────────── */
+
+/* The Layout Builder UI wraps each block in .layout-builder-block; the body
+   classes the Reveal block keys on aren't present on the node layout page. */
+.layout-builder-block .visual-story--sidecar {
+  --vs-sidecar-stage-h: min(60vh, 32rem);
+}
+
+.layout-builder-block .visual-story__sidecar-slide {
+  min-height: 0;
+  padding-block: 2rem;
+}

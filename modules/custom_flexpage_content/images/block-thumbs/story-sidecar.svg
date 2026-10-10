@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260">
+  <rect width="400" height="260" fill="#f4f0e6"/>
+  <!-- Locked full-height media column -->
+  <rect x="160" y="0" width="240" height="260" fill="#8a9aa8"/>
+  <polygon points="160,260 240,150 300,210 340,170 400,230 400,260" fill="#5f707e"/>
+  <circle cx="340" cy="70" r="20" fill="#d9dee2" opacity="0.8"/>
+  <!-- Next media fading in -->
+  <rect x="160" y="0" width="240" height="260" fill="#b8c4c0" opacity="0.25"/>
+  <!-- Scrolling text column -->
+  <rect x="22" y="22" width="96" height="10" rx="3" fill="#131820" opacity="0.85"/>
+  <rect x="22" y="40" width="116" height="5" rx="2.5" fill="#131820" opacity="0.45"/>
+  <rect x="22" y="50" width="108" height="5" rx="2.5" fill="#131820" opacity="0.45"/>
+  <rect x="22" y="60" width="112" height="5" rx="2.5" fill="#131820" opacity="0.45"/>
+  <rect x="22" y="70" width="70" height="5" rx="2.5" fill="#131820" opacity="0.45"/>
+  <rect x="22" y="150" width="84" height="10" rx="3" fill="#131820" opacity="0.85"/>
+  <rect x="22" y="168" width="116" height="5" rx="2.5" fill="#131820" opacity="0.45"/>
+  <rect x="22" y="178" width="104" height="5" rx="2.5" fill="#131820" opacity="0.45"/>
+  <rect x="22" y="188" width="110" height="5" rx="2.5" fill="#131820" opacity="0.45"/>
+  <!-- Scroll cue -->
+  <polygon points="140,112 148,112 144,120" fill="#bf5700"/>
+  <polygon points="140,124 148,124 144,132" fill="#bf5700" opacity="0.5"/>
+</svg>

@@ -234,6 +234,19 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'custom-flexpage-story-card-carousel',
     ],
+    'custom_flexpage_story_sidecar' => [
+      'variables' => [
+        'eyebrow' => '',
+        'headline' => '',
+        'intro' => '',
+        'items' => [],
+        'color_theme' => 'light',
+        'text_side' => 'left',
+        'panel_width' => 'medium',
+        'transition' => 'crossfade',
+      ],
+      'template' => 'custom-flexpage-story-sidecar',
+    ],
     'custom_flexpage_story_timeline_milestones' => [
       'variables' => [
         'eyebrow' => '',

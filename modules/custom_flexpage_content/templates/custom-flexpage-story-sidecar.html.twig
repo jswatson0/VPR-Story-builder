@@ -1,0 +1,104 @@
+{#
+/**
+ * @file
+ * Sidecar: full-height media locked beside scrolling narrative text.
+ *
+ * Crossfade renders one sticky media stack beside all the text slides, and
+ * the JS fades between its layers. Release renders one row per slide, each
+ * with its own sticky media cell that unlocks when the row's text ends.
+ */
+#}
+{% set is_release = transition == 'release' %}
+
+{% macro media(item, eager) %}
+  {% if item.media_kind == 'video' %}
+    <video class="visual-story__sidecar-media-el" data-vs-sidecar-video muted loop playsinline preload="metadata" style="object-position: {{ item.focal_x }}% {{ item.focal_y }}%;"{% if item.media_alt %} aria-label="{{ item.media_alt }}"{% else %} aria-hidden="true"{% endif %}>
+      <source src="{{ item.media_url }}" type="{{ item.media_mime }}">
+    </video>
+  {% else %}
+    <img class="visual-story__sidecar-media-el" src="{{ item.media_url }}" alt="{{ item.media_alt }}" style="object-position: {{ item.focal_x }}% {{ item.focal_y }}%;"{% if not eager %} loading="lazy"{% endif %} decoding="async">
+  {% endif %}
+  {% if item.caption %}
+    <p class="visual-story__sidecar-caption">{{ item.caption }}</p>
+  {% endif %}
+{% endmacro %}
+
+{% macro header(eyebrow, headline, intro) %}
+  {% if eyebrow or headline or intro %}
+    <header class="visual-story__sidecar-header">
+      {% if eyebrow %}
+        <p class="visual-story__eyebrow">{{ eyebrow }}</p>
+      {% endif %}
+      {% if headline %}
+        <h2 class="visual-story__headline">{{ headline }}</h2>
+      {% endif %}
+      {% if intro %}
+        <div class="visual-story__intro visual-story__sidecar-intro">{{ intro }}</div>
+      {% endif %}
+    </header>
+  {% endif %}
+{% endmacro %}
+
+{% macro slide(item) %}
+  {% if item.title or item.has_body %}
+    <article class="visual-story__sidecar-card">
+      {% if item.title %}
+        <h3 class="visual-story__sidecar-title">{{ item.title }}</h3>
+      {% endif %}
+      {% if item.has_body %}
+        <div class="visual-story__sidecar-body">{{ item.body }}</div>
+      {% endif %}
+    </article>
+  {% endif %}
+{% endmacro %}
+
+<section class="visual-story visual-story--sidecar visual-story--theme-{{ color_theme }} visual-story--sidecar-text-{{ text_side }} visual-story--sidecar-width-{{ panel_width }} visual-story--sidecar-{{ transition }}" data-vs-sidecar="{{ transition }}"{% if headline %} aria-label="{{ headline }}"{% endif %}>
+  {% if is_release %}
+    {% for item in items %}
+      <div class="visual-story__sidecar-row">
+        <div class="visual-story__sidecar-media-col">
+          <div class="visual-story__sidecar-stage">
+            {% if item.media_url %}
+              <div class="visual-story__sidecar-layer visual-story__sidecar-layer--{{ item.media_display }} is-active">
+                {{ _self.media(item, loop.first) }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="visual-story__sidecar-text-col">
+          {% if loop.first %}
+            {{ _self.header(eyebrow, headline, intro) }}
+          {% endif %}
+          <div class="visual-story__sidecar-slide">
+            {{ _self.slide(item) }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="visual-story__sidecar-row">
+      <div class="visual-story__sidecar-media-col">
+        <div class="visual-story__sidecar-stage">
+          {# filter keeps keys, so this is the index of the first slide with media. #}
+          {% set first_media_index = items|filter(i => i.media_url)|keys|first %}
+          {% for item in items %}
+            {% if item.media_url %}
+              {% set is_first = loop.index0 == first_media_index %}
+              <div class="visual-story__sidecar-layer visual-story__sidecar-layer--{{ item.media_display }}{% if is_first %} is-active{% endif %}" data-vs-sidecar-layer="{{ loop.index0 }}"{% if not is_first %} aria-hidden="true"{% endif %}>
+                {{ _self.media(item, is_first) }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="visual-story__sidecar-text-col">
+        {{ _self.header(eyebrow, headline, intro) }}
+        {% for item in items %}
+          <div class="visual-story__sidecar-slide" data-vs-sidecar-slide="{{ loop.index0 }}">
+            {{ _self.slide(item) }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
