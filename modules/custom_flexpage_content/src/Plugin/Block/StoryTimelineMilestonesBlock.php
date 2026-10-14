@@ -48,7 +48,7 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
     ];
     $form['editor_help']['summary'] = [
       '#type' => 'item',
-      '#markup' => $this->t('<p>This block renders a visual chronology with milestone cards connected by a central timeline rail. Use it to communicate progress, phases, or historical narrative.</p><p><strong>Milestone format:</strong> one line per row as <code>Year|Title|Description</code>.</p>'),
+      '#markup' => $this->t('<p>This block renders a visual chronology with milestone cards connected by a central timeline rail. Use it to communicate progress, phases, or historical narrative.</p><p><strong>Milestone format:</strong> one line per row as <code>Year|Title|Description</code>.</p><p><strong>Optional media:</strong> add up to three more fields as <code>Year|Title|Description|Media URL|Credit|Alt text</code>. The media URL can be an image or a YouTube link. Leave a field empty to skip it (for example <code>2019||Description|https://youtu.be/abc123</code>).</p>'),
     ];
 
     $media_id = (int) ($this->configuration['media_id'] ?? 0);
@@ -123,7 +123,7 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
     $form['milestones'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Milestones'),
-      '#description' => $this->t('Enter one milestone per line as Year|Title|Description.'),
+      '#description' => $this->t('Enter one milestone per line as Year|Title|Description. Optionally append |Media URL|Credit|Alt text, where the media URL is an image or a YouTube link.'),
       '#default_value' => $this->configuration['milestones'] ?? '',
       '#required' => TRUE,
       '#rows' => 8,
@@ -136,7 +136,9 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
       '#options' => [
         'alternating' => $this->t('Alternating (left / right)'),
         'single-side' => $this->t('Single side (all right)'),
+        'horizontal' => $this->t('Horizontal (slides with a scrollable time axis)'),
       ],
+      '#description' => $this->t('Horizontal shows one milestone at a time with a zoomable time axis below. When every year field contains a four-digit year, markers are spaced by date; otherwise they are spaced evenly.'),
     ];
 
     $form['theme'] = [
@@ -191,6 +193,9 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
       return [];
     }
 
+    $layout = $this->configuration['layout'] ?? 'alternating';
+    $axis = $layout === 'horizontal' ? $this->positionMilestones($items) : [];
+
     return [
       '#theme' => 'custom_flexpage_story_timeline_milestones',
       '#eyebrow' => $this->configuration['eyebrow'] ?? '',
@@ -201,7 +206,8 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
         '#format' => $this->configuration['intro_format'] ?? filter_default_format(),
       ],
       '#items' => $items,
-      '#layout' => $this->configuration['layout'] ?? 'alternating',
+      '#layout' => $layout,
+      '#axis' => $axis,
       '#color_theme' => $this->configuration['theme'] ?? 'light',
       '#media_url' => $image['url'] ?? '',
       '#media_alt' => $image['alt'] ?? '',
@@ -229,17 +235,88 @@ class StoryTimelineMilestonesBlock extends VisualStoryBlockBase {
         continue;
       }
 
-      $parts = array_map('trim', explode('|', $line, 3));
+      $parts = array_map('trim', explode('|', $line, 6));
       $items[] = [
         'year' => (string) ($parts[0] ?? ''),
         'title' => (string) ($parts[1] ?? ''),
         'description' => (string) ($parts[2] ?? ''),
+        'media' => $this->parseMilestoneMedia((string) ($parts[3] ?? ''), (string) ($parts[5] ?? '')),
+        'credit' => (string) ($parts[4] ?? ''),
       ];
     }
 
     return array_values(array_filter($items, static function (array $item): bool {
       return $item['year'] !== '' || $item['title'] !== '' || $item['description'] !== '';
     }));
+  }
+
+  /**
+   * Places milestones along the horizontal axis.
+   *
+   * Sets each item's 'position' (0–1). Items are spaced by date when every
+   * year field contains a four-digit year (and optionally a leading month
+   * name, as in "Sep 2016") and evenly otherwise.
+   *
+   * @return array
+   *   The year range as ['start' => int, 'end' => int], or an empty array
+   *   when items are spaced evenly.
+   */
+  protected function positionMilestones(array &$items): array {
+    $months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+    $years = [];
+    foreach ($items as $item) {
+      if (!preg_match('/(?<!\d)(\d{4})(?!\d)/', $item['year'], $matches, PREG_OFFSET_CAPTURE)) {
+        $years = [];
+        break;
+      }
+      $year = (int) $matches[1][0];
+      // A month name before the year ("Sep 2016", "Jun–Aug 2019") places the
+      // item within its year.
+      if (preg_match('/\b(' . implode('|', $months) . ')/i', substr($item['year'], 0, $matches[1][1]), $month)) {
+        $year += array_search(strtolower($month[1]), $months, TRUE) / 12;
+      }
+      $years[] = $year;
+    }
+
+    $count = count($items);
+    if ($years && max($years) > min($years)) {
+      $start = (int) floor(min($years));
+      $end = (int) ceil(max($years));
+      foreach ($items as $i => &$item) {
+        $item['position'] = ($years[$i] - $start) / ($end - $start);
+      }
+      unset($item);
+      return ['start' => $start, 'end' => $end];
+    }
+
+    foreach ($items as $i => &$item) {
+      $item['position'] = $count > 1 ? $i / ($count - 1) : 0.5;
+    }
+    unset($item);
+    return [];
+  }
+
+  /**
+   * Classifies a milestone media URL as a YouTube video or an image.
+   */
+  protected function parseMilestoneMedia(string $url, string $alt): ?array {
+    if ($url === '' || !preg_match('@^(https?://|/)@i', $url)) {
+      return NULL;
+    }
+
+    if (preg_match('@^https?://(?:www\.|m\.)?(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/))([A-Za-z0-9_-]{11})@i', $url, $matches)) {
+      return [
+        'type' => 'video',
+        'video_id' => $matches[1],
+        'alt' => $alt,
+      ];
+    }
+
+    return [
+      'type' => 'image',
+      'url' => $url,
+      'alt' => $alt,
+    ];
   }
 
 }

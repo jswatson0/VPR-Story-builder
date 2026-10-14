@@ -254,6 +254,7 @@ function custom_flexpage_content_theme($existing, $type, $theme, $path) {
         'intro' => '',
         'items' => [],
         'layout' => 'alternating',
+        'axis' => [],
         'color_theme' => 'light',
         'media_url' => '',
         'media_alt' => '',

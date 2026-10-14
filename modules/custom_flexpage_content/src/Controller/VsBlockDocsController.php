@@ -225,7 +225,7 @@ class VsBlockDocsController extends ControllerBase {
       [
         'id'          => 'timeline',
         'label'       => 'Timeline',
-        'description' => 'Vertical timeline of milestones with dates, headlines, body text, and optional media. Supports alternating and single-column layouts.',
+        'description' => 'Timeline of milestones with dates, headlines, body text, and optional media. Supports alternating and single-column vertical layouts, plus a horizontal layout that shows one milestone at a time over a zoomable time axis.',
         'use_for'     => ['Historical timelines', 'Project milestones', 'Research journey narratives'],
         'example'     => $this->buildBlockExample('custom_flexpage_story_timeline_milestones_block', [
           'eyebrow'    => 'Our History',
@@ -243,8 +243,8 @@ class VsBlockDocsController extends ControllerBase {
         ]),
         'fields'      => [
           'Eyebrow / Headline / Intro' => 'Section-level heading above the timeline items.',
-          'Milestones' => 'One milestone per line, pipe-separated: Year | Title | Description. Example: 1974 | Institute Founded | A small grant started it all.',
-          'Layout' => 'Alternating (items alternate left/right) or Single-column (all items on one side).',
+          'Milestones' => 'One milestone per line, pipe-separated: Year | Title | Description. Example: 1974 | Institute Founded | A small grant started it all. Optionally append | Media URL | Credit | Alt text to show an image or YouTube video on the card.',
+          'Layout' => 'Alternating (items alternate left/right), Single-column (all items on one side), or Horizontal (one slide at a time with prev/next arrows and a clickable, zoomable time axis; markers are spaced by date when every Year contains a four-digit year).',
           'Color theme' => 'Light or Dark.',
           'Background media' => 'Optional image shown behind the entire timeline section.',
         ],

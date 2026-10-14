@@ -4,6 +4,26 @@
  * Theme implementation for Story Timeline: Milestones block.
  */
 #}
+{% macro card_media(item) %}
+  {% if item.media %}
+    <figure class="visual-story__timeline-card-media visual-story__timeline-card-media--{{ item.media.type }}">
+      {% if item.media.type == 'video' %}
+        {% set video_label = item.media.alt ?: (item.title ?: item.year) %}
+        {% set play_label = video_label ? 'Play video: @title'|t({'@title': video_label}) : 'Play video'|t %}
+        <button type="button" class="visual-story__timeline-video" data-vs-timeline-video="{{ item.media.video_id }}" data-vs-timeline-video-title="{{ video_label }}" aria-label="{{ play_label }}">
+          <img src="https://i.ytimg.com/vi/{{ item.media.video_id }}/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+          <span class="visual-story__timeline-video-play" aria-hidden="true"></span>
+        </button>
+      {% else %}
+        <img src="{{ item.media.url }}" alt="{{ item.media.alt }}" loading="lazy" decoding="async">
+      {% endif %}
+      {% if item.credit %}
+        <figcaption class="visual-story__timeline-credit">{{ item.credit }}</figcaption>
+      {% endif %}
+    </figure>
+  {% endif %}
+{% endmacro %}
+
 {% set classes = [
   'visual-story',
   'visual-story--timeline',
@@ -34,28 +54,99 @@
       <div class="visual-story__intro">{{ intro }}</div>
     {% endif %}
 
-    <div class="visual-story__timeline-track" aria-hidden="true">
-      <span class="visual-story__timeline-track-fill" data-vs-timeline-progress></span>
-    </div>
+    {% if layout == 'horizontal' %}
+      <div class="visual-story__timeline-h" data-vs-timeline-h{% if axis %} data-vs-timeline-h-start="{{ axis.start }}" data-vs-timeline-h-end="{{ axis.end }}"{% endif %}>
+        <div class="visual-story__timeline-stage">
+          <button type="button" class="visual-story__timeline-arrow visual-story__timeline-arrow--prev" data-vs-timeline-h-prev>
+            <span class="visual-story__timeline-arrow-icon" aria-hidden="true"></span>
+            <span class="visual-story__timeline-arrow-label">
+              <span class="visual-story__timeline-arrow-year" data-vs-timeline-h-arrow-year></span>
+              <span class="visual-story__timeline-arrow-title" data-vs-timeline-h-arrow-title></span>
+            </span>
+          </button>
 
-    <ol class="visual-story__timeline-list" data-vs-timeline-list>
-      {% for item in items %}
-        {% set card_side = (layout == 'alternating' and loop.index is odd) ? 'left' : 'right' %}
-        <li class="visual-story__timeline-item visual-story__timeline-item--{{ card_side }}" data-vs-timeline-item>
-          <span class="visual-story__timeline-dot" aria-hidden="true"></span>
-          <article class="visual-story__timeline-card">
-            {% if item.year %}
-              <p class="visual-story__timeline-year">{{ item.year }}</p>
-            {% endif %}
-            {% if item.title %}
-              <h3 class="visual-story__timeline-title">{{ item.title }}</h3>
-            {% endif %}
-            {% if item.description %}
-              <p class="visual-story__timeline-desc">{{ item.description }}</p>
-            {% endif %}
-          </article>
-        </li>
-      {% endfor %}
-    </ol>
+          <ol class="visual-story__timeline-slides">
+            {% for item in items %}
+              <li class="visual-story__timeline-slide{{ item.media ? ' visual-story__timeline-slide--has-media' }}" data-vs-timeline-h-slide aria-label="{{ '@current of @total'|t({'@current': loop.index, '@total': loop.length}) }}">
+                {{ _self.card_media(item) }}
+                <div class="visual-story__timeline-slide-body">
+                  {% if item.year %}
+                    <p class="visual-story__timeline-year">{{ item.year }}</p>
+                  {% endif %}
+                  {% if item.title %}
+                    <h3 class="visual-story__timeline-title">{{ item.title }}</h3>
+                  {% endif %}
+                  {% if item.description %}
+                    <p class="visual-story__timeline-desc">{{ item.description }}</p>
+                  {% endif %}
+                </div>
+              </li>
+            {% endfor %}
+          </ol>
+
+          <button type="button" class="visual-story__timeline-arrow visual-story__timeline-arrow--next" data-vs-timeline-h-next>
+            <span class="visual-story__timeline-arrow-icon" aria-hidden="true"></span>
+            <span class="visual-story__timeline-arrow-label">
+              <span class="visual-story__timeline-arrow-year" data-vs-timeline-h-arrow-year></span>
+              <span class="visual-story__timeline-arrow-title" data-vs-timeline-h-arrow-title></span>
+            </span>
+          </button>
+        </div>
+
+        <div class="visual-story__timeline-nav">
+          <div class="visual-story__timeline-zoom">
+            <button type="button" class="visual-story__timeline-zoom-btn" data-vs-timeline-h-zoom="1" aria-label="{{ 'Zoom in'|t }}">+</button>
+            <button type="button" class="visual-story__timeline-zoom-btn" data-vs-timeline-h-zoom="-1" aria-label="{{ 'Zoom out'|t }}">&minus;</button>
+          </div>
+          <div class="visual-story__timeline-viewport" data-vs-timeline-h-viewport>
+            <div class="visual-story__timeline-canvas" data-vs-timeline-h-canvas>
+              <ol class="visual-story__timeline-markers">
+                {% for item in items %}
+                  <li class="visual-story__timeline-marker" data-vs-timeline-h-position="{{ item.position }}">
+                    <button type="button" class="visual-story__timeline-marker-btn" data-vs-timeline-h-marker data-year="{{ item.year }}" data-title="{{ item.title }}">
+                      {% if item.media %}
+                        <span class="visual-story__timeline-marker-thumb" aria-hidden="true">
+                          <img src="{{ item.media.type == 'video' ? 'https://i.ytimg.com/vi/' ~ item.media.video_id ~ '/default.jpg' : item.media.url }}" alt="" loading="lazy" decoding="async">
+                        </span>
+                      {% endif %}
+                      <span class="visual-story__timeline-marker-text">
+                        {% if item.year %}<span class="visual-story__timeline-marker-year">{{ item.year }}</span>{% endif %}
+                        <span class="visual-story__timeline-marker-title">{{ item.title ?: item.description|slice(0, 60) }}</span>
+                      </span>
+                    </button>
+                  </li>
+                {% endfor %}
+              </ol>
+              <div class="visual-story__timeline-axis" data-vs-timeline-h-axis aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="visual-story__timeline-track" aria-hidden="true">
+        <span class="visual-story__timeline-track-fill" data-vs-timeline-progress></span>
+      </div>
+
+      <ol class="visual-story__timeline-list" data-vs-timeline-list>
+        {% for item in items %}
+          {% set card_side = (layout == 'alternating' and loop.index is odd) ? 'left' : 'right' %}
+          <li class="visual-story__timeline-item visual-story__timeline-item--{{ card_side }}">
+            <span class="visual-story__timeline-dot" aria-hidden="true"></span>
+            <article class="visual-story__timeline-card">
+              {{ _self.card_media(item) }}
+              {% if item.year %}
+                <p class="visual-story__timeline-year">{{ item.year }}</p>
+              {% endif %}
+              {% if item.title %}
+                <h3 class="visual-story__timeline-title">{{ item.title }}</h3>
+              {% endif %}
+              {% if item.description %}
+                <p class="visual-story__timeline-desc">{{ item.description }}</p>
+              {% endif %}
+            </article>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
   </div>
 </section>

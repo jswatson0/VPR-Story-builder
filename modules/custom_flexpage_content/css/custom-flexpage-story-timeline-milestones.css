@@ -1,13 +1,44 @@
 .visual-story--timeline {
+  --vs-accent: #bf5700;
+  --vs-timeline-bg: transparent;
+  --vs-timeline-copy: #1e293b;
+  --vs-timeline-heading: #111827;
   --vs-timeline-rail-color: rgba(30, 41, 59, 0.2);
-  --vs-timeline-fill-color: #f3a712;
+  --vs-timeline-fill-color: #bf5700;
+  --vs-timeline-dot-halo: rgba(191, 87, 0, 0.14);
   position: relative;
   padding: clamp(2.5rem, 5vw, 5rem) clamp(1rem, 3vw, 2rem) clamp(3rem, 6vw, 6rem);
 }
 
 .visual-story--timeline.visual-story--theme-dark {
+  --vs-accent: #f3a712;
+  --vs-timeline-bg: #0b1320;
+  --vs-timeline-copy: rgba(245, 243, 234, 0.88);
+  --vs-timeline-heading: #f8f5ec;
   --vs-timeline-rail-color: rgba(255, 255, 255, 0.24);
   --vs-timeline-fill-color: #ffd178;
+  --vs-timeline-dot-halo: rgba(243, 167, 18, 0.14);
+}
+
+/* Text + Image's CSS sets unscoped .visual-story--theme-light/-dark
+   backgrounds that leak onto any story block on the same page, so restate the
+   timeline's own background at higher specificity. */
+.visual-story--timeline.visual-story--theme-light,
+.visual-story--timeline.visual-story--theme-dark {
+  background: var(--vs-timeline-bg);
+  color: var(--vs-timeline-copy);
+}
+
+.visual-story--timeline .visual-story__headline,
+.visual-story--timeline .visual-story__timeline-title {
+  color: var(--vs-timeline-heading);
+}
+
+/* Outranks the theme's article p / h3 colors inside cards. */
+.visual-story--timeline .visual-story__intro,
+.visual-story--timeline .visual-story__timeline-desc,
+.visual-story--timeline .visual-story__timeline-credit {
+  color: var(--vs-timeline-copy);
 }
 
 .visual-story__timeline-media {
@@ -63,12 +94,6 @@
   align-items: center;
   gap: clamp(0.75rem, 2vw, 1.5rem);
   margin: 0 0 clamp(1.1rem, 2vw, 1.6rem);
-  opacity: 0.15;
-  transition: opacity 0.5s ease;
-}
-
-.visual-story__timeline-item.is-active {
-  opacity: 1;
 }
 
 .visual-story__timeline-dot {
@@ -79,7 +104,7 @@
   height: 0.75rem;
   border-radius: 999px;
   background: var(--vs-timeline-fill-color);
-  box-shadow: 0 0 0 5px rgba(243, 167, 18, 0.14);
+  box-shadow: 0 0 0 5px var(--vs-timeline-dot-halo);
 }
 
 .visual-story__timeline-card {
@@ -110,6 +135,104 @@
 
 .visual-story--timeline-layout-single-side .visual-story__timeline-item .visual-story__timeline-card {
   grid-column: 3;
+}
+
+.visual-story__timeline-card-media {
+  display: block;
+  margin: -1rem -1rem 0.9rem;
+  border-radius: 0.45rem 0.45rem 0 0;
+  overflow: hidden;
+}
+
+.visual-story__timeline-card-media img,
+.visual-story__timeline-card-media iframe {
+  display: block;
+  width: 100%;
+}
+
+.visual-story__timeline-card-media--image img {
+  height: auto;
+  max-height: 22rem;
+  object-fit: cover;
+}
+
+.visual-story__timeline-card-media--video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.visual-story__timeline-card-media--video img,
+.visual-story__timeline-card-media--video iframe {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+/* Outranks speedway's global button:not(...) styles. */
+.visual-story__timeline-card-media button.visual-story__timeline-video,
+.visual-story__timeline-card-media button.visual-story__timeline-video:hover,
+.visual-story__timeline-card-media button.visual-story__timeline-video:focus {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.visual-story__timeline-video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4rem;
+  height: 2.8rem;
+  transform: translate(-50%, -50%);
+  border-radius: 0.6rem;
+  background: rgba(20, 26, 34, 0.82);
+  transition: background-color 0.2s ease;
+}
+
+.visual-story__timeline-video-play::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+  border-width: 0.6rem 0 0.6rem 1rem;
+  border-color: transparent transparent transparent #fff;
+}
+
+.visual-story__timeline-video:hover .visual-story__timeline-video-play,
+.visual-story__timeline-video:focus-visible .visual-story__timeline-video-play {
+  background: #bf5700;
+}
+
+.visual-story__timeline-video:focus-visible {
+  outline: 3px solid var(--vs-timeline-fill-color);
+  outline-offset: -3px;
+}
+
+.visual-story__timeline-credit {
+  padding: 0.35rem 1rem 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  opacity: 0.75;
+}
+
+.visual-story--timeline .visual-story__timeline-card-media--video .visual-story__timeline-credit {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 0.35rem;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
 }
 
 .visual-story__timeline-year {
@@ -149,7 +272,6 @@
     grid-template-columns: 1.1rem 1fr;
     gap: 0.75rem;
     margin-bottom: 1rem;
-    opacity: 1;
   }
 
   .visual-story__timeline-dot {
@@ -165,13 +287,444 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .visual-story__timeline-item {
-    opacity: 1;
-    transition: none;
+/* Horizontal layout: one slide at a time over a zoomable time axis. */
+.visual-story--timeline {
+  --vs-timeline-nav-bg: rgba(20, 26, 34, 0.05);
+  --vs-timeline-marker-bg: #fff;
+  --vs-timeline-marker-border: rgba(20, 26, 34, 0.18);
+  --vs-timeline-marker-active-bg: #fff4ea;
+}
+
+.visual-story--timeline.visual-story--theme-dark {
+  --vs-timeline-nav-bg: rgba(255, 255, 255, 0.06);
+  --vs-timeline-marker-bg: #16202f;
+  --vs-timeline-marker-border: rgba(255, 255, 255, 0.2);
+  --vs-timeline-marker-active-bg: #2a2416;
+}
+
+.visual-story--timeline-layout-horizontal .visual-story__timeline-inner {
+  width: min(84rem, calc(100% - 2rem));
+}
+
+.visual-story__timeline-h {
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.visual-story__timeline-stage {
+  position: relative;
+}
+
+.visual-story__timeline-slides {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2rem;
+}
+
+.visual-story__timeline-slide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: center;
+  margin: 0;
+}
+
+.visual-story__timeline-slide--has-media {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
+.visual-story__timeline-slide:not(.visual-story__timeline-slide--has-media) .visual-story__timeline-slide-body {
+  max-width: 44rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.visual-story__timeline-slide .visual-story__timeline-card-media {
+  margin: 0;
+  border-radius: 0.4rem;
+}
+
+.visual-story__timeline-slide .visual-story__timeline-card-media--image img {
+  max-height: clamp(16rem, 36vw, 26rem);
+  width: 100%;
+  object-fit: contain;
+}
+
+.visual-story__timeline-slide .visual-story__timeline-year {
+  font-size: 0.9rem;
+}
+
+.visual-story__timeline-slide .visual-story__timeline-title {
+  font-size: clamp(1.4rem, 1.1rem + 1.1vw, 2.1rem);
+  margin-bottom: 0.75rem;
+}
+
+.visual-story__timeline-slide .visual-story__timeline-desc {
+  font-size: 1.05rem;
+}
+
+/* Once JS is running, stack the slides in one grid cell (so the stage is as
+   tall as the tallest slide and doesn't jump) and show only the active one. */
+.visual-story__timeline-h.is-ready .visual-story__timeline-stage {
+  padding: 0 clamp(3.5rem, 9vw, 9rem);
+}
+
+.visual-story__timeline-h.is-ready .visual-story__timeline-slides {
+  gap: 0;
+}
+
+.visual-story__timeline-h.is-ready .visual-story__timeline-slide {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(1.5rem);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s linear 0.35s;
+}
+
+.visual-story__timeline-h.is-ready .visual-story__timeline-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s;
+}
+
+.visual-story__timeline-arrow,
+.visual-story__timeline-nav {
+  display: none;
+}
+
+.visual-story__timeline-h.is-ready .visual-story__timeline-nav {
+  display: flex;
+}
+
+/* Outranks speedway's global button:not(...) styles. */
+.visual-story__timeline-h.is-ready button.visual-story__timeline-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: clamp(3rem, 8vw, 8rem);
+  margin: 0;
+  padding: 0.5rem 0;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--vs-timeline-copy);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.visual-story__timeline-h.is-ready button.visual-story__timeline-arrow[hidden] {
+  display: none;
+}
+
+.visual-story__timeline-h.is-ready button.visual-story__timeline-arrow:hover,
+.visual-story__timeline-h.is-ready button.visual-story__timeline-arrow:focus-visible {
+  opacity: 1;
+  background: none;
+  color: var(--vs-timeline-copy);
+}
+
+.visual-story__timeline-h.is-ready button.visual-story__timeline-arrow:focus-visible {
+  outline: 2px solid var(--vs-accent);
+  outline-offset: 2px;
+}
+
+.visual-story__timeline-arrow--prev {
+  left: 0;
+}
+
+.visual-story__timeline-h.is-ready button.visual-story__timeline-arrow--next {
+  right: 0;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.visual-story__timeline-arrow-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-top: 3px solid currentColor;
+  border-left: 3px solid currentColor;
+  transform: rotate(-45deg);
+  margin-left: 0.4rem;
+}
+
+.visual-story__timeline-arrow--next .visual-story__timeline-arrow-icon {
+  transform: rotate(135deg);
+  margin: 0 0.4rem 0 0;
+}
+
+.visual-story__timeline-arrow-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.visual-story__timeline-arrow-year {
+  color: var(--vs-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.visual-story__timeline-arrow-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.visual-story__timeline-nav {
+  position: relative;
+  margin-top: clamp(1.75rem, 4vw, 3rem);
+  background: var(--vs-timeline-nav-bg);
+  border-top: 1px solid var(--vs-timeline-rail-color);
+  border-radius: 0.4rem;
+}
+
+.visual-story__timeline-zoom {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.visual-story__timeline-nav button.visual-story__timeline-zoom-btn {
+  width: 1.9rem;
+  height: 1.9rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--vs-timeline-marker-border);
+  border-radius: 0.3rem;
+  background: var(--vs-timeline-marker-bg);
+  color: var(--vs-timeline-heading);
+  font: 600 1.1rem/1 sans-serif;
+  cursor: pointer;
+}
+
+.visual-story__timeline-nav button.visual-story__timeline-zoom-btn:hover:not(:disabled),
+.visual-story__timeline-nav button.visual-story__timeline-zoom-btn:focus-visible {
+  border-color: var(--vs-accent);
+  color: var(--vs-accent);
+  background: var(--vs-timeline-marker-bg);
+}
+
+.visual-story__timeline-nav button.visual-story__timeline-zoom-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.visual-story__timeline-viewport {
+  flex: 1;
+  min-width: 0;
+  margin-left: 2.9rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  cursor: grab;
+}
+
+.visual-story__timeline-viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.visual-story__timeline-canvas {
+  --vs-timeline-marker-h: 3.4rem;
+  --vs-timeline-row-h: calc(var(--vs-timeline-marker-h) + 0.5rem);
+  position: relative;
+  min-width: 100%;
+  height: calc(var(--vs-timeline-rows, 1) * var(--vs-timeline-row-h) + 3rem);
+}
+
+.visual-story__timeline-markers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.visual-story__timeline-marker {
+  position: absolute;
+  top: calc(0.75rem + var(--vs-timeline-row, 0) * var(--vs-timeline-row-h));
+  bottom: 2rem;
+  width: 10rem;
+  margin: 0;
+  border-left: 1px solid var(--vs-timeline-marker-border);
+}
+
+/* Outranks speedway's ol:not([type...]) > li decimal numbering. */
+.visual-story__timeline-markers > .visual-story__timeline-marker,
+.visual-story__timeline-slides > .visual-story__timeline-slide {
+  list-style: none;
+}
+
+.visual-story__timeline-marker::after {
+  content: '';
+  position: absolute;
+  bottom: -0.3rem;
+  left: -0.3rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--vs-timeline-rail-color);
+}
+
+.visual-story__timeline-marker:has(.is-active) {
+  z-index: 1;
+  border-left-color: var(--vs-accent);
+}
+
+.visual-story__timeline-marker:has(.is-active)::after {
+  background: var(--vs-accent);
+}
+
+.visual-story__timeline-markers button.visual-story__timeline-marker-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  height: var(--vs-timeline-marker-h);
+  margin: 0;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--vs-timeline-marker-border);
+  border-left: 0;
+  border-radius: 0 0.3rem 0.3rem 0;
+  background: var(--vs-timeline-marker-bg);
+  color: var(--vs-timeline-copy);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.visual-story__timeline-markers button.visual-story__timeline-marker-btn:hover,
+.visual-story__timeline-markers button.visual-story__timeline-marker-btn:focus-visible {
+  opacity: 1;
+  background: var(--vs-timeline-marker-bg);
+  color: var(--vs-timeline-copy);
+}
+
+.visual-story__timeline-markers button.visual-story__timeline-marker-btn.is-active {
+  opacity: 1;
+  background: var(--vs-timeline-marker-active-bg);
+  border-color: var(--vs-accent);
+  box-shadow: inset 3px 0 0 var(--vs-accent);
+}
+
+.visual-story__timeline-markers button.visual-story__timeline-marker-btn:focus-visible {
+  outline: 2px solid var(--vs-accent);
+  outline-offset: 1px;
+}
+
+.visual-story__timeline-marker-thumb {
+  flex: none;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 0.2rem;
+  overflow: hidden;
+}
+
+.visual-story__timeline-marker-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visual-story__timeline-marker-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+.visual-story__timeline-marker-year {
+  color: var(--vs-accent);
+  font-size: 0.7rem;
+}
+
+.visual-story__timeline-marker-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--vs-timeline-heading);
+}
+
+.visual-story__timeline-axis {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2rem;
+  border-top: 1px solid var(--vs-timeline-rail-color);
+}
+
+.visual-story__timeline-tick {
+  position: absolute;
+  top: 0;
+  padding-top: 0.45rem;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  line-height: 1;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.visual-story__timeline-tick::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 0.3rem;
+  border-left: 1px solid var(--vs-timeline-rail-color);
+}
+
+@media (max-width: 700px) {
+  .visual-story__timeline-slide--has-media {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .visual-story__timeline-track-fill {
+  .visual-story__timeline-slide {
+    align-content: start;
+    gap: 1rem;
+  }
+
+  .visual-story__timeline-h.is-ready .visual-story__timeline-stage {
+    padding: 0 0 3.5rem;
+  }
+
+  /* Arrows sit below the slide on phones, icon only. */
+  .visual-story__timeline-h.is-ready button.visual-story__timeline-arrow {
+    top: auto;
+    bottom: 0;
+    width: auto;
+    transform: none;
+  }
+
+  .visual-story__timeline-arrow-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-story__timeline-track-fill,
+  .visual-story__timeline-h.is-ready .visual-story__timeline-slide,
+  .visual-story__timeline-h.is-ready .visual-story__timeline-slide.is-active {
     transition: none;
+    transform: none;
   }
 }

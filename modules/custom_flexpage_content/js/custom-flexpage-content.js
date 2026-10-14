@@ -607,44 +607,51 @@
         observer.observe(section);
       });
 
+      once('custom-flexpage-story-timeline-video', '[data-vs-timeline-video]', context).forEach((button) => {
+        button.addEventListener('click', () => {
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(button.dataset.vsTimelineVideo)}?autoplay=1&rel=0`;
+          iframe.title = button.dataset.vsTimelineVideoTitle || Drupal.t('YouTube video');
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          button.replaceWith(iframe);
+          iframe.focus();
+          // The horizontal timeline sends this when its slide is hidden.
+          iframe.addEventListener('vs-timeline-video-stop', () => iframe.replaceWith(button), { once: true });
+        });
+      });
+
       once('custom-flexpage-story-timeline', '[data-vs-story-timeline]', context).forEach((section) => {
-        const items = section.querySelectorAll('[data-vs-timeline-item]');
         const progressFill = section.querySelector('[data-vs-timeline-progress]');
 
-        if (!items.length || !progressFill) {
+        if (!progressFill) {
           return;
         }
 
-        if (prefersReducedMotion.matches || !hasGsap) {
-          items.forEach((item) => item.classList.add('is-active'));
+        if (prefersReducedMotion.matches) {
           progressFill.style.height = '100%';
           return;
         }
 
-        const { ScrollTrigger } = window;
+        // Measure the rail live on every frame so the fill's leading edge
+        // stays at the viewport center even as lazy images change the height.
+        const track = progressFill.parentElement;
+        let frame = 0;
+        const update = () => {
+          frame = 0;
+          const rect = track.getBoundingClientRect();
+          const filled = Math.min(Math.max(window.innerHeight / 2 - rect.top, 0), rect.height);
+          progressFill.style.height = `${filled}px`;
+        };
+        const requestUpdate = () => {
+          if (!frame) {
+            frame = window.requestAnimationFrame(update);
+          }
+        };
 
-        items.forEach((item) => {
-          ScrollTrigger.create({
-            trigger: item,
-            start: 'top 72%',
-            end: 'bottom 38%',
-            onEnter: () => item.classList.add('is-active'),
-            onEnterBack: () => item.classList.add('is-active'),
-            onLeave: () => item.classList.remove('is-active'),
-            onLeaveBack: () => item.classList.remove('is-active'),
-          });
-        });
-
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top 70%',
-          end: 'bottom 35%',
-          scrub: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            progressFill.style.height = `${(self.progress * 100).toFixed(2)}%`;
-          },
-        });
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+        update();
       });
 
     },
