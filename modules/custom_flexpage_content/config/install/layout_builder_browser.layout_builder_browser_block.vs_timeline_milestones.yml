@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: vs_timeline_milestones
+block_id: custom_flexpage_story_timeline_milestones_block
+category: visual_storytelling
+label: Timeline
+image_path: /modules/contrib/vpr-storytelling/modules/custom_flexpage_content/images/block-thumbs/story-timeline-milestones.svg
+image_alt: 'Vertical timeline with alternating milestone cards'
+weight: 6

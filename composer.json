@@ -1,0 +1,12 @@
+{
+    "name": "jsw2387/vpr-storytelling",
+    "description": "Visual Storytelling Layout Builder blocks and Storybuilder for UT Drupal Kit sites.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/core": "^10.3 || ^11",
+        "drupal/entity_clone": "^2.2",
+        "drupal/layout_builder_browser": "^1.9",
+        "drupal/media_library_form_element": "^2.0"
+    }
+}

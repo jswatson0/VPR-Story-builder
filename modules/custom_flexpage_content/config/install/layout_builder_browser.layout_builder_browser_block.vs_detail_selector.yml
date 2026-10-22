@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: vs_detail_selector
+block_id: custom_flexpage_detail_selector_block
+category: visual_storytelling
+label: 'Interactive Panels'
+image_path: /modules/contrib/vpr-storytelling/modules/custom_flexpage_content/images/block-thumbs/story-detail-selector.svg
+image_alt: 'Two-column interactive selector with clickable items and detail panel'
+weight: 5

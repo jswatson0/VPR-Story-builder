@@ -1,10 +1,10 @@
 name: 'Custom Flexpage Content'
 type: module
 description: 'Provides visual storytelling blocks for Layout Builder flex pages.'
-package: Research
+package: Visual Storytelling
 core_version_requirement: ^10 || ^11
 dependencies:
-  - drupal:default_content
+  - layout_builder_browser:layout_builder_browser
   - drupal:media
   - drupal:media_library
   - drupal:media_library_form_element

@@ -10,8 +10,30 @@
  */
 function custom_flexpage_content_layout_builder_browser_alter(array &$build, array $context) {
   $build['#attached']['library'][] = 'custom_flexpage_content/block_editor';
+  _custom_flexpage_content_fix_thumb_paths($build);
   _custom_flexpage_content_inject_views_blocks($build, $context);
   _custom_flexpage_content_inject_vs_docs_link($build);
+}
+
+/**
+ * Points VS block thumbnails at wherever this module is installed.
+ *
+ * Browser block config stores image_path as an absolute path, which breaks
+ * when the module moves (e.g. web/modules/research to web/modules/contrib).
+ */
+function _custom_flexpage_content_fix_thumb_paths(array &$build) {
+  if (empty($build['block_categories']['visual_storytelling']['links'])) {
+    return;
+  }
+
+  $base = '/' . \Drupal::service('extension.list.module')->getPath('custom_flexpage_content') . '/';
+
+  foreach ($build['block_categories']['visual_storytelling']['links'] as &$item) {
+    $uri = $item['link']['#title']['image']['#uri'] ?? NULL;
+    if ($uri && preg_match('#/custom_flexpage_content/(images/.+)$#', $uri, $m)) {
+      $item['link']['#title']['image']['#uri'] = $base . $m[1];
+    }
+  }
 }
 
 /**

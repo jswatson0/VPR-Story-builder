@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: vs_image_grid
+block_id: research_image_grid_block
+category: visual_storytelling
+label: 'Photo Grid'
+image_path: /modules/contrib/vpr-storytelling/modules/custom_flexpage_content/images/block-thumbs/research-image-grid.svg
+image_alt: 'Configurable photo grid with optional modal descriptions'
+weight: 7

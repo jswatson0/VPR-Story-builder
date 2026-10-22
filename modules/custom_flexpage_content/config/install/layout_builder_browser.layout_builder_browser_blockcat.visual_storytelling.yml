@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: visual_storytelling
+label: 'Visual Storytelling'
+weight: -8
+opened: false
+image_path: ''
+image_alt: ''

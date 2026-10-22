@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: vs_byline
+block_id: custom_flexpage_story_byline_block
+category: visual_storytelling
+label: Byline
+image_path: /modules/contrib/vpr-storytelling/modules/custom_flexpage_content/images/block-thumbs/story-byline.svg
+image_alt: 'Author photo, name, and publication date, linked to the News authors taxonomy'
+weight: 10

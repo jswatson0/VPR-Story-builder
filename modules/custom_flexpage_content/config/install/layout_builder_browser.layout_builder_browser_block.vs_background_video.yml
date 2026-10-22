@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: vs_background_video
+block_id: custom_flexpage_story_background_video_block
+category: visual_storytelling
+label: 'Background Video'
+image_path: /modules/contrib/vpr-storytelling/modules/custom_flexpage_content/images/block-thumbs/story-background-video.svg
+image_alt: 'Full-screen section with autoplaying muted video background and overlay text'
+weight: 9
