@@ -44,30 +44,54 @@ Then:
 
 ## Working on it
 
-Have a site install it from source so the installed copy is a git clone:
+Develop in texas-research's DDEV site, which has real stories to test against.
+By default Composer installs the package from a zip, so the installed folder
+isn't a git repo and edits there get lost. Make it a clone once:
 
-```json
-"config": {
-    "preferred-install": {
-        "jswatson0/vpr-storytelling": "source",
-        "*": "dist"
-    }
-}
+```bash
+ddev composer reinstall jswatson0/vpr-storytelling --prefer-install=source
+cd web/modules/contrib/vpr-storytelling
+git switch main
 ```
 
-Then edit in `web/modules/contrib/vpr-storytelling/`, commit and push from
-there, and tag a release.
+This leaves the site's `composer.json` and `composer.lock` alone. Composer
+checks out a commit, not a branch, so `git switch main` gets you onto a branch
+you can commit to. The site's own git ignores `web/modules/contrib/`, so package
+changes only show up in this folder's git.
+
+Then:
+
+1. Edit and test locally. Check pt2050 as well before releasing anything
+   visual, since the CSS was written against texas-research's theme.
+2. Commit and push to `main` from this folder.
+3. Tag a release (below).
+
+Commit or stash before running `composer update` on the site. Otherwise Composer
+asks whether to throw away your uncommitted changes.
+
+If `git push` asks for an SSH key: Composer sets the push URL to SSH. Switch it
+to HTTPS with
+`git remote set-url --push origin https://github.com/jswatson0/VPR-Story-builder.git`.
 
 ## Releases
 
 Tag `MAJOR.MINOR.PATCH`: minor for new blocks or features, patch for fixes,
 major for anything that breaks existing stories. Note each release in
-CHANGELOG.md. Sites pick it up when they choose to:
+CHANGELOG.md, then:
+
+```bash
+git tag 1.1.0 && git push origin 1.1.0
+```
+
+Sites require `^1.0` and their `composer.lock` pins the exact version, so a new
+tag reaches a site only when someone updates it there:
 
 ```bash
 ddev composer update jswatson0/vpr-storytelling
-ddev drush updb -y && ddev drush cex -y
+ddev drush updb -y && ddev drush cr && ddev drush cex -y
 ```
+
+Commit `composer.lock` and any exported config, then deploy as usual.
 
 ### Config changes need an update hook
 
