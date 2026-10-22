@@ -21,7 +21,7 @@ In the site's `composer.json`:
 "repositories": {
     "vpr-storytelling": {
         "type": "vcs",
-        "url": "https://github.com/jsw2387_utexas/vpr-storytelling"
+        "url": "https://github.com/jsw2387_utexas/VPR-Storytelling"
     }
 }
 ```
