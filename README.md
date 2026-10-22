@@ -21,13 +21,13 @@ In the site's `composer.json`:
 "repositories": {
     "vpr-storytelling": {
         "type": "vcs",
-        "url": "https://github.com/jsw2387_utexas/VPR-Storytelling"
+        "url": "https://github.com/jswatson0/VPR-Story-builder"
     }
 }
 ```
 
 ```bash
-ddev composer require jsw2387/vpr-storytelling:^1.0
+ddev composer require jswatson0/vpr-storytelling:^1.0
 ddev drush en custom_flexpage_content storybuilder -y
 ddev drush cex -y
 ```
@@ -49,7 +49,7 @@ Have a site install it from source so the installed copy is a git clone:
 ```json
 "config": {
     "preferred-install": {
-        "jsw2387/vpr-storytelling": "source",
+        "jswatson0/vpr-storytelling": "source",
         "*": "dist"
     }
 }
@@ -65,7 +65,7 @@ major for anything that breaks existing stories. Note each release in
 CHANGELOG.md. Sites pick it up when they choose to:
 
 ```bash
-ddev composer update jsw2387/vpr-storytelling
+ddev composer update jswatson0/vpr-storytelling
 ddev drush updb -y && ddev drush cex -y
 ```
 
