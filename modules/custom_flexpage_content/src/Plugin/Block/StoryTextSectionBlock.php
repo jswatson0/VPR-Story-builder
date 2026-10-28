@@ -193,9 +193,11 @@ class StoryTextSectionBlock extends VisualStoryBlockBase {
     ];
 
     $form['cta_url'] = [
-      '#type' => 'url',
-      '#title' => $this->t('CTA external URL'),
-      '#description' => $this->t('Use for external destinations. Leave empty if using internal page selector above.'),
+      '#type' => 'textfield',
+      '#element_validate' => [[static::class, 'validateCtaUrl']],
+      '#maxlength' => 2048,
+      '#title' => $this->t('CTA URL'),
+      '#description' => $this->t('A path on this site, such as /research, or a full URL for other sites. Leave empty if you selected a page above.'),
       '#default_value' => $this->configuration['cta_url'] ?? '',
     ];
 

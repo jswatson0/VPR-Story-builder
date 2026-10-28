@@ -3,6 +3,7 @@
 namespace Drupal\custom_flexpage_content\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -222,6 +223,30 @@ abstract class VisualStoryBlockBase extends BlockBase {
     }
 
     return 0;
+  }
+
+  /**
+   * Validates a CTA URL: a path on this site or a full URL.
+   *
+   * Accepts /path, ?query and #fragment links, and absolute URLs with a safe
+   * scheme (http, https, mailto, tel). The url element type only accepts
+   * absolute URLs, so pages without a node, such as views, had no way in.
+   */
+  public static function validateCtaUrl(array &$element, FormStateInterface $form_state): void {
+    $value = trim((string) $element['#value']);
+    if ($value === '') {
+      return;
+    }
+    if (preg_match('@^[/?#]@', $value) && !str_starts_with($value, '//')) {
+      return;
+    }
+    if (UrlHelper::isValid($value, TRUE) && UrlHelper::stripDangerousProtocols($value) === $value) {
+      return;
+    }
+    if (preg_match('@^(mailto|tel):\S+$@i', $value)) {
+      return;
+    }
+    $form_state->setError($element, t('%title must be a path on this site starting with /, such as /research, or a full URL such as https://example.com.', ['%title' => $element['#title']]));
   }
 
   /**

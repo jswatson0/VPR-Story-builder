@@ -182,7 +182,9 @@ class StoryBackgroundVideoBlock extends VisualStoryBlockBase {
     ];
 
     $form['cta_url'] = [
-      '#type'          => 'url',
+      '#type'          => 'textfield',
+      '#element_validate' => [[static::class, 'validateCtaUrl']],
+      '#maxlength'     => 2048,
       '#title'         => $this->t('CTA URL'),
       '#default_value' => $this->configuration['cta_url'] ?? '',
     ];

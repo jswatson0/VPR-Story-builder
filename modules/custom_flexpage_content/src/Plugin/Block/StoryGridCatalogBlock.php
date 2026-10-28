@@ -233,9 +233,11 @@ class StoryGridCatalogBlock extends VisualStoryBlockBase {
       ];
 
       $form[$key]["{$key}_cta_url"] = [
-        '#type' => 'url',
-        '#title' => $this->t('Or enter an external URL'),
-        '#description' => $this->t('For links outside this site only. Leave empty if you selected a page above.'),
+        '#type' => 'textfield',
+        '#element_validate' => [[static::class, 'validateCtaUrl']],
+        '#maxlength' => 2048,
+        '#title' => $this->t('Or enter a URL'),
+        '#description' => $this->t('A path on this site, such as /research, or a full URL for other sites. Leave empty if you selected a page above.'),
         '#default_value' => $this->configuration["{$key}_cta_url"] ?? '',
         '#wrapper_attributes' => ['class' => ['vs-field-fallback']],
       ];
